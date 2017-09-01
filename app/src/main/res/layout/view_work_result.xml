@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingTop="14dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="18dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:weightSum="10"
+            android:baselineAligned="false">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="OK qty"
+                    android:textColor="@color/blackText"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Sum NG qty"
+                    android:textColor="@color/blackText"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Result qty"
+                    android:textStyle="bold"
+                    android:textColor="@color/blackText"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Last S/N"
+                    android:textStyle="bold"
+                    android:textColor="@color/blackText"
+                    android:textSize="@dimen/textSizeNormal" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <EditText
+                        android:id="@+id/edit_ok_qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:inputType="number"
+                        android:hint="Input OK qty"
+                        android:digits="0123456789"
+                        android:textColor="@color/default_green"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <TextView
+                        android:id="@+id/text_ng_qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/red"
+                        android:text="0"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <TextView
+                        android:id="@+id/text_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/blueText"
+                        android:text="0"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <EditText
+                        android:id="@+id/edit_last_sn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Input Last S/N"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="@color/default_green"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <!-- -->
+        <!-- -->
+        <!-- -->
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

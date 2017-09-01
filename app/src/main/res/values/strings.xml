@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Scan Activity -->
+    <string name="action_settings">Settings</string>
+    <string name="text_scan_qr_login">Scan QR Code to login</string>
+    <string name="text_scan_qr_fill_data">Scan QR Code for fill Part and WIP</string>
+
+
+    <!-- Dialog Emp_No -->
+    <string name="text_enter_emp_no">Enter Employee no.</string>
+    <string name="text_input_emp_no">Please in put Employee no.</string>
+
+    <!-- Dialog Login Failed -->
+    <string name="login_failed">you are not authorize to working this process.\nPlease contact to Line leader.</string>
+    <string name="login_no_data">User not have Model and Process</string>
+
+    <!-- Dialog Emp_ListSelect -->
+    <string name="text_emp_no">Employee no.:</string>
+    <string name="text_model">Model    : </string>
+    <string name="text_line_no">Line no. :</string>
+    <string name="text_process_no">Process no. :</string>
+    <string name="text_lot_no">Lot no. :</string>
+
+    <!-- Dialog Line Leader select-->
+    <string name="text_select_line_leader">Select line leader</string>
+    <string name="text_line_leader">Line leader :</string>
+    <string name="text_first_serial_no">First serial No. :</string>
+
+
+    <!-- Dialog Stop Running -->
+    <string name="text_stop_running_q">Stop Running ?</string>
+    <string name="text_input_comment">Please input Comment</string>
+
+
+    <!-- Main Activity-->
+    <string name="running">RUNNING</string>
+    <string name="stop">STOP</string>
+    <string name="failure">Failure</string>
+
+    <string name="download_success">DownloadSuccess</string>
+    <string name="download_failed">DownloadFailure</string>
+    <string name="downloading">Downloading...</string>
+    <string name="load">Loading &#8230;</string>
+    <string name="create_directory_error">Can\'t created directory for save file</string>
+
+</resources>

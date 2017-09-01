@@ -1,0 +1,23 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <!-- Text Size -->
+    <dimen name="textSizeBig">28sp</dimen>
+    <dimen name="textSizeNormal">21sp</dimen>
+    <dimen name="textSizeSmall">17sp</dimen>
+
+
+    <!-- Main Activity -->
+    <dimen name="mainPaddingTop">40dp</dimen>
+    <dimen name="mainPaddingTop_InNameModel">20dp</dimen>
+    <dimen name="textMargin">5dp</dimen>
+
+
+    <dimen name="padding_listDocument">20dp</dimen>
+
+    <dimen name="space_normal">14dp</dimen>
+
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="transparent">
+
+    <item android:background="#111111" android:state_empty="true" />
+    <item android:background="#ffffff" android:state_expanded="true" />
+
+</selector>

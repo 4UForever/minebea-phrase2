@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_bg"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:divider="@null"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/expand_child_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/textMargin"
+        android:paddingBottom="@dimen/textMargin"
+        android:background="@color/white"
+        android:text="Process no."
+        android:textColor="@color/blackText"
+        android:textSize="@dimen/textSizeNormal"
+
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white">
+
+        <View
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+    </LinearLayout>
+
+</LinearLayout>
