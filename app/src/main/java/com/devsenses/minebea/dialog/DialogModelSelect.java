@@ -1,10 +1,15 @@
 package com.devsenses.minebea.dialog;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,19 +22,26 @@ import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.Shift;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Horus on 1/28/2015.
  */
 public class DialogModelSelect extends MaterialDialog.Builder {
     private Spinner spinnerModel, spinnerLine, spinnerProcess, spinnerShift;
+    private EditText editDate;
 
     private List<Shift> shiftData;
     private List<Model> modelData;
 
     private OnSelectedListener listener;
+
+    private DatePickerDialog datePickerDialog;
+    private SimpleDateFormat dateFormatter;
 
     public DialogModelSelect(@NonNull Context context, String empNo, boolean isWork, boolean isView, List<Shift> shiftData, List<Model> modelData,
                              OnSelectedListener listener) {
@@ -41,6 +53,8 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         initCustomView();
         initUIDialog();
         initDialogOption(isWork, isView);
+        setDateTimeField();
+        initEditDate();
         initSpinnerShift();
         initSpinnerModel();
 
@@ -60,6 +74,10 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     }
 
     private void initUIDialog() {
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        editDate = (EditText) customView.findViewById(R.id.editDate);
+        editDate.setInputType(InputType.TYPE_NULL);
+
         spinnerShift = (Spinner) customView.findViewById(R.id.spinnerShift);
         spinnerModel = (Spinner) customView.findViewById(R.id.spinnerModel);
         spinnerLine = (Spinner) customView.findViewById(R.id.spinnerLineNo);
@@ -80,6 +98,29 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     private void setEmployeeNo(String qrCode) {
         TextView textEmpNo = (TextView) customView.findViewById(R.id.textEmpNo);
         textEmpNo.setText(qrCode);
+    }
+
+    private void initEditDate() {
+        editDate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                datePickerDialog.show();
+                return false;
+            }
+        });
+    }
+
+    private void setDateTimeField() {
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                editDate.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     private void initSpinnerShift() {
@@ -129,17 +170,9 @@ public class DialogModelSelect extends MaterialDialog.Builder {
 
     private List<String> getShiftTimeList() {
         List<String> listShift = new ArrayList<>();
-//        for (int i = 0; i < shiftData.size(); i++) {
-//            listShift.add(shiftData.get(i).getTime());
-//        }
-        listShift.add("A : 7.00-15.00");
-        listShift.add("B : 15.00-23.00");
-        listShift.add("C : 23.00-7.00");
-        listShift.add("D : 8.00-17.00");
-        listShift.add("M : 7.00-19.00");
-        listShift.add("N : 19.00-7.00");
-        listShift.add("Ao : 7.00-19.00");
-        listShift.add("Co : 19.00-7.00");
+        for (int i = 0; i < shiftData.size(); i++) {
+            listShift.add(shiftData.get(i).getTime());
+        }
         return listShift;
     }
 

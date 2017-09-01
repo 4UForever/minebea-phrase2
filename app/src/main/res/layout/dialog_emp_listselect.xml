@@ -37,6 +37,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1">
 
             <TextView
@@ -46,17 +48,21 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/textSizeNormal" />
 
-            <Spinner
-                android:id="@+id/spinnerDate"
+            <EditText
+                android:id="@+id/editDate"
                 style="@style/spinner_wh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeNormal"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1">
 
             <TextView

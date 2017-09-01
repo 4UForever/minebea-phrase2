@@ -24,7 +24,7 @@ public class LoginData implements Parcelable{
     private static final String FIELD_GROUPS = "groups";
     private static final String FIELD_PERMISSION = "permissions";
     private static final String FIELD_MODELS = "models";
-    private static final String FIELD_SHIFTS = "shift_id";
+    private static final String FIELD_SHIFTS = "shifts";
 
 
     @SerializedName(FIELD_LAST_LOGIN)
