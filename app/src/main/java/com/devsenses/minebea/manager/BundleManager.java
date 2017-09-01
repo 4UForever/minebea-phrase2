@@ -2,8 +2,11 @@ package com.devsenses.minebea.manager;
 
 import android.os.Bundle;
 
-import com.devsenses.minebea.model.loginmodel.*;
+import com.devsenses.minebea.model.loginmodel.Line;
+import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
+import com.devsenses.minebea.model.loginmodel.SelectedModel;
+import com.devsenses.minebea.model.loginmodel.Shift;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
 
@@ -30,8 +33,12 @@ public class BundleManager {
     public static final String KEY_LOT_NO = "lotNo";
     public static final String KEY_ON_BREAK = "onBreak";
     public static final String KEY_RECOVER_PART = "recoverPart";
+    public static final String KEY_SHIFT_ID = "idShift";
+    public static final String KEY_SHIFT_NAME = "shiftName";
 
-    public static Bundle putLoginModelDataToBundle(Bundle bundle, Model model, Line line, Process process) {
+    public static Bundle putLoginModelDataToBundle(Bundle bundle, Shift shift, Model model, Line line, Process process) {
+
+        setShiftData(bundle, shift);
         setModelData(bundle, model);
         setLineData(bundle, line);
         setProcessList(bundle, line.getProcesses());
@@ -44,6 +51,9 @@ public class BundleManager {
     }
 
     public static Bundle putSelectedModelDataToBundle(Bundle bundle, SelectedModel selectedModel) {
+        setShiftId(bundle, selectedModel.getID());
+        setShiftTime(bundle, selectedModel.getTime());
+
         setModelId(bundle, selectedModel.getID());
         setModelTitle(bundle, selectedModel.getTitle());
 
@@ -66,8 +76,8 @@ public class BundleManager {
         return bundle;
     }
 
-    public static Bundle putLotNo(Bundle bundle,String lotNo){
-        setLotNo(bundle,lotNo);
+    public static Bundle putLotNo(Bundle bundle, String lotNo) {
+        setLotNo(bundle, lotNo);
         return bundle;
     }
 
@@ -80,6 +90,28 @@ public class BundleManager {
         return (RecoverPartModel) bundle.getParcelable(KEY_RECOVER_PART);
     }
 
+
+    /* Shift */
+    public static void setShiftData(Bundle bundle, Shift shift) {
+        setShiftId(bundle, shift.getId());
+        setShiftTime(bundle, shift.getTime());
+    }
+
+    public static void setShiftId(Bundle bundle, long id) {
+        bundle.putLong(BundleManager.KEY_SHIFT_ID, id);
+    }
+
+    public static String getShiftTime(Bundle bundle) {
+        return bundle.getString(KEY_SHIFT_NAME, "No model title");
+    }
+
+    public static void setShiftTime(Bundle bundle, String time) {
+        bundle.putString(BundleManager.KEY_SHIFT_NAME, time);
+    }
+
+    public static long getShiftID(Bundle bundle) {
+        return bundle.getLong(KEY_SHIFT_ID, 0);
+    }
 
     /* Model */
     public static void setModelData(Bundle bundle, Model model) {

@@ -13,54 +13,114 @@ public class SelectedModel {
     private String mProcessNumber;
     private Long mOnBreak;
     private String mLotNumber;
+    private String mTime;
 
-    public void setID(long id){mId = id;}
-    public long getID(){return mId;}
+    public void setID(long id) {
+        mId = id;
+    }
 
-    public void setTitle(String title){mTitles = title;}
-    public String getTitle(){return mTitles;}
+    public long getID() {
+        return mId;
+    }
 
-    public void setLineID(long lineID){mLineID = lineID;}
-    public long getLineID(){return mLineID;}
+    public void setTitle(String title) {
+        mTitles = title;
+    }
 
-    public void setLineTitle(String lineTitle){mLineTitle = lineTitle;}
-    public String getLineTitle(){return mLineTitle;}
+    public String getTitle() {
+        return mTitles;
+    }
 
-    public void setProcessID(long processID){mProcessID = processID;}
-    public long getProcessID(){return mProcessID;}
+    public void setLineID(long lineID) {
+        mLineID = lineID;
+    }
 
-    public void setProcessTitle(String processTitle){mProcessTitle = processTitle;}
-    public String getProcessTitle(){return mProcessTitle;}
+    public long getLineID() {
+        return mLineID;
+    }
 
-    public void setProcessNumber(String processNumber){mProcessNumber = processNumber;}
-    public String getProcessNumber(){return mProcessNumber;}
+    public void setLineTitle(String lineTitle) {
+        mLineTitle = lineTitle;
+    }
 
-    public void setOnBreak(Long onBreak){mOnBreak = onBreak;}
-    public Long getOnBreak(){return mOnBreak;}
+    public String getLineTitle() {
+        return mLineTitle;
+    }
 
-    public String getLotNumber() {return mLotNumber;}
-    public void setLotNumber(String lotNumber) {this.mLotNumber = lotNumber;}
+    public void setProcessID(long processID) {
+        mProcessID = processID;
+    }
 
-    public SelectedModel initModel(Model model){
+    public long getProcessID() {
+        return mProcessID;
+    }
+
+    public void setProcessTitle(String processTitle) {
+        mProcessTitle = processTitle;
+    }
+
+    public String getProcessTitle() {
+        return mProcessTitle;
+    }
+
+    public void setProcessNumber(String processNumber) {
+        mProcessNumber = processNumber;
+    }
+
+    public String getProcessNumber() {
+        return mProcessNumber;
+    }
+
+    public void setOnBreak(Long onBreak) {
+        mOnBreak = onBreak;
+    }
+
+    public Long getOnBreak() {
+        return mOnBreak;
+    }
+
+    public String getLotNumber() {
+        return mLotNumber;
+    }
+
+    public void setLotNumber(String lotNumber) {
+        this.mLotNumber = lotNumber;
+    }
+
+    public void setTime(String time) {
+        mTime = time;
+    }
+
+    public String getTime() {
+        return mTime;
+    }
+
+    public SelectedModel initShift(Shift shift) {
+        setID(shift.getId());
+        setTime(shift.getTime());
+        return this;
+    }
+
+    public SelectedModel initModel(Model model) {
         setID(model.getId());
         setTitle(model.getTitle());
         return this;
     }
 
-    public SelectedModel initLine(Line line){
+    public SelectedModel initLine(Line line) {
         setLineID(line.getId());
         setLineTitle(line.getTitle());
         return this;
     }
 
-    public SelectedModel initProcess(Process process){
+    public SelectedModel initProcess(Process process) {
         setProcessID(process.getId());
         setProcessTitle(process.getTitle());
         setProcessNumber(process.getNumber());
         return this;
     }
 
-    public SelectedModel initProcessLog(ProcessLog processLog){
+    public SelectedModel initProcessLog(ProcessLog processLog) {
         setID(processLog.getData().getModelId());
         setTitle(processLog.getData().getModelTitle());
 

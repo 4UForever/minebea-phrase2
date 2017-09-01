@@ -1,9 +1,7 @@
 package com.devsenses.minebea.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -11,27 +9,32 @@ import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 import com.devsenses.minebea.R;
-import com.devsenses.minebea.dialog.DialogModelSelect;
 import com.devsenses.minebea.dialog.DialogEmp_No;
+import com.devsenses.minebea.dialog.DialogModelSelect;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.fragment.ScanQRFragment;
 import com.devsenses.minebea.listener.OnApiFailureRecoverProcessListener;
 import com.devsenses.minebea.listener.OnBaseApi;
-import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.listener.OnDialogEmp_NoListener;
 import com.devsenses.minebea.listener.OnQRCodeHelperListener;
-import com.devsenses.minebea.model.loginmodel.*;
-import com.devsenses.minebea.model.loginmodel.Process;
+import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.manager.LoginManager;
+import com.devsenses.minebea.model.loginmodel.Line;
+import com.devsenses.minebea.model.loginmodel.LoginModel;
+import com.devsenses.minebea.model.loginmodel.Model;
+import com.devsenses.minebea.model.loginmodel.Process;
+import com.devsenses.minebea.model.loginmodel.ProcessLog;
+import com.devsenses.minebea.model.loginmodel.SelectedModel;
+import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.model.loginmodel.UserPermission;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
-import com.devsenses.minebea.permission.Permission;
-import com.devsenses.minebea.task.Task;
 import com.devsenses.minebea.task.TaskLogin;
 import com.devsenses.minebea.task.TaskModel;
 import com.devsenses.minebea.utils.Utils;
 
-import io.fabric.sdk.android.Fabric;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 public class ScanQrActivity extends FragmentActivity {
     public static final String EMP_NO_KEY = "empNoKey";
@@ -42,6 +45,8 @@ public class ScanQrActivity extends FragmentActivity {
 
     private String employeeNo;
     private Bundle bundle;
+
+    private List<Shift> shiftList;
     private List<Model> modelList;
     private DialogEmp_No dialogEmp_no;
 
@@ -136,6 +141,7 @@ public class ScanQrActivity extends FragmentActivity {
                 bundle = BundleManager.putUserDataToBundle(bundle, qrCode,
                         permission.getIsWork(), permission.getIsView());
 
+                shiftList = modelReturn.getDatum().getShifts();
                 modelList = modelReturn.getDatum().getModels();
                 checkForUnfinishedProcess(modelReturn);
             }
@@ -157,7 +163,7 @@ public class ScanQrActivity extends FragmentActivity {
         if (modelReturn.getDatum().getOnProcess() != null) {
             loadRecoverProcess(modelReturn.getDatum().getOnProcess());
         } else {
-            showModelDialog(modelReturn.getDatum().getModels(), BundleManager.getIsWork(bundle),
+            showModelDialog(modelReturn.getDatum().getShifts(), modelReturn.getDatum().getModels(), BundleManager.getIsWork(bundle),
                     BundleManager.getIsView(bundle));
         }
     }
@@ -203,14 +209,15 @@ public class ScanQrActivity extends FragmentActivity {
                 });
     }
 
-    private void showModelDialog(List<Model> modelList, final boolean isWork, final boolean isView) {
+    private void showModelDialog(List<Shift> shiftList, List<Model> modelList, final boolean isWork, final boolean isView) {
         scanQRFragment.stopCamera();
-        new DialogModelSelect(this, employeeNo, isWork, isView, modelList, new DialogModelSelect.OnSelectedListener() {
+        new DialogModelSelect(this, employeeNo, isWork, isView, shiftList, modelList, new DialogModelSelect.OnSelectedListener() {
             @Override
-            public void onWork(Model model, Line line, Process process) {
+            public void onWork(Shift shift, Model model, Line line, Process process) {
                 Utils.clearKeyboard(ScanQrActivity.this);
 
                 SelectedModel selectedModel = new SelectedModel()
+                        .initShift(shift)
                         .initModel(model)
                         .initLine(line)
                         .initProcess(process);
@@ -222,9 +229,9 @@ public class ScanQrActivity extends FragmentActivity {
             }
 
             @Override
-            public void onView(Model model, Line line, Process process) {
+            public void onView(Shift shift, Model model, Line line, Process process) {
                 Utils.clearKeyboard(ScanQrActivity.this);
-                bundle = BundleManager.putLoginModelDataToBundle(bundle, model, line, process);
+                bundle = BundleManager.putLoginModelDataToBundle(bundle, shift, model, line, process);
                 startReportActivity(bundle);
             }
         }).show();
@@ -243,7 +250,7 @@ public class ScanQrActivity extends FragmentActivity {
                 DialogWithText.showMessage(ScanQrActivity.this, reason, new DialogWithText.OnClickListener() {
                     @Override
                     public void onClick() {
-                        showModelDialog(modelList, BundleManager.getIsWork(bundle), BundleManager.getIsView(bundle));
+                        showModelDialog(shiftList, modelList, BundleManager.getIsWork(bundle), BundleManager.getIsView(bundle));
                     }
                 });
             }

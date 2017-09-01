@@ -29,6 +29,53 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeNormal" />
+
+            <Spinner
+                android:id="@+id/spinnerDate"
+                style="@style/spinner_wh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_shift"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeNormal" />
+
+            <Spinner
+                android:id="@+id/spinnerShift"
+                style="@style/spinner_wh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_marginTop="40dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"

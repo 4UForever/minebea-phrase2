@@ -15,6 +15,7 @@ import com.devsenses.minebea.adapter.SpinnerTitleAdapter;
 import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
+import com.devsenses.minebea.model.loginmodel.Shift;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +24,24 @@ import java.util.List;
  * Created by Horus on 1/28/2015.
  */
 public class DialogModelSelect extends MaterialDialog.Builder {
-    private Spinner spinnerModel, spinnerLine, spinnerProcess;
+    private Spinner spinnerModel, spinnerLine, spinnerProcess, spinnerShift;
 
+    private List<Shift> shiftData;
     private List<Model> modelData;
 
     private OnSelectedListener listener;
 
-    public DialogModelSelect(@NonNull Context context, String empNo, boolean isWork, boolean isView, List<Model> modelData,
+    public DialogModelSelect(@NonNull Context context, String empNo, boolean isWork, boolean isView, List<Shift> shiftData, List<Model> modelData,
                              OnSelectedListener listener) {
         super(context);
+        this.shiftData = shiftData;
         this.modelData = modelData;
         this.listener = listener;
 
         initCustomView();
         initUIDialog();
         initDialogOption(isWork, isView);
+        initSpinnerShift();
         initSpinnerModel();
 
         if (isWork) {
@@ -56,6 +60,7 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     }
 
     private void initUIDialog() {
+        spinnerShift = (Spinner) customView.findViewById(R.id.spinnerShift);
         spinnerModel = (Spinner) customView.findViewById(R.id.spinnerModel);
         spinnerLine = (Spinner) customView.findViewById(R.id.spinnerLineNo);
         spinnerProcess = (Spinner) customView.findViewById(R.id.spinnerProcessNo);
@@ -75,6 +80,12 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     private void setEmployeeNo(String qrCode) {
         TextView textEmpNo = (TextView) customView.findViewById(R.id.textEmpNo);
         textEmpNo.setText(qrCode);
+    }
+
+    private void initSpinnerShift() {
+        SpinnerTitleAdapter spinnerProcessAdapter = new SpinnerTitleAdapter(context, getShiftTimeList());
+        spinnerShift.setAdapter(spinnerProcessAdapter);
+        spinnerProcessAdapter.notifyDataSetChanged();
     }
 
     private void initSpinnerModel() {
@@ -116,6 +127,22 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         spinnerProcessAdapter.notifyDataSetChanged();
     }
 
+    private List<String> getShiftTimeList() {
+        List<String> listShift = new ArrayList<>();
+//        for (int i = 0; i < shiftData.size(); i++) {
+//            listShift.add(shiftData.get(i).getTime());
+//        }
+        listShift.add("A : 7.00-15.00");
+        listShift.add("B : 15.00-23.00");
+        listShift.add("C : 23.00-7.00");
+        listShift.add("D : 8.00-17.00");
+        listShift.add("M : 7.00-19.00");
+        listShift.add("N : 19.00-7.00");
+        listShift.add("Ao : 7.00-19.00");
+        listShift.add("Co : 19.00-7.00");
+        return listShift;
+    }
+
     private List<String> getModelTitleList() {
         List<String> listModel = new ArrayList<>();
         for (int i = 0; i < modelData.size(); i++) {
@@ -144,15 +171,17 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                int shiftPosition = getShiftPosition();
                 int modelPosition = getModelPosition();
                 int linePosition = getLinePosition();
                 int processPosition = getProcessPosition();
 
+                Shift selectedShift = shiftData.get(shiftPosition);
                 Model selectedModel = modelData.get(modelPosition);
                 Line selectedLine = selectedModel.getLines().get(linePosition);
                 Process selectedProcess = selectedLine.getProcesses().get(processPosition);
 
-                listener.onWork(selectedModel, selectedLine, selectedProcess);
+                listener.onWork(selectedShift, selectedModel, selectedLine, selectedProcess);
                 autoDismiss(true);
             }
         });
@@ -162,18 +191,24 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                int shiftPosition = getShiftPosition();
                 int modelPosition = getModelPosition();
                 int linePosition = getLinePosition();
                 int processPosition = getProcessPosition();
 
+                Shift selectedShift = shiftData.get(shiftPosition);
                 Model selectedModel = modelData.get(modelPosition);
                 Line selectedLine = selectedModel.getLines().get(linePosition);
                 Process selectedProcess = selectedLine.getProcesses().get(processPosition);
 
-                listener.onView(selectedModel, selectedLine, selectedProcess);
+                listener.onView(selectedShift, selectedModel, selectedLine, selectedProcess);
                 autoDismiss(true);
             }
         });
+    }
+
+    private int getShiftPosition() {
+        return (spinnerShift != null ? spinnerShift.getSelectedItemPosition() : 0);
     }
 
     private int getModelPosition() {
@@ -189,9 +224,9 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     }
 
     public interface OnSelectedListener {
-        void onWork(Model model, Line line, Process process);
+        void onWork(Shift shift, Model model, Line line, Process process);
 
-        void onView(Model model, Line line, Process process);
+        void onView(Shift shift, Model model, Line line, Process process);
     }
 
 }

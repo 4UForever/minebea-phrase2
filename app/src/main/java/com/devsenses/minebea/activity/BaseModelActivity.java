@@ -13,7 +13,7 @@ import com.devsenses.minebea.utils.Utils;
  * Created by pong.p on 2/9/2016.
  */
 public abstract class BaseModelActivity extends FragmentActivity {
-    protected long lineId, modelId, processId;
+    protected long lineId, modelId, processId, shiftId;
     protected String employeeNo = "";
     protected Bundle bundle;
     private TextView lbTextProcessHeader;
@@ -31,6 +31,7 @@ public abstract class BaseModelActivity extends FragmentActivity {
     public abstract void initCreateView(Bundle savedInstanceState);
 
     protected void initDataFromBundle(Bundle bundle) {
+        shiftId = BundleManager.getShiftID(bundle);
         processId = BundleManager.getProcessID(bundle);
         lineId = BundleManager.getLineID(bundle);
         modelId = BundleManager.getModelID(bundle);

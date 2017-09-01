@@ -23,6 +23,8 @@
     <string name="text_line_no">Line no. :</string>
     <string name="text_process_no">Process no. :</string>
     <string name="text_lot_no">Lot no. :</string>
+    <string name="text_date">Date : </string>
+    <string name="text_shift">Shift : </string>
 
     <!-- Dialog Line Leader select-->
     <string name="text_select_line_leader">Select line leader</string>
