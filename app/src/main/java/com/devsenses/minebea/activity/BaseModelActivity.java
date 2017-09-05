@@ -13,6 +13,10 @@ import com.devsenses.minebea.R;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.utils.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by pong.p on 2/9/2016.
  */
@@ -62,11 +66,21 @@ public abstract class BaseModelActivity extends FragmentActivity {
         blackSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, black.length(), 0);
         builder.append(blackSpannable);
 
-        String blue = " " + BundleManager.getWorkingDate(bundle) + " / " + BundleManager.getShiftTime(bundle);
-        SpannableString blueSpannable = new SpannableString(blue);
-        blueSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blueText)), 0, blue.length(), 0);
-        builder.append(blueSpannable);
-        textDateShift.setText(builder, TextView.BufferType.SPANNABLE);
+        String workingDateOldString = BundleManager.getWorkingDate(bundle);
+
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(workingDateOldString);
+            String workingDateNewString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
+            String blue = " " + workingDateNewString + " / " + BundleManager.getShiftTime(bundle);
+            SpannableString blueSpannable = new SpannableString(blue);
+            blueSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blueText)), 0, blue.length(), 0);
+            builder.append(blueSpannable);
+            textDateShift.setText(builder, TextView.BufferType.SPANNABLE);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         lbTextModel.setText(BundleManager.getModelTitle(bundle));
         lbTextLine.setText(BundleManager.getLineTitle(bundle));
