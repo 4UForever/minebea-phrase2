@@ -77,6 +77,8 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         editDate = (EditText) customView.findViewById(R.id.editDate);
         editDate.setInputType(InputType.TYPE_NULL);
+        Calendar newDate = Calendar.getInstance();
+        editDate.setText(dateFormatter.format(newDate.getTime()));
 
         spinnerShift = (Spinner) customView.findViewById(R.id.spinnerShift);
         spinnerModel = (Spinner) customView.findViewById(R.id.spinnerModel);
