@@ -145,6 +145,10 @@ public class SelectedModel {
     }
 
     public SelectedModel initProcessLog(ProcessLog processLog) {
+        setWorkingDate(processLog.getData().getWorkingDate());
+        setShiftID(processLog.getData().getShiftId());
+        setShiftTitle(processLog.getData().getShiftTime());
+
         setID(processLog.getData().getModelId());
         setTitle(processLog.getData().getModelTitle());
 

@@ -47,5 +47,6 @@
     <string name="downloading">Downloading...</string>
     <string name="load">Loading &#8230;</string>
     <string name="create_directory_error">Can\'t created directory for save file</string>
+    <string name="login_date_and_shift">Login Date / Shift : </string>
 
 </resources>
