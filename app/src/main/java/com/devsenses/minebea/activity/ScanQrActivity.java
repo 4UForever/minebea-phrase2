@@ -213,10 +213,11 @@ public class ScanQrActivity extends FragmentActivity {
         scanQRFragment.stopCamera();
         new DialogModelSelect(this, employeeNo, isWork, isView, shiftList, modelList, new DialogModelSelect.OnSelectedListener() {
             @Override
-            public void onWork(Shift shift, Model model, Line line, Process process) {
+            public void onWork(String workingDate, Shift shift, Model model, Line line, Process process) {
                 Utils.clearKeyboard(ScanQrActivity.this);
 
                 SelectedModel selectedModel = new SelectedModel()
+                        .initWorkingDate(workingDate)
                         .initShift(shift)
                         .initModel(model)
                         .initLine(line)
@@ -229,9 +230,9 @@ public class ScanQrActivity extends FragmentActivity {
             }
 
             @Override
-            public void onView(Shift shift, Model model, Line line, Process process) {
+            public void onView(String workingDate, Shift shift, Model model, Line line, Process process) {
                 Utils.clearKeyboard(ScanQrActivity.this);
-                bundle = BundleManager.putLoginModelDataToBundle(bundle, shift, model, line, process);
+                bundle = BundleManager.putLoginModelDataToBundle(bundle, workingDate, shift, model, line, process);
                 startReportActivity(bundle);
             }
         }).show();

@@ -13,7 +13,9 @@ public class SelectedModel {
     private String mProcessNumber;
     private Long mOnBreak;
     private String mLotNumber;
-    private String mTime;
+    private long mShiftID;
+    private String mShiftTitles;
+    private String mWorkingDate;
 
     public void setID(long id) {
         mId = id;
@@ -87,17 +89,39 @@ public class SelectedModel {
         this.mLotNumber = lotNumber;
     }
 
-    public void setTime(String time) {
-        mTime = time;
+
+    public String getWorkingDate() {
+        return mWorkingDate;
     }
 
-    public String getTime() {
-        return mTime;
+    public void setWorkingDate(String mWorkingDate) {
+        this.mWorkingDate = mWorkingDate;
+    }
+
+    public long getShiftID() {
+        return mShiftID;
+    }
+
+    public void setShiftID(long mShiftID) {
+        this.mShiftID = mShiftID;
+    }
+
+    public void setShiftTitle(String shiftTitles) {
+        mShiftTitles = shiftTitles;
+    }
+
+    public String getShiftTitle() {
+        return mShiftTitles;
+    }
+
+    public SelectedModel initWorkingDate(String mWorkingDate) {
+        setWorkingDate(mWorkingDate);
+        return this;
     }
 
     public SelectedModel initShift(Shift shift) {
-        setID(shift.getId());
-        setTime(shift.getTime());
+        setShiftID(shift.getId());
+        setShiftTitle(shift.getTime());
         return this;
     }
 

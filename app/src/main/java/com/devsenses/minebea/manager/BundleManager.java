@@ -35,9 +35,11 @@ public class BundleManager {
     public static final String KEY_RECOVER_PART = "recoverPart";
     public static final String KEY_SHIFT_ID = "idShift";
     public static final String KEY_SHIFT_NAME = "shiftName";
+    public static final String KEY_WORKING_DATE = "workingDate";
 
-    public static Bundle putLoginModelDataToBundle(Bundle bundle, Shift shift, Model model, Line line, Process process) {
+    public static Bundle putLoginModelDataToBundle(Bundle bundle, String workingDate, Shift shift, Model model, Line line, Process process) {
 
+        setWorkingDateData(bundle, workingDate);
         setShiftData(bundle, shift);
         setModelData(bundle, model);
         setLineData(bundle, line);
@@ -51,8 +53,11 @@ public class BundleManager {
     }
 
     public static Bundle putSelectedModelDataToBundle(Bundle bundle, SelectedModel selectedModel) {
+
+        setWorkingDate(bundle, selectedModel.getWorkingDate());
+
         setShiftId(bundle, selectedModel.getID());
-        setShiftTime(bundle, selectedModel.getTime());
+        setShiftTime(bundle, selectedModel.getShiftTitle());
 
         setModelId(bundle, selectedModel.getID());
         setModelTitle(bundle, selectedModel.getTitle());
@@ -90,6 +95,18 @@ public class BundleManager {
         return (RecoverPartModel) bundle.getParcelable(KEY_RECOVER_PART);
     }
 
+    /* Date */
+    public static void setWorkingDateData(Bundle bundle, String date){
+        setWorkingDate(bundle, date);
+    }
+
+    public static String getWorkingDate(Bundle bundle) {
+        return bundle.getString(KEY_WORKING_DATE, "No model title");
+    }
+
+    public static void setWorkingDate(Bundle bundle, String mWorkingDate) {
+        bundle.putString(BundleManager.KEY_WORKING_DATE, mWorkingDate);
+    }
 
     /* Shift */
     public static void setShiftData(Bundle bundle, Shift shift) {

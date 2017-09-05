@@ -211,12 +211,14 @@ public class DialogModelSelect extends MaterialDialog.Builder {
                 int linePosition = getLinePosition();
                 int processPosition = getProcessPosition();
 
+                String selectedDate = editDate.getText().toString();
+
                 Shift selectedShift = shiftData.get(shiftPosition);
                 Model selectedModel = modelData.get(modelPosition);
                 Line selectedLine = selectedModel.getLines().get(linePosition);
                 Process selectedProcess = selectedLine.getProcesses().get(processPosition);
 
-                listener.onWork(selectedShift, selectedModel, selectedLine, selectedProcess);
+                listener.onWork(selectedDate, selectedShift, selectedModel, selectedLine, selectedProcess);
                 autoDismiss(true);
             }
         });
@@ -231,12 +233,14 @@ public class DialogModelSelect extends MaterialDialog.Builder {
                 int linePosition = getLinePosition();
                 int processPosition = getProcessPosition();
 
+                String selectedDate = editDate.getText().toString();
+
                 Shift selectedShift = shiftData.get(shiftPosition);
                 Model selectedModel = modelData.get(modelPosition);
                 Line selectedLine = selectedModel.getLines().get(linePosition);
                 Process selectedProcess = selectedLine.getProcesses().get(processPosition);
 
-                listener.onView(selectedShift, selectedModel, selectedLine, selectedProcess);
+                listener.onView(selectedDate, selectedShift, selectedModel, selectedLine, selectedProcess);
                 autoDismiss(true);
             }
         });
@@ -259,9 +263,9 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     }
 
     public interface OnSelectedListener {
-        void onWork(Shift shift, Model model, Line line, Process process);
+        void onWork(String workingDate, Shift shift, Model model, Line line, Process process);
 
-        void onView(Shift shift, Model model, Line line, Process process);
+        void onView(String workingDate, Shift shift, Model model, Line line, Process process);
     }
 
 }
