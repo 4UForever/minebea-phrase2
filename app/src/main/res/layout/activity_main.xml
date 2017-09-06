@@ -83,7 +83,7 @@
                             android:layout_marginRight="8dp"
                             android:layout_weight="1"
                             android:background="@color/white"
-                            android:gravity="right"
+                            android:gravity="center"
                             android:inputType="number" />
 
                         <Button
@@ -135,7 +135,7 @@
                             android:layout_marginRight="8dp"
                             android:layout_weight="1"
                             android:background="@color/white"
-                            android:gravity="right"
+                            android:gravity="center"
                             android:inputType="number" />
 
                         <Button
