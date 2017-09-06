@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import java.util.Locale;
 public class DialogModelSelect extends MaterialDialog.Builder {
     private Spinner spinnerModel, spinnerLine, spinnerProcess, spinnerShift;
     private EditText editDate;
+    private LinearLayout layoutDateAndShift;
 
     private List<Shift> shiftData;
     private List<Model> modelData;
@@ -84,6 +86,8 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         spinnerModel = (Spinner) customView.findViewById(R.id.spinnerModel);
         spinnerLine = (Spinner) customView.findViewById(R.id.spinnerLineNo);
         spinnerProcess = (Spinner) customView.findViewById(R.id.spinnerProcessNo);
+
+        layoutDateAndShift = (LinearLayout) customView.findViewById(R.id.layout_date_and_shift);
     }
 
     private void initDialogOption(boolean isWork, boolean isView) {
@@ -91,6 +95,7 @@ public class DialogModelSelect extends MaterialDialog.Builder {
             this.positiveText("PROCESS").positiveColor(ContextCompat.getColor(context, R.color.blueText));
         }
         if (isView) {
+            layoutDateAndShift.setVisibility(View.GONE);
             this.negativeText("VIEW");
         }
         this.cancelable(false);
