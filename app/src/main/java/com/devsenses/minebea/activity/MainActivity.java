@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +17,8 @@ import com.devsenses.minebea.dialog.DialogStopRunning;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
+import com.devsenses.minebea.listener.OnButtonAddNumberClickedListener;
+import com.devsenses.minebea.listener.OnButtonDeleteNumberClickedListener;
 import com.devsenses.minebea.listener.OnDialogStopProcessListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
@@ -32,6 +36,8 @@ public class MainActivity extends ReportActivity {
     private TextView lbStatus;
 
     private BreakReasonData currentBreakReasonData;
+    private EditText editSetup;
+    private EditText editDt;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -60,6 +66,8 @@ public class MainActivity extends ReportActivity {
     private void initUI() {
         lbStatus = (TextView) findViewById(R.id.current_status_text);
         processCheckBox = (CheckBox) findViewById(R.id.process_checkbox);
+        editSetup = (EditText) findViewById(R.id.edit_main_setup);
+        editDt = (EditText) findViewById(R.id.edit_main_dt);
     }
 
     @Override
@@ -72,6 +80,17 @@ public class MainActivity extends ReportActivity {
 
     protected void initEvent() {
         processCheckBox.setOnClickListener(new OnCheckProcessClickListener());
+
+        Button btnSetupAdd = (Button) findViewById(R.id.btn_main_setup_add);
+        Button btnSetupDelete = (Button) findViewById(R.id.btn_main_setup_delete);
+        Button btnDtAdd = (Button) findViewById(R.id.btn_main_dt_add);
+        Button btnDtRemove = (Button) findViewById(R.id.btn_main_dt_delete);
+
+        btnSetupAdd.setOnClickListener(new OnButtonAddNumberClickedListener(editSetup));
+        btnSetupDelete.setOnClickListener(new OnButtonDeleteNumberClickedListener(editSetup));
+
+        btnDtAdd.setOnClickListener(new OnButtonAddNumberClickedListener(editDt));
+        btnDtRemove.setOnClickListener(new OnButtonDeleteNumberClickedListener(editDt));
     }
 
     private class OnCheckProcessClickListener implements View.OnClickListener {
@@ -86,9 +105,9 @@ public class MainActivity extends ReportActivity {
     }
 
     private void checkProcessStatus(Long breakId) {
-        if(breakId >= 0){
+        if (breakId >= 0) {
             setStatusToBreak();
-        }else{
+        } else {
             setStatusToRunning();
         }
     }
@@ -211,5 +230,4 @@ public class MainActivity extends ReportActivity {
             }
         });
     }
-
 }
