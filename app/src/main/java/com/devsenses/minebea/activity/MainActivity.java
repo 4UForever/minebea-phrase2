@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.dialog.DialogBreakReason;
+import com.devsenses.minebea.dialog.DialogNgListDetail;
 import com.devsenses.minebea.dialog.DialogStopRunning;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
@@ -23,6 +24,7 @@ import com.devsenses.minebea.listener.OnDialogStopProcessListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.task.TaskBreak;
 import com.devsenses.minebea.task.TaskProcess;
 
@@ -39,6 +41,9 @@ public class MainActivity extends ReportActivity {
     private EditText editSetup;
     private EditText editDt;
 
+    private NGListData baseNgListData;
+    private NGListData selectedNgListData;
+
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
      * So... the code look weird but it work well.
@@ -52,6 +57,8 @@ public class MainActivity extends ReportActivity {
     @Override
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
+
+        baseNgListData = BundleManager.getNgList(bundle);
 
         initUI();
         setEventLogout();
@@ -91,6 +98,30 @@ public class MainActivity extends ReportActivity {
 
         btnDtAdd.setOnClickListener(new OnButtonAddNumberClickedListener(editDt));
         btnDtRemove.setOnClickListener(new OnButtonDeleteNumberClickedListener(editDt));
+
+        Button btnAddNg1 = (Button) findViewById(R.id.btn_main_add_ng1);
+        btnAddNg1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNgListDialog();
+            }
+        });
+    }
+
+    private void showNgListDialog() {
+        DialogNgListDetail dialog = new DialogNgListDetail(this, baseNgListData, selectedNgListData, new DialogNgListDetail.OnDialogNgListListener() {
+            @Override
+            public void onSavedList(NGListData listData) {
+                if (listData != null) {
+                    selectedNgListData = listData;
+                }
+            }
+        });
+        dialog.show();
+//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//        dialog.show().getWindow().setAttributes(lp);
     }
 
     private class OnCheckProcessClickListener implements View.OnClickListener {
