@@ -1,14 +1,14 @@
 package com.devsenses.minebea.listener;
 
+import com.devsenses.minebea.model.BaseModel;
 import com.devsenses.minebea.model.breakmodel.BreakReasonModel;
 import com.devsenses.minebea.model.documentmodel.DocumentModel;
-import com.devsenses.minebea.model.BaseModel;
 import com.devsenses.minebea.model.lineleadermodel.LineLeaderModel;
 import com.devsenses.minebea.model.loginmodel.LoginModel;
 import com.devsenses.minebea.model.loginmodel.OnProcessModel;
+import com.devsenses.minebea.model.ngmodel.NGModel;
 import com.devsenses.minebea.model.partmodel.LotModel;
 import com.devsenses.minebea.model.partmodel.PartModel;
-import com.devsenses.minebea.model.ngmodel.NGModel;
 
 import retrofit.Call;
 import retrofit.http.Field;
@@ -31,7 +31,8 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/process/model-data")
-    Call<BaseModel> sendModel(@Field("qr_code") String qrCode, @Field("model_id") long modelID,
+    Call<BaseModel> sendModel(@Field("qr_code") String qrCode, @Field("working_date") String workingDate,
+                              @Field("shift_id") long shiftID, @Field("model_id") long modelID,
                               @Field("line_id") long lineID, @Field("process_id") long processID);
 
     @FormUrlEncoded

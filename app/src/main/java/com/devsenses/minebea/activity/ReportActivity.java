@@ -32,6 +32,7 @@ public class ReportActivity extends BaseModelActivity  implements ListDocumentFr
         setEventLogout();
         hideWorkStatus();
         hideLotNo();
+        hideAddNG1();
 
         if (savedInstanceState == null) {
             initDocumentManager();
@@ -51,6 +52,11 @@ public class ReportActivity extends BaseModelActivity  implements ListDocumentFr
     private void hideLotNo() {
         LinearLayout layoutLotNo = (LinearLayout) findViewById(R.id.layoutLotNo);
         layoutLotNo.setVisibility(View.GONE);
+    }
+
+    private void hideAddNG1(){
+        LinearLayout layoutAddNG1 = (LinearLayout) findViewById(R.id.layoutAddNG1);
+        layoutAddNG1.setVisibility(View.GONE);
     }
 
     protected void setEventLogout() {

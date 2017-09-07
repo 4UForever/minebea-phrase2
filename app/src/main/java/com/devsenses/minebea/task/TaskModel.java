@@ -24,7 +24,8 @@ public class TaskModel extends Task {
         final LoadingDialog dialog = new LoadingDialog(context);
         dialog.show();
 
-        Call<BaseModel> call = getService().sendModel(qrCode, selectedModel.getID(),
+        Call<BaseModel> call = getService().sendModel(qrCode, selectedModel.getWorkingDate(),
+                selectedModel.getShiftID(), selectedModel.getID(),
                 selectedModel.getLineID(), selectedModel.getProcessID());
 
         call.enqueue(new Callback<BaseModel>() {

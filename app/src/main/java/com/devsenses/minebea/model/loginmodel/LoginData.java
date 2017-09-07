@@ -24,6 +24,7 @@ public class LoginData implements Parcelable{
     private static final String FIELD_GROUPS = "groups";
     private static final String FIELD_PERMISSION = "permissions";
     private static final String FIELD_MODELS = "models";
+    private static final String FIELD_SHIFTS = "shifts";
 
 
     @SerializedName(FIELD_LAST_LOGIN)
@@ -52,6 +53,8 @@ public class LoginData implements Parcelable{
     private Long mOnProcessId;
     @SerializedName(FIELD_PERMISSION)
     private UserPermission mUserPermission;
+    @SerializedName(FIELD_SHIFTS)
+    private List<Shift> mShifts;
 
 
 
@@ -100,6 +103,13 @@ public class LoginData implements Parcelable{
     }
     public List<Model> getModels() {
         return mModels;
+    }
+
+    public void setShifts(List<Shift> shifts) {
+        mShifts = shifts;
+    }
+    public List<Shift> getShifts() {
+        return mShifts;
     }
 
     public void setLastLogout(String lastLogout) {
@@ -162,6 +172,8 @@ public class LoginData implements Parcelable{
         in.readTypedList(mGroups, Group.CREATOR);
         mModels = new ArrayList<>();
         in.readTypedList(mModels, Model.CREATOR);
+        mShifts = new ArrayList<>();
+        in.readTypedList(mModels, Model.CREATOR);
         mLastLogout = in.readString();
         mLastName = in.readString();
         mUpdatedAt = in.readString();
@@ -193,6 +205,7 @@ public class LoginData implements Parcelable{
         dest.writeString(mCreatedAt);
         dest.writeTypedList(mGroups);
         dest.writeTypedList(mModels);
+        dest.writeTypedList(mShifts);
         dest.writeString(mLastLogout);
         dest.writeString(mLastName);
         dest.writeString(mUpdatedAt);
@@ -202,7 +215,7 @@ public class LoginData implements Parcelable{
 
     @Override
     public String toString(){
-        return "lastLogin = " + mLastLogin + ", id = " + mId + ", firstName = " + mFirstName + ", createdAt = " + mCreatedAt + ", groups = " + mGroups + ", models = " + mModels + ", lastLogout = " + mLastLogout + ", lastName = " + mLastName + ", updatedAt = " + mUpdatedAt + ", email = " + mEmail;
+        return "lastLogin = " + mLastLogin + ", id = " + mId + ", firstName = " + mFirstName + ", createdAt = " + mCreatedAt + ", groups = " + mGroups + ", models = " + mModels + ", shifts = " + mShifts +", lastLogout = " + mLastLogout + ", lastName = " + mLastName + ", updatedAt = " + mUpdatedAt + ", email = " + mEmail;
     }
 
 
