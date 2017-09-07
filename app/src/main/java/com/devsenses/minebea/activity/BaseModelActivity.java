@@ -29,8 +29,9 @@ public abstract class BaseModelActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         bundle = getIntent().getExtras();
         if (bundle == null) {
-            bundle = BundleManager.putUserDataToBundle(new Bundle(), "0001", false, false);
-            bundle = BundleManager.putLoginModelDataToBundle(bundle, MockData.getMockModel(),
+            bundle = BundleManager.putUserDataToBundle(new Bundle(), "pong.p", false, false);
+            bundle = BundleManager.putLoginModelDataToBundle(bundle, "20/10/2560",
+                    MockData.getMockShift(), MockData.getMockModel(),
                     MockData.getMockLine(), MockData.getMockProcess());
             bundle = BundleManager.putSelectedModelDataToBundle(bundle, MockData.getMockSelectedModel());
             bundle = BundleManager.putLotNo(bundle, "mock lot no naja");

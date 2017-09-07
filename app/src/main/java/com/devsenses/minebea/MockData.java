@@ -4,6 +4,7 @@ import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
+import com.devsenses.minebea.model.loginmodel.Shift;
 import com.devsenses.minebea.model.partmodel.LotNo;
 import com.devsenses.minebea.model.partmodel.Part;
 import com.devsenses.minebea.model.partmodel.PartData;
@@ -16,6 +17,15 @@ import java.util.List;
  */
 
 public final class MockData {
+
+    public static Shift getMockShift() {
+        Shift shift = new Shift();
+        shift.setId(0);
+        shift.setLabel("mock shift");
+        shift.setTime("10.20-20.30");
+
+        return shift;
+    }
 
     public static Model getMockModel() {
         List<Line> lines = new ArrayList<>();
