@@ -1,8 +1,12 @@
 package com.devsenses.minebea.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
 import com.devsenses.minebea.MockData;
@@ -14,10 +18,11 @@ import com.devsenses.minebea.utils.Utils;
  * Created by pong.p on 2/9/2016.
  */
 public abstract class BaseModelActivity extends FragmentActivity {
-    protected long lineId, modelId, processId;
+    protected long lineId, modelId, processId, shiftId;
     protected String employeeNo = "";
     protected Bundle bundle;
-    private TextView lbTextProcessHeader;
+    protected String workingDate, shiftTime;
+    private TextView textDateShift, lbTextProcessHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,9 @@ public abstract class BaseModelActivity extends FragmentActivity {
     public abstract void initCreateView(Bundle savedInstanceState);
 
     protected void initDataFromBundle(Bundle bundle) {
+        workingDate = BundleManager.getWorkingDate(bundle);
+        shiftId = BundleManager.getShiftID(bundle);
+        shiftTime = BundleManager.getShiftTime(bundle);
         processId = BundleManager.getProcessID(bundle);
         lineId = BundleManager.getLineID(bundle);
         modelId = BundleManager.getModelID(bundle);
@@ -52,9 +60,22 @@ public abstract class BaseModelActivity extends FragmentActivity {
         TextView lbTextLine = (TextView) findViewById(R.id.lbTextLine);
         TextView lbTextEmpNo = (TextView) findViewById(R.id.lbTextEmpNo);
         TextView lbLotNoTextView = (TextView) findViewById(R.id.lbLotNoTextView);
+        textDateShift = (TextView) findViewById(R.id.textDateShift);
 
         setFormattedProcessText(BundleManager.getProcessTitle(bundle), BundleManager.getProcessNumber(bundle),
                 lbTextProcessHeader);
+
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        String black = getResources().getString(R.string.login_date_and_shift);
+        SpannableString blackSpannable = new SpannableString(black);
+        blackSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, black.length(), 0);
+        builder.append(blackSpannable);
+
+        String blue = " " + BundleManager.getWorkingDate(bundle) + " / " + BundleManager.getShiftTime(bundle);
+        SpannableString blueSpannable = new SpannableString(blue);
+        blueSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blueText)), 0, blue.length(), 0);
+        builder.append(blueSpannable);
+        textDateShift.setText(builder, TextView.BufferType.SPANNABLE);
 
         lbTextModel.setText(BundleManager.getModelTitle(bundle));
         lbTextLine.setText(BundleManager.getLineTitle(bundle));

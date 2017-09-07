@@ -23,6 +23,8 @@
     <string name="text_line_no">Line no. :</string>
     <string name="text_process_no">Process no. :</string>
     <string name="text_lot_no">Lot no. :</string>
+    <string name="text_date">Date : </string>
+    <string name="text_shift">Shift : </string>
 
     <!-- Dialog Line Leader select-->
     <string name="text_select_line_leader">Select line leader</string>
@@ -45,5 +47,7 @@
     <string name="downloading">Downloading...</string>
     <string name="load">Loading &#8230;</string>
     <string name="create_directory_error">Can\'t created directory for save file</string>
+    <string name="login_date_and_shift">Login Date / Shift : </string>
+    <string name="add_ng1">Add NG1</string>
 
 </resources>
