@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:weightSum="10">
+
+    <Spinner
+        android:id="@+id/spinner_ng_list_item"
+        style="@style/spinner_wh"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="7" />
+
+    <EditText
+        android:id="@+id/edit_ng_item_qty"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="@dimen/md_button_padding_vertical" />
+</LinearLayout>
