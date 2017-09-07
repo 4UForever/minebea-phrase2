@@ -2,9 +2,12 @@ package com.devsenses.minebea.model.ngmodel;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by pong.p on 2/3/2016.
  */
+@Parcel(Parcel.Serialization.BEAN)
 public class NG {
     private static final String FIELD_ID = "id";
     private static final String FIELD_PROCESS_ID = "process_id";
@@ -24,6 +27,8 @@ public class NG {
     @SerializedName(FIELD_UPDATED_AT)
     private String mUpdatedAt;
 
+    private String mUseQty;
+
     public NG() {}
 
     public long getId() {return id;}
@@ -40,4 +45,21 @@ public class NG {
 
     public String getUpdatedAt() {return mUpdatedAt;}
     public void setUpdatedAt(String updatedAt) {this.mUpdatedAt = updatedAt;}
+
+    public String getUseQty() {
+        return mUseQty!=null?mUseQty:"0";
+    }
+    public void setUseQty(String useQty) {
+        this.mUseQty = useQty;
+    }
+
+    @Override
+    public String toString() {
+        return "NG{" +
+                "id=" + id +
+                ", mProcessId='" + mProcessId + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mUseQty='" + mUseQty + '\'' +
+                '}';
+    }
 }
