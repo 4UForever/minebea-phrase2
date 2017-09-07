@@ -5,6 +5,8 @@ import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
 import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.model.ngmodel.NG;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.LotNo;
 import com.devsenses.minebea.model.partmodel.Part;
 import com.devsenses.minebea.model.partmodel.PartData;
@@ -115,5 +117,28 @@ public final class MockData {
         lotNo.setQuantity(3);
 
         return lotNo;
+    }
+
+    public static NGListData getMockNGListData() {
+        List<NG> ngs = new ArrayList<>();
+        ngs.add(getMockNg("mock ng detail 1"));
+        ngs.add(getMockNg("mock ng detail 2"));
+        ngs.add(getMockNg("mock ng detail 3"));
+
+        NGListData ngListData = new NGListData();
+        ngListData.setNGList(ngs);
+
+        return ngListData;
+    }
+
+    public static NG getMockNg(String title) {
+        NG ng = new NG();
+        ng.setId(0);
+        ng.setTitle(title);
+        ng.setProcessId("mock pcs id");
+        ng.setCreatedAt("02/30/2560");
+        ng.setUpdatedAt("02/30/2560");
+
+        return ng;
     }
 }

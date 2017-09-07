@@ -36,6 +36,7 @@ public abstract class BaseModelActivity extends FragmentActivity {
             bundle = BundleManager.putSelectedModelDataToBundle(bundle, MockData.getMockSelectedModel());
             bundle = BundleManager.putLotNo(bundle, "mock lot no naja");
             bundle = BundleManager.putPartData(bundle, MockData.getMockPartData());
+            bundle = BundleManager.putNg1List(bundle, MockData.getMockNGListData());
         }
         initDataFromBundle(bundle);
 
