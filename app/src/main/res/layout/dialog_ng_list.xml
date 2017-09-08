@@ -63,12 +63,21 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/text_dialog_ng_list_empty_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_normal"
+        android:text="No NG1 detail list found."
+        android:visibility="gone"
+        android:textSize="@dimen/textSizeNormal" />
+
     <ListView
         android:id="@+id/list_dialog_ng_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0dp"
         android:divider="@null"
+        android:dividerHeight="0dp"
         tools:listitem="@layout/item_ng_detail" />
 
 </LinearLayout>

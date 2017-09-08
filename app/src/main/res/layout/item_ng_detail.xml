@@ -22,4 +22,14 @@
         android:gravity="center"
         android:inputType="number"
         android:padding="@dimen/md_button_padding_vertical" />
+
+    <Button
+        android:id="@+id/btn_ng_item_delete"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/space_normal"
+        android:adjustViewBounds="true"
+        android:background="@drawable/minus"
+        android:scaleType="center" />
 </LinearLayout>
