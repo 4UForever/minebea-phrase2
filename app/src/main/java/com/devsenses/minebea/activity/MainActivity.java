@@ -24,9 +24,12 @@ import com.devsenses.minebea.listener.OnDialogStopProcessListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
+import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.task.TaskBreak;
 import com.devsenses.minebea.task.TaskProcess;
+
+import java.util.List;
 
 /**
  * Created by Horus on 1/30/2015.
@@ -42,7 +45,7 @@ public class MainActivity extends ReportActivity {
     private EditText editDt;
 
     private NGListData baseNgListData;
-    private NGListData selectedNgListData;
+    private List<NGDetail> selectedNgList;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -109,19 +112,16 @@ public class MainActivity extends ReportActivity {
     }
 
     private void showNgListDialog() {
-        DialogNgListDetail dialog = new DialogNgListDetail(this, baseNgListData, selectedNgListData, new DialogNgListDetail.OnDialogNgListListener() {
+        DialogNgListDetail dialog = new DialogNgListDetail(this, baseNgListData, selectedNgList, new DialogNgListDetail.OnDialogNgListListener() {
             @Override
-            public void onSavedList(NGListData listData) {
-                if (listData != null) {
-                    selectedNgListData = listData;
+            public void onSavedList(List<NGDetail> ngDetailList) {
+                if (ngDetailList != null) {
+                    selectedNgList.clear();
+                    selectedNgList.addAll(ngDetailList);
                 }
             }
         });
         dialog.show();
-//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-//        dialog.show().getWindow().setAttributes(lp);
     }
 
     private class OnCheckProcessClickListener implements View.OnClickListener {
