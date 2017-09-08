@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,7 +52,7 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         this.shiftData = shiftData;
         this.modelData = modelData;
         this.listener = listener;
-
+        
         initCustomView();
         initUIDialog();
         initDialogOption(isWork, isView);
@@ -95,8 +96,10 @@ public class DialogModelSelect extends MaterialDialog.Builder {
             this.positiveText("PROCESS").positiveColor(ContextCompat.getColor(context, R.color.blueText));
         }
         if (isView) {
-            layoutDateAndShift.setVisibility(View.GONE);
             this.negativeText("VIEW");
+        }
+        if (!isWork && isView) {
+            layoutDateAndShift.setVisibility(View.GONE);
         }
         this.cancelable(false);
         this.autoDismiss(false);
