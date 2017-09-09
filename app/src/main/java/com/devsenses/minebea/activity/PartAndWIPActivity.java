@@ -217,7 +217,7 @@ public class PartAndWIPActivity extends BaseModelActivity {
         TaskNG.getNGList(PartAndWIPActivity.this, employeeNo, new OnApiGetNGListener() {
             @Override
             public void onSuccess(NGListData ngListData) {
-                bundle = BundleManager.putNg1List(bundle, ngListData);
+                bundle = BundleManager.putBaseNgList(bundle, ngListData);
                 startMainActivity(bundle);
             }
 
