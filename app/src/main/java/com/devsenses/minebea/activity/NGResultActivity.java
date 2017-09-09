@@ -201,8 +201,8 @@ public class NGResultActivity extends BaseModelActivity {
         new DialogBreakReason(NGResultActivity.this, getFormattedProcessText(), breakReasonData,
                 new DialogBreakReason.OnBreakReasonDialogListener() {
                     @Override
-                    public void onStop(BreakReason breakReason) {
-                        startBreak(breakReason);
+                    public void onStop(BreakReason breakReason, String description) {
+                        startBreak(breakReason, description);
                     }
 
                     @Override
@@ -212,8 +212,8 @@ public class NGResultActivity extends BaseModelActivity {
                 }).show();
     }
 
-    private void startBreak(BreakReason breakReason) {
-        TaskBreak.startBreak(NGResultActivity.this, employeeNo, breakReason.getId(), new OnBaseApi() {
+    private void startBreak(BreakReason breakReason, String description) {
+        TaskBreak.startBreak(NGResultActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
             @Override
             public void onSuccess() {
                 DialogWithText.showMessage(NGResultActivity.this, "You are breaking now.\n" +

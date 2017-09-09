@@ -5,8 +5,8 @@ import android.content.Context;
 import com.devsenses.minebea.dialog.LoadingDialog;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
-import com.devsenses.minebea.model.breakmodel.BreakReasonModel;
 import com.devsenses.minebea.model.BaseModel;
+import com.devsenses.minebea.model.breakmodel.BreakReasonModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,9 +37,9 @@ public class TaskBreak extends Task {
                         Gson gson = new GsonBuilder().create();
                         BaseModel modelData = gson.fromJson(response.errorBody().string(), BaseModel.class);
                         error = modelData.getMetaDatum().getError();
-                    }catch (Exception ex) {
+                    } catch (Exception ex) {
                         error = "Unexpected error found.";
-                        reportException("TaskBreak/getBreakReasonList",response.errorBody());
+                        reportException("TaskBreak/getBreakReasonList", response.errorBody());
                     }
                     listener.onFailure(error);
                 }
@@ -55,7 +55,7 @@ public class TaskBreak extends Task {
         });
     }
 
-    public static void startBreak(final Context context, String qrCode, long reasonId, final OnBaseApi listener) {
+    public static void startBreak(final Context context, String qrCode, long reasonId, String description, final OnBaseApi listener) {
         final LoadingDialog dialog = new LoadingDialog(context);
         dialog.show();
 
@@ -75,7 +75,7 @@ public class TaskBreak extends Task {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         error = "Unexpected error found.";
-                        reportException("TaskBreak/startBreak",response.errorBody());
+                        reportException("TaskBreak/startBreak", response.errorBody());
                     }
                     listener.onFailure(error);
                 }
