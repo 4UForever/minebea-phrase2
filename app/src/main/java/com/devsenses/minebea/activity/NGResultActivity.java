@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devsenses.minebea.R;
@@ -16,11 +18,10 @@ import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.manager.BundleManager;
-import com.devsenses.minebea.manager.NGManager;
+import com.devsenses.minebea.manager.NGDetailListManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.task.TaskBreak;
-import com.devsenses.minebea.task.TaskFinish;
 import com.devsenses.minebea.utils.Utils;
 
 /**
@@ -36,7 +37,7 @@ public class NGResultActivity extends BaseModelActivity {
     private EditText editLastSN;
 
     private LinearLayout btnDoneLayout;
-    private NGManager ngManager;
+    private NGDetailListManager ngDetailListManager;
     private BreakReasonData currentBreakReasonData;
 
     @Override
@@ -54,21 +55,13 @@ public class NGResultActivity extends BaseModelActivity {
         Utils.clearKeyboard(this);
 
         if (savedInstanceState == null) {
-            initNGManager();
+            initNGDetailListManager();
         }
     }
 
-    private void initNGManager() {
-        LinearLayout layoutNGList = (LinearLayout) findViewById(R.id.layout_ng_list);
-        TextView textAddNG = (TextView) findViewById(R.id.text_add_ng);
-        ngManager = new NGManager(NGResultActivity.this, layoutNGList, textAddNG, new NGManager.OnUpdateNGNumberListener() {
-            @Override
-            public void onUpdateQuantity() {
-                textSumNG.setText(String.valueOf(ngManager.getSumQuantityFromNGList()));
-                textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
-            }
-        });
-        ngManager.loadNGList(employeeNo);
+    private void initNGDetailListManager() {
+        ListView listView = (ListView) findViewById(R.id.list_result_ng1_and_ng2);
+        ngDetailListManager = new NGDetailListManager(NGResultActivity.this, listView, BundleManager.getNg1List(bundle));
     }
 
     private void initUI() {
@@ -100,7 +93,6 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private boolean checkNGProcessCondition() {
-        if (ngManager != null && !ngManager.isNGListComplete()) return false;
         if (getOKQuantity() == 0) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add OK quantity.");
             return false;
@@ -128,23 +120,25 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void sendNGDataToServer() {
-        TaskFinish.finishProcess(NGResultActivity.this, employeeNo, getOKQuantity(),
-                editLastSN.getText().toString(), ngManager.getNGListJsonFormat(), new OnBaseApi() {
-                    @Override
-                    public void onSuccess() {
-                        showContinueDialog();
-                    }
-
-                    @Override
-                    public void onFailure(String reason) {
-                        DialogWithText.showAlertWithBreak(NGResultActivity.this, reason, new DialogWithText.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                loadReasonList();
-                            }
-                        });
-                    }
-                });
+        //TODO fixed ng1 and 2 send data
+        Log.d("MineBea", "is ng match?" + ngDetailListManager.isNg1AndNg2Matched());
+//        TaskFinish.finishProcess(NGResultActivity.this, employeeNo, getOKQuantity(),
+//                editLastSN.getText().toString(), ngManager.getNGListJsonFormat(), new OnBaseApi() {
+//                    @Override
+//                    public void onSuccess() {
+//                        showContinueDialog();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String reason) {
+//                        DialogWithText.showAlertWithBreak(NGResultActivity.this, reason, new DialogWithText.OnClickListener() {
+//                            @Override
+//                            public void onClick() {
+//                                loadReasonList();
+//                            }
+//                        });
+//                    }
+//                });
     }
 
     private int getOKQuantity() {

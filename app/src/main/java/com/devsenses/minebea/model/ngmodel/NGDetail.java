@@ -27,7 +27,7 @@ public class NGDetail {
     }
 
     public String getQuantity() {
-        return quantity;
+        return quantity != null ? quantity : "0";
     }
 
     public void setQuantity(String quantity) {
