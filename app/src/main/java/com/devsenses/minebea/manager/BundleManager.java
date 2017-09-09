@@ -7,6 +7,7 @@ import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
 import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
@@ -39,7 +40,10 @@ public class BundleManager {
     public static final String KEY_SHIFT_ID = "idShift";
     public static final String KEY_SHIFT_NAME = "shiftName";
     public static final String KEY_WORKING_DATE = "workingDate";
-    public static final String KEY_NG_LIST_DATA = "ngListData";
+    public static final String KEY_BASE_NG_LIST_DATA = "ngListData";
+    public static final String KEY_NG_1_LIST = "ng1";
+    public static final String KEY_SETUP = "setup";
+    public static final String KEY_DT = "dt";
 
     public static Bundle putLoginModelDataToBundle(Bundle bundle, String workingDate, Shift shift, Model model, Line line, Process process) {
 
@@ -95,17 +99,50 @@ public class BundleManager {
         return bundle;
     }
 
-    public static Bundle putNg1List(Bundle bundle, NGListData listData) {
-        setNgList(bundle, listData);
+    public static Bundle putBaseNgList(Bundle bundle, NGListData listData) {
+        setBaseNgList(bundle, listData);
+
         return bundle;
     }
 
-    private static void setNgList(Bundle bundle, NGListData listData) {
-        bundle.putParcelable(KEY_NG_LIST_DATA, Parcels.wrap(listData));
+    private static void setBaseNgList(Bundle bundle, NGListData listData) {
+        bundle.putParcelable(KEY_BASE_NG_LIST_DATA, Parcels.wrap(listData));
     }
 
-    public static NGListData getNgList(Bundle bundle) {
-        return Parcels.unwrap(bundle.getParcelable(KEY_NG_LIST_DATA));
+    public static NGListData getBaseNgList(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_BASE_NG_LIST_DATA));
+    }
+
+    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List, String setup, String dt) {
+        setNg1List(bundle, ng1List);
+        setSetup(bundle, setup);
+        setDt(bundle, dt);
+
+        return bundle;
+    }
+
+    private static void setNg1List(Bundle bundle, List<NGDetail> ng1List) {
+        bundle.putParcelable(KEY_NG_1_LIST, Parcels.wrap(ng1List));
+    }
+
+    public static List<NGDetail> getNg1List(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_NG_1_LIST));
+    }
+
+    private static void setSetup(Bundle bundle, String setup) {
+        bundle.putString(KEY_SETUP, setup);
+    }
+
+    public static String getSetup(Bundle bundle) {
+        return bundle.getString(KEY_SETUP, "0");
+    }
+
+    private static void setDt(Bundle bundle, String dt) {
+        bundle.putString(KEY_DT, dt);
+    }
+
+    public static String getDt(Bundle bundle) {
+        return bundle.getString(KEY_DT, "0");
     }
 
     public static RecoverPartModel getRecoverPartAndWIPData(Bundle bundle) {

@@ -28,6 +28,8 @@ import com.devsenses.minebea.utils.Utils;
  */
 public class NGResultActivity extends BaseModelActivity {
 
+    private EditText editSetup;
+    private EditText editDt;
     private EditText editOK;
     private TextView textSumNG;
     private TextView textResult;
@@ -48,6 +50,7 @@ public class NGResultActivity extends BaseModelActivity {
 
         initUI();
         initEvent();
+        initSummaryWorkingData();
         Utils.clearKeyboard(this);
 
         if (savedInstanceState == null) {
@@ -71,10 +74,17 @@ public class NGResultActivity extends BaseModelActivity {
     private void initUI() {
         btnDoneLayout = (LinearLayout) findViewById(R.id.btn_done_layout);
 
+        editSetup = (EditText) findViewById(R.id.edit_work_result_setup);
+        editDt = (EditText) findViewById(R.id.edit_work_result_dt);
         editOK = (EditText) findViewById(R.id.edit_ok_qty);
         textSumNG = (TextView) findViewById(R.id.text_ng_qty);
         textResult = (TextView) findViewById(R.id.text_result);
         editLastSN = (EditText) findViewById(R.id.edit_last_sn);
+    }
+
+    private void initSummaryWorkingData() {
+        editSetup.setText(BundleManager.getSetup(bundle));
+        editDt.setText(BundleManager.getDt(bundle));
     }
 
     private void initEvent() {
@@ -145,9 +155,21 @@ public class NGResultActivity extends BaseModelActivity {
         return getNumberFromString(textSumNG.getText().toString());
     }
 
+    private int getSetup() {
+        return getNumberFromString(editSetup.getText().toString());
+    }
+
+    private int getDt() {
+        return getNumberFromString(editDt.getText().toString());
+    }
+
     private int getNumberFromString(String str) {
-        str = str.replaceAll("[\\D]", "");
-        return str.isEmpty() ? 0 : Integer.parseInt(str);
+        try {
+            str = str.replaceAll("[\\D]", "");
+            return str.isEmpty() ? 0 : Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     private void showContinueDialog() {

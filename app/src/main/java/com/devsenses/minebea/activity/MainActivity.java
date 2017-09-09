@@ -61,7 +61,7 @@ public class MainActivity extends ReportActivity {
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
-        baseNgListData = BundleManager.getNgList(bundle);
+        baseNgListData = BundleManager.getBaseNgList(bundle);
 
         initUI();
         setEventLogout();
@@ -197,6 +197,7 @@ public class MainActivity extends ReportActivity {
 
     private void goToNGPage() {
         Intent intent = new Intent(MainActivity.this, NGResultActivity.class);
+        bundle = BundleManager.putSummaryWorkingData(bundle, selectedNgList, getSetup(), getDt());
         intent.putExtras(bundle);
         this.finish();
         this.startActivity(intent);
@@ -259,5 +260,13 @@ public class MainActivity extends ReportActivity {
                 setStatusToRunning();
             }
         });
+    }
+
+    private String getSetup() {
+        return !editSetup.getText().toString().isEmpty() ? editSetup.getText().toString() : "0";
+    }
+
+    private String getDt() {
+        return !editDt.getText().toString().isEmpty() ? editDt.getText().toString() : "0";
     }
 }
