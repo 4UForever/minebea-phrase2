@@ -116,8 +116,7 @@ public class MainActivity extends ReportActivity {
             @Override
             public void onSavedList(List<NGDetail> ngDetailList) {
                 if (ngDetailList != null) {
-                    selectedNgList.clear();
-                    selectedNgList.addAll(ngDetailList);
+                    selectedNgList = ngDetailList;
                 }
             }
         });
