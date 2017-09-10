@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
+import com.devsenses.minebea.MockData;
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.utils.Utils;
@@ -27,6 +28,16 @@ public abstract class BaseModelActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bundle = getIntent().getExtras();
+        if (bundle == null) {
+            bundle = BundleManager.putUserDataToBundle(new Bundle(), "pong.p", false, false);
+            bundle = BundleManager.putLoginModelDataToBundle(bundle, "20/10/2560",
+                    MockData.getMockShift(), MockData.getMockModel(),
+                    MockData.getMockLine(), MockData.getMockProcess());
+            bundle = BundleManager.putSelectedModelDataToBundle(bundle, MockData.getMockSelectedModel());
+            bundle = BundleManager.putLotNo(bundle, "mock lot no naja");
+            bundle = BundleManager.putPartData(bundle, MockData.getMockPartData());
+            bundle = BundleManager.putNg1List(bundle, MockData.getMockNGListData());
+        }
         initDataFromBundle(bundle);
 
         initCreateView(savedInstanceState);

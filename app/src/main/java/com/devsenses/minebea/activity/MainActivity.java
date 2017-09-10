@@ -5,22 +5,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.dialog.DialogBreakReason;
+import com.devsenses.minebea.dialog.DialogNgListDetail;
 import com.devsenses.minebea.dialog.DialogStopRunning;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
+import com.devsenses.minebea.listener.OnButtonAddNumberClickedListener;
+import com.devsenses.minebea.listener.OnButtonDeleteNumberClickedListener;
 import com.devsenses.minebea.listener.OnDialogStopProcessListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
+import com.devsenses.minebea.model.ngmodel.NGDetail;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.task.TaskBreak;
 import com.devsenses.minebea.task.TaskProcess;
+
+import java.util.List;
 
 /**
  * Created by Horus on 1/30/2015.
@@ -32,6 +41,11 @@ public class MainActivity extends ReportActivity {
     private TextView lbStatus;
 
     private BreakReasonData currentBreakReasonData;
+    private EditText editSetup;
+    private EditText editDt;
+
+    private NGListData baseNgListData;
+    private List<NGDetail> selectedNgList;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -47,6 +61,8 @@ public class MainActivity extends ReportActivity {
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
+        baseNgListData = BundleManager.getNgList(bundle);
+
         initUI();
         setEventLogout();
         initEvent();
@@ -60,6 +76,8 @@ public class MainActivity extends ReportActivity {
     private void initUI() {
         lbStatus = (TextView) findViewById(R.id.current_status_text);
         processCheckBox = (CheckBox) findViewById(R.id.process_checkbox);
+        editSetup = (EditText) findViewById(R.id.edit_main_setup);
+        editDt = (EditText) findViewById(R.id.edit_main_dt);
     }
 
     @Override
@@ -72,6 +90,38 @@ public class MainActivity extends ReportActivity {
 
     protected void initEvent() {
         processCheckBox.setOnClickListener(new OnCheckProcessClickListener());
+
+        Button btnSetupAdd = (Button) findViewById(R.id.btn_main_setup_add);
+        Button btnSetupDelete = (Button) findViewById(R.id.btn_main_setup_delete);
+        Button btnDtAdd = (Button) findViewById(R.id.btn_main_dt_add);
+        Button btnDtRemove = (Button) findViewById(R.id.btn_main_dt_delete);
+
+        btnSetupAdd.setOnClickListener(new OnButtonAddNumberClickedListener(editSetup));
+        btnSetupDelete.setOnClickListener(new OnButtonDeleteNumberClickedListener(editSetup));
+
+        btnDtAdd.setOnClickListener(new OnButtonAddNumberClickedListener(editDt));
+        btnDtRemove.setOnClickListener(new OnButtonDeleteNumberClickedListener(editDt));
+
+        Button btnAddNg1 = (Button) findViewById(R.id.btn_main_add_ng1);
+        btnAddNg1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNgListDialog();
+            }
+        });
+    }
+
+    private void showNgListDialog() {
+        DialogNgListDetail dialog = new DialogNgListDetail(this, baseNgListData, selectedNgList, new DialogNgListDetail.OnDialogNgListListener() {
+            @Override
+            public void onSavedList(List<NGDetail> ngDetailList) {
+                if (ngDetailList != null) {
+                    selectedNgList.clear();
+                    selectedNgList.addAll(ngDetailList);
+                }
+            }
+        });
+        dialog.show();
     }
 
     private class OnCheckProcessClickListener implements View.OnClickListener {
@@ -86,9 +136,9 @@ public class MainActivity extends ReportActivity {
     }
 
     private void checkProcessStatus(Long breakId) {
-        if(breakId >= 0){
+        if (breakId >= 0) {
             setStatusToBreak();
-        }else{
+        } else {
             setStatusToRunning();
         }
     }
@@ -211,5 +261,4 @@ public class MainActivity extends ReportActivity {
             }
         });
     }
-
 }

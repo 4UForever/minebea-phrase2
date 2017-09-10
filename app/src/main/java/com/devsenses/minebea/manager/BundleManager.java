@@ -7,8 +7,11 @@ import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
 import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ public class BundleManager {
     public static final String KEY_SHIFT_ID = "idShift";
     public static final String KEY_SHIFT_NAME = "shiftName";
     public static final String KEY_WORKING_DATE = "workingDate";
+    public static final String KEY_NG_LIST_DATA = "ngListData";
 
     public static Bundle putLoginModelDataToBundle(Bundle bundle, String workingDate, Shift shift, Model model, Line line, Process process) {
 
@@ -91,12 +95,25 @@ public class BundleManager {
         return bundle;
     }
 
+    public static Bundle putNg1List(Bundle bundle, NGListData listData) {
+        setNgList(bundle, listData);
+        return bundle;
+    }
+
+    private static void setNgList(Bundle bundle, NGListData listData) {
+        bundle.putParcelable(KEY_NG_LIST_DATA, Parcels.wrap(listData));
+    }
+
+    public static NGListData getNgList(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_NG_LIST_DATA));
+    }
+
     public static RecoverPartModel getRecoverPartAndWIPData(Bundle bundle) {
         return (RecoverPartModel) bundle.getParcelable(KEY_RECOVER_PART);
     }
 
     /* Date */
-    public static void setWorkingDateData(Bundle bundle, String date){
+    public static void setWorkingDateData(Bundle bundle, String date) {
         setWorkingDate(bundle, date);
     }
 

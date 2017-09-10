@@ -3,6 +3,7 @@ package com.devsenses.minebea.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.devsenses.minebea.R;
@@ -14,7 +15,7 @@ import com.devsenses.minebea.model.documentmodel.DocumentData;
 /**
  * Created by pong.p on 12/28/2015.
  */
-public class ReportActivity extends BaseModelActivity  implements ListDocumentFragment.OnListDocumentListener,
+public class ReportActivity extends BaseModelActivity implements ListDocumentFragment.OnListDocumentListener,
         GridMenuDocumentFragment.OnGridMenuDocumentListener {
     private static final String TAG = "ReportActivity";
 
@@ -32,7 +33,7 @@ public class ReportActivity extends BaseModelActivity  implements ListDocumentFr
         setEventLogout();
         hideWorkStatus();
         hideLotNo();
-        hideAddNG1();
+        hideAddNG1Button();
 
         if (savedInstanceState == null) {
             initDocumentManager();
@@ -49,14 +50,14 @@ public class ReportActivity extends BaseModelActivity  implements ListDocumentFr
         layoutStatus.setVisibility(View.GONE);
     }
 
+    private void hideAddNG1Button() {
+        Button button = (Button) findViewById(R.id.btn_main_add_ng1);
+        button.setVisibility(View.GONE);
+    }
+
     private void hideLotNo() {
         LinearLayout layoutLotNo = (LinearLayout) findViewById(R.id.layoutLotNo);
         layoutLotNo.setVisibility(View.GONE);
-    }
-
-    private void hideAddNG1(){
-        LinearLayout layoutAddNG1 = (LinearLayout) findViewById(R.id.layoutAddNG1);
-        layoutAddNG1.setVisibility(View.GONE);
     }
 
     protected void setEventLogout() {
