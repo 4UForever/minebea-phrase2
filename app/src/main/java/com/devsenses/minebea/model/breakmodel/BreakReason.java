@@ -9,6 +9,7 @@ public class BreakReason{
     private static final String FIELD_ID = "id";
     private static final String FIELD_CODE = "code";
     private static final String FIELD_REASON = "reason";
+    private static final String FIELD_FLAG = "flag";
     private static final String FIELD_CREATED_AT = "created_at";
     private static final String FIELD_UPDATED_AT = "updated_at";
 
@@ -23,6 +24,8 @@ public class BreakReason{
     private String mCreatedAt;
     @SerializedName(FIELD_UPDATED_AT)
     private String mUpdatedAt;
+    @SerializedName(FIELD_FLAG)
+    private int mFlag;
 
     public long getId() {return mId;}
     public void setId(long id) {this.mId = id;}
@@ -39,4 +42,7 @@ public class BreakReason{
     public String getUpdatedAt() {return mUpdatedAt;}
 
     public void setUpdatedAt(String updatedAt) {this.mUpdatedAt = updatedAt;}
+
+    public int getFlag() {return mFlag;}
+    public void setFlag(int flag) {this.mFlag = flag;}
 }

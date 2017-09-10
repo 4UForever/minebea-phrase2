@@ -116,8 +116,7 @@ public class MainActivity extends ReportActivity {
             @Override
             public void onSavedList(List<NGDetail> ngDetailList) {
                 if (ngDetailList != null) {
-                    selectedNgList.clear();
-                    selectedNgList.addAll(ngDetailList);
+                    selectedNgList = ngDetailList;
                 }
             }
         });
@@ -228,8 +227,8 @@ public class MainActivity extends ReportActivity {
         new DialogBreakReason(MainActivity.this, getFormattedProcessText(), breakReasonData,
                 new DialogBreakReason.OnBreakReasonDialogListener() {
                     @Override
-                    public void onStop(BreakReason breakReason) {
-                        startBreak(breakReason);
+                    public void onStop(BreakReason breakReason, String description) {
+                        startBreak(breakReason, description);
                     }
 
                     @Override
@@ -239,8 +238,8 @@ public class MainActivity extends ReportActivity {
                 }).show();
     }
 
-    private void startBreak(BreakReason breakReason) {
-        TaskBreak.startBreak(MainActivity.this, employeeNo, breakReason.getId(), new OnBaseApi() {
+    private void startBreak(BreakReason breakReason, String description) {
+        TaskBreak.startBreak(MainActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
             @Override
             public void onSuccess() {
                 setStatusToBreak();
