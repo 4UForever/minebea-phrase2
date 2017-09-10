@@ -2,9 +2,9 @@ package com.devsenses.minebea.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -14,14 +14,17 @@ import android.widget.TextView;
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.dialog.DialogBreakReason;
 import com.devsenses.minebea.dialog.DialogContinueWork;
+import com.devsenses.minebea.dialog.DialogNgRemark;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.manager.NGDetailListManager;
+import com.devsenses.minebea.model.FinishModel;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.task.TaskBreak;
+import com.devsenses.minebea.task.TaskFinish;
 import com.devsenses.minebea.utils.Utils;
 
 /**
@@ -85,11 +88,28 @@ public class NGResultActivity extends BaseModelActivity {
             @Override
             public void onClick(View v) {
                 if (checkNGProcessCondition()) {
-                    sendNGDataToServer();
+                    if (ngDetailListManager.isNg1AndNg2Matched()) {
+                        sendNGDataToServer("");
+                    } else {
+                        showNgRemarkDialog();
+                    }
                 }
             }
         });
-        editOK.addTextChangedListener(new CustomTextWatcher());
+        editOK.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
+            }
+        });
     }
 
     private boolean checkNGProcessCondition() {
@@ -101,44 +121,50 @@ public class NGResultActivity extends BaseModelActivity {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add last serial number.");
             return false;
         }
+        if (ngDetailListManager.isNg2Empty()) {
+            DialogWithText.showMessage(NGResultActivity.this, "Pleas input all NG2 value.");
+            return false;
+        }
         return true;
     }
 
-    private class CustomTextWatcher implements TextWatcher {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
-        }
+    private void showNgRemarkDialog() {
+        new DialogNgRemark(NGResultActivity.this, new DialogNgRemark.OnConfirmNgDialogListener() {
+            @Override
+            public void onConfirm(String remark) {
+                sendNGDataToServer(remark);
+            }
+        }).show();
     }
 
-    private void sendNGDataToServer() {
+    private void sendNGDataToServer(@Nullable String remark) {
         //TODO fixed ng1 and 2 send data
-        Log.d("MineBea", "is ng match?" + ngDetailListManager.isNg1AndNg2Matched());
-//        TaskFinish.finishProcess(NGResultActivity.this, employeeNo, getOKQuantity(),
-//                editLastSN.getText().toString(), ngManager.getNGListJsonFormat(), new OnBaseApi() {
-//                    @Override
-//                    public void onSuccess() {
-//                        showContinueDialog();
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String reason) {
-//                        DialogWithText.showAlertWithBreak(NGResultActivity.this, reason, new DialogWithText.OnClickListener() {
-//                            @Override
-//                            public void onClick() {
-//                                loadReasonList();
-//                            }
-//                        });
-//                    }
-//                });
+        FinishModel model = new FinishModel();
+        model.setQrCode(employeeNo);
+        model.setOkQty(getOKQuantity());
+        model.setLastSerialNo(editLastSN.getText().toString());
+        model.setSetup(getSetup());
+        model.setDt(getDt());
+        model.setNgs(ngDetailListManager.getNgSummaryJsonFormatted());
+        model.setBreaks("[]");
+        model.setRemark(remark);
+
+        TaskFinish.finishProcess(NGResultActivity.this, model, new OnBaseApi() {
+            @Override
+            public void onSuccess() {
+                showContinueDialog();
+            }
+
+            @Override
+            public void onFailure(String reason) {
+                DialogWithText.showAlertWithBreak(NGResultActivity.this, reason, new DialogWithText.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        loadReasonList();
+                    }
+                });
+            }
+        });
     }
 
     private int getOKQuantity() {
