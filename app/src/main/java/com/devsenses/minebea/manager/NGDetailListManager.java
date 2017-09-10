@@ -9,6 +9,10 @@ import com.devsenses.minebea.adapter.Ng1AndNg2Adapter;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGSummary;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -35,32 +39,19 @@ public class NGDetailListManager {
         listView.setAdapter(adapter);
     }
 
-    public String getNgSummaryJsonFormatted() {
-        return "";
-    }
-
     private List<NGSummary> getNgSummaryList() {
         return adapter.getNgSummaryList();
     }
 
-    private int getSumNG1() {
-        int sum = 0;
-        for (int i = 0; i < getNgSummaryList().size(); i++) {
-            sum += Integer.parseInt(getNgSummaryList().get(i).getNg1());
-        }
-        return sum;
-    }
-
-    private int getSumNG2() {
-        int sum = 0;
+    public boolean isNg2Empty() {
+        boolean isEmpty = false;
         for (int i = 0; i < getNgSummaryList().size(); i++) {
             if (getNgSummaryList().get(i).getNg2().isEmpty()) {
-                sum = getSumNG1();
-            } else {
-                sum += Integer.parseInt(getNgSummaryList().get(i).getNg2());
+                isEmpty = true;
             }
         }
-        return sum;
+
+        return isEmpty;
     }
 
     public boolean isNg1AndNg2Matched() {
@@ -68,17 +59,37 @@ public class NGDetailListManager {
         int ng1, ng2;
         for (int i = 0; i < getNgSummaryList().size(); i++) {
             ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
-            if (getNgSummaryList().get(i).getNg2().isEmpty()) {
-                ng2 = ng1;
-            } else {
-                ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
-            }
+            ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
             Log.d("MineBea", "ng1=" + ng1 + " ng2=" + ng2);
-            if (ng2 != 0 && ng1 != ng2) {
+            if (ng2 >= ng1) {
                 isMatched = false;
             }
         }
         Log.d("MineBea", "------------------------------------");
         return isMatched;
+    }
+
+    public String getNgSummaryJsonFormatted() {
+        int ng1, ng2;
+        try {
+            JSONArray ary = new JSONArray();
+            for (int i = 0; i < getNgSummaryList().size(); i++) {
+                JSONObject ngObj = new JSONObject();
+                ngObj.put("ng_id", getNgSummaryList().get(i).getNg().getId());
+                ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
+                ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
+                if (ng2 >= ng1) {
+                    ngObj.put("ng1", ng2);
+                } else {
+                    ngObj.put("ng1", ng1);
+                }
+                ngObj.put("ng2", ng2);
+                ary.put(ngObj);
+            }
+            return ary.toString();
+        } catch (JSONException e) {
+            Log.d("MineBea", "Json Error: " + e.getMessage());
+            return "[]";
+        }
     }
 }
