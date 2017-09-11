@@ -25,9 +25,13 @@ import java.util.List;
  */
 
 public class Ng1AndNg2Adapter extends BaseAdapter {
+    public interface OnNg2ChangeListener {
+        void onNg2Change();
+    }
 
     private final List<NGSummary> list;
     private final LayoutInflater inflater;
+    private OnNg2ChangeListener listener;
 
     public Ng1AndNg2Adapter(@NonNull Context context, @Nullable List<NGDetail> ngDetailList) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -42,6 +46,10 @@ public class Ng1AndNg2Adapter extends BaseAdapter {
                 this.list.add(summary);
             }
         }
+    }
+
+    public void setOnNg2ChangeListener(OnNg2ChangeListener listener) {
+        this.listener = listener;
     }
 
     public List<NGSummary> getNgSummaryList() {
@@ -94,6 +102,7 @@ public class Ng1AndNg2Adapter extends BaseAdapter {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(currentItemPosition).setNg2(editNg2.getText().toString());
+                    if (listener != null) listener.onNg2Change();
                 }
 
                 @Override

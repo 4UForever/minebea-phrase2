@@ -20,11 +20,16 @@ import java.util.List;
  */
 
 public class NGDetailListManager {
+    public interface OnNg2SumChangeListener {
+        void onNg2SumUpdate(String sumNg2);
+    }
+
     private final Context context;
     private final ListView listView;
     private final List<NGDetail> ngDetailList;
 
     private Ng1AndNg2Adapter adapter;
+    private OnNg2SumChangeListener listener;
 
     public NGDetailListManager(@NonNull Context context, ListView listView, List<NGDetail> ngDetailList) {
         this.context = context;
@@ -34,13 +39,35 @@ public class NGDetailListManager {
         initListView();
     }
 
+    public void setOnNg2ChangeListener(OnNg2SumChangeListener listener) {
+        this.listener = listener;
+    }
+
     private void initListView() {
         adapter = new Ng1AndNg2Adapter(context, ngDetailList);
+        adapter.setOnNg2ChangeListener(new Ng1AndNg2Adapter.OnNg2ChangeListener() {
+            @Override
+            public void onNg2Change() {
+                if (listener != null) listener.onNg2SumUpdate(getSumNg2Value());
+            }
+        });
         listView.setAdapter(adapter);
     }
 
     private List<NGSummary> getNgSummaryList() {
         return adapter.getNgSummaryList();
+    }
+
+    public String getSumNg2Value() {
+        String ng2;
+        int ng2Value = 0;
+        for (int i = 0; i < getNgSummaryList().size(); i++) {
+            ng2 = getNgSummaryList().get(i).getNg2();
+            if (!ng2.isEmpty()) {
+                ng2Value += Integer.parseInt(ng2);
+            }
+        }
+        return String.valueOf(ng2Value);
     }
 
     public boolean isNg2Empty() {

@@ -65,6 +65,13 @@ public class NGResultActivity extends BaseModelActivity {
     private void initNGDetailListManager() {
         ListView listView = (ListView) findViewById(R.id.list_result_ng1_and_ng2);
         ngDetailListManager = new NGDetailListManager(NGResultActivity.this, listView, BundleManager.getNg1List(bundle));
+        ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
+            @Override
+            public void onNg2SumUpdate(String sumNg2) {
+                textSumNG.setText(sumNg2);
+                updateResultQty();
+            }
+        });
     }
 
     private void initUI() {
@@ -107,7 +114,7 @@ public class NGResultActivity extends BaseModelActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
+                updateResultQty();
             }
         });
     }
@@ -148,6 +155,8 @@ public class NGResultActivity extends BaseModelActivity {
         model.setNgs(ngDetailListManager.getNgSummaryJsonFormatted());
         model.setBreaks("[]");
         model.setRemark(remark);
+        model.setStartDate(BundleManager.getStartDate(bundle));
+        model.setEndDate(BundleManager.getEndDate(bundle));
 
         TaskFinish.finishProcess(NGResultActivity.this, model, new OnBaseApi() {
             @Override
@@ -165,6 +174,10 @@ public class NGResultActivity extends BaseModelActivity {
                 });
             }
         });
+    }
+
+    private void updateResultQty(){
+        textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
     }
 
     private int getOKQuantity() {
