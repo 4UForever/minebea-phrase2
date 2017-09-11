@@ -23,11 +23,11 @@ public class TaskFinish extends Task {
         final LoadingDialog dialog = new LoadingDialog(context);
         dialog.show();
 
-        Log.d("MineBea", "get formatted--" + model.getNgs());
+        Log.d("MineBea", model.toString());
 
         Call<BaseModel> call = getService().finishProcess(model.getQrCode(), model.getOkQty(),
                 model.getLastSerialNo(), model.getSetup(), model.getDt(), model.getNgs(),
-                model.getBreaks(), model.getRemark());
+                model.getBreaks(), model.getRemark(), model.getStartDate(), model.getEndDate());
 
         call.enqueue(new Callback<BaseModel>() {
             @Override

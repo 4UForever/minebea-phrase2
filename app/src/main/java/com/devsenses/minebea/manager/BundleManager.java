@@ -44,6 +44,8 @@ public class BundleManager {
     public static final String KEY_NG_1_LIST = "ng1";
     public static final String KEY_SETUP = "setup";
     public static final String KEY_DT = "dt";
+    public static final String KEY_START_DATE = "start_date";
+    public static final String KEY_END_DATE = "end_date";
 
     public static Bundle putLoginModelDataToBundle(Bundle bundle, String workingDate, Shift shift, Model model, Line line, Process process) {
 
@@ -113,10 +115,13 @@ public class BundleManager {
         return Parcels.unwrap(bundle.getParcelable(KEY_BASE_NG_LIST_DATA));
     }
 
-    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List, String setup, String dt) {
+    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List, String setup,
+                                               String dt, String startDate, String endDate) {
         setNg1List(bundle, ng1List);
         setSetup(bundle, setup);
         setDt(bundle, dt);
+        setStartDate(bundle, startDate);
+        setEndDate(bundle, endDate);
 
         return bundle;
     }
@@ -143,6 +148,22 @@ public class BundleManager {
 
     public static String getDt(Bundle bundle) {
         return bundle.getString(KEY_DT, "0");
+    }
+
+    private static void setStartDate(Bundle bundle, String startDate) {
+        bundle.putString(KEY_START_DATE, startDate);
+    }
+
+    public static String getStartDate(Bundle bundle) {
+        return bundle.getString(KEY_START_DATE, "");
+    }
+
+    private static void setEndDate(Bundle bundle, String endDate) {
+        bundle.putString(KEY_END_DATE, endDate);
+    }
+
+    public static String getEndDate(Bundle bundle) {
+        return bundle.getString(KEY_END_DATE, "");
     }
 
     public static RecoverPartModel getRecoverPartAndWIPData(Bundle bundle) {

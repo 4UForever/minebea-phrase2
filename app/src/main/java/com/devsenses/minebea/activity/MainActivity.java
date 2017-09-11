@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +18,6 @@ import com.devsenses.minebea.dialog.DialogNgListDetail;
 import com.devsenses.minebea.dialog.DialogStopRunning;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
-import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.listener.OnButtonAddNumberClickedListener;
 import com.devsenses.minebea.listener.OnButtonDeleteNumberClickedListener;
 import com.devsenses.minebea.listener.OnDialogStopProcessListener;
@@ -27,8 +27,8 @@ import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.task.TaskBreak;
-import com.devsenses.minebea.task.TaskProcess;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -40,12 +40,13 @@ public class MainActivity extends ReportActivity {
     private CheckBox processCheckBox;
     private TextView lbStatus;
 
-    private BreakReasonData currentBreakReasonData;
     private EditText editSetup;
     private EditText editDt;
 
     private NGListData baseNgListData;
     private List<NGDetail> selectedNgList;
+
+    private String startDate;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -142,21 +143,6 @@ public class MainActivity extends ReportActivity {
         }
     }
 
-    private void startProcess(final long processId) {
-        TaskProcess.startProcess(MainActivity.this, employeeNo, modelId, lineId, processId, new TaskProcess.StartProcessListener() {
-            @Override
-            public void onStartSuccess() {
-                setStatusToRunning();
-            }
-
-            @Override
-            public void onFailure(String reason) {
-                DialogWithText.showMessage(MainActivity.this, reason);
-                setStatusToBreak();
-            }
-        });
-    }
-
     private void setStatusToRunning() {
         lbStatus.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
         lbStatus.setText(getResources().getString(R.string.running));
@@ -195,14 +181,6 @@ public class MainActivity extends ReportActivity {
         dialog.show();
     }
 
-    private void goToNGPage() {
-        Intent intent = new Intent(MainActivity.this, NGResultActivity.class);
-        bundle = BundleManager.putSummaryWorkingData(bundle, selectedNgList, getSetup(), getDt());
-        intent.putExtras(bundle);
-        this.finish();
-        this.startActivity(intent);
-    }
-
     private void loadReasonList() {
         TaskBreak.getBreakReasonList(MainActivity.this, employeeNo, new OnApiGetReasonListener() {
             @Override
@@ -224,7 +202,6 @@ public class MainActivity extends ReportActivity {
     }
 
     private void showBreakDialog(BreakReasonData breakReasonData) {
-        this.currentBreakReasonData = breakReasonData;
         new DialogBreakReason(MainActivity.this, getFormattedProcessText(), breakReasonData,
                 new DialogBreakReason.OnBreakReasonDialogListener() {
                     @Override
@@ -239,27 +216,61 @@ public class MainActivity extends ReportActivity {
                 }).show();
     }
 
-    private void startBreak(BreakReason breakReason, String description) {
-        TaskBreak.startBreak(MainActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
-            @Override
-            public void onSuccess() {
-                setStatusToBreak();
-            }
+    private void startProcess(final long processId) {
+        //TODO : save start date
+        if (startDate == null || startDate.isEmpty()) {
+            startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+        }
+        setStatusToRunning();
+//        TaskProcess.startProcess(MainActivity.this, employeeNo, modelId, lineId, processId, new TaskProcess.StartProcessListener() {
+//            @Override
+//            public void onStartSuccess() {
+//                setStatusToRunning();
+//            }
+//
+//            @Override
+//            public void onFailure(String reason) {
+//                DialogWithText.showMessage(MainActivity.this, reason);
+//                setStatusToBreak();
+//            }
+//        });
+    }
 
-            @Override
-            public void onFailure(String reason) {
-                DialogWithText.showMessage(MainActivity.this, reason, true,
-                        new DialogWithText.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                if (currentBreakReasonData != null) {
-                                    showBreakDialog(currentBreakReasonData);
-                                }
-                            }
-                        });
-                setStatusToRunning();
-            }
-        });
+    private void startBreak(BreakReason breakReason, String remark) {
+        //TODO : save break to storage
+        setStatusToBreak();
+//        TaskBreak.startBreak(MainActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
+//            @Override
+//            public void onSuccess() {
+//                setStatusToBreak();
+//            }
+//
+//            @Override
+//            public void onFailure(String reason) {
+//                DialogWithText.showMessage(MainActivity.this, reason, true,
+//                        new DialogWithText.OnClickListener() {
+//                            @Override
+//                            public void onClick() {
+//                                if (currentBreakReasonData != null) {
+//                                    showBreakDialog(currentBreakReasonData);
+//                                }
+//                            }
+//                        });
+//                setStatusToRunning();
+//            }
+//        });
+    }
+
+    private void goToNGPage() {
+        String endDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+
+        Intent intent = new Intent(MainActivity.this, NGResultActivity.class);
+        bundle = BundleManager.putSummaryWorkingData(bundle, selectedNgList, getSetup(), getDt(), startDate, endDate);
+        //TODO add break list to bundle
+//        bundle = BundleManager.putBreakList(bundle, breakList);
+        intent.putExtras(bundle);
+        this.finish();
+        this.startActivity(intent);
     }
 
     private String getSetup() {

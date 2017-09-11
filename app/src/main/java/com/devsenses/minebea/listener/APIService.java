@@ -77,5 +77,6 @@ public interface APIService {
     Call<BaseModel> finishProcess(@Field("qr_code") String qrCode, @Field("ok_qty") int okQuantity,
                                   @Field("last_serial_no") String lastSerial, @Field("setup") int setup,
                                   @Field("dt") int dt, @Field("ngs") String ngListJson,
-                                  @Field("breaks") String breakListJson, @Field("remark") String remark);
+                                  @Field("breaks") String breakListJson, @Field("remark") String remark,
+                                  @Field("start_time") String startDate, @Field("end_time") String endDate);
 }

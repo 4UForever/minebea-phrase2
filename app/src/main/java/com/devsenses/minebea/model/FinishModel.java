@@ -13,6 +13,8 @@ public class FinishModel {
     private String ngs;
     private String breaks;
     private String remark;
+    private String startDate;
+    private String endDate;
 
     public String getQrCode() {
         return qrCode;
@@ -76,5 +78,37 @@ public class FinishModel {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "FinishModel{" +
+                "qrCode='" + qrCode + '\n' +
+                ", okQty=" + okQty  + '\n' +
+                ", lastSerialNo='" + lastSerialNo + '\n' +
+                ", setup=" + setup  + '\n' +
+                ", dt=" + dt  + '\n' +
+                ", ngs='" + ngs + '\n' +
+                ", breaks='" + breaks + '\n' +
+                ", remark='" + remark + '\n' +
+                ", startDate='" + startDate + '\n' +
+                ", endDate='" + endDate + '\n' +
+                '}';
     }
 }
