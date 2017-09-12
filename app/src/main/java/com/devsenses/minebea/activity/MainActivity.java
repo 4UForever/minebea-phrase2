@@ -26,7 +26,10 @@ import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
+import com.devsenses.minebea.storage.DefaultValue;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskBreak;
+import com.devsenses.minebea.utils.NetworkUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -47,6 +50,7 @@ public class MainActivity extends ReportActivity {
     private List<NGDetail> selectedNgList;
 
     private String startDate;
+    private PreferenceHelper preferenceHelper;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -63,6 +67,9 @@ public class MainActivity extends ReportActivity {
         setContentView(R.layout.activity_main);
 
         baseNgListData = BundleManager.getBaseNgList(bundle);
+        preferenceHelper = new PreferenceHelper(MainActivity.this, employeeNo);
+        //TODO remove under line when production
+        preferenceHelper.clearPreference();
 
         initUI();
         setEventLogout();
@@ -182,23 +189,32 @@ public class MainActivity extends ReportActivity {
     }
 
     private void loadReasonList() {
-        TaskBreak.getBreakReasonList(MainActivity.this, employeeNo, new OnApiGetReasonListener() {
-            @Override
-            public void onSuccess(BreakReasonData breakReasonData) {
-                showBreakDialog(breakReasonData);
-            }
+        if (NetworkUtils.isNetworkConnect(MainActivity.this)) {
+            TaskBreak.getBreakReasonList(MainActivity.this, employeeNo, new OnApiGetReasonListener() {
+                @Override
+                public void onSuccess(BreakReasonData breakReasonData) {
+                    preferenceHelper.saveBreakReasonData(breakReasonData);
+                    showBreakDialog(breakReasonData);
+                }
 
-            @Override
-            public void onFailure(String reason) {
-                DialogWithText.showMessage(MainActivity.this, reason + "\nPlease try again.", true,
-                        new DialogWithText.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                showStopRunningDialog();
-                            }
-                        });
+                @Override
+                public void onFailure(String reason) {
+                    DialogWithText.showMessage(MainActivity.this, reason + "\nPlease try again.", true,
+                            new DialogWithText.OnClickListener() {
+                                @Override
+                                public void onClick() {
+                                    showStopRunningDialog();
+                                }
+                            });
+                }
+            });
+        } else {
+            if (preferenceHelper.getBreakReasonData() != null) {
+                showBreakDialog(preferenceHelper.getBreakReasonData());
+            } else {
+                showBreakDialog(DefaultValue.getDefaultBreakReasonData());
             }
-        });
+        }
     }
 
     private void showBreakDialog(BreakReasonData breakReasonData) {
@@ -217,23 +233,11 @@ public class MainActivity extends ReportActivity {
     }
 
     private void startProcess(final long processId) {
-        //TODO : save start date
+        //TODO : save start date to storage
         if (startDate == null || startDate.isEmpty()) {
             startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
         }
         setStatusToRunning();
-//        TaskProcess.startProcess(MainActivity.this, employeeNo, modelId, lineId, processId, new TaskProcess.StartProcessListener() {
-//            @Override
-//            public void onStartSuccess() {
-//                setStatusToRunning();
-//            }
-//
-//            @Override
-//            public void onFailure(String reason) {
-//                DialogWithText.showMessage(MainActivity.this, reason);
-//                setStatusToBreak();
-//            }
-//        });
     }
 
     private void startBreak(BreakReason breakReason, String remark) {
