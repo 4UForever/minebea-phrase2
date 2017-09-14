@@ -69,7 +69,9 @@ public class MainActivity extends ReportActivity {
         baseNgListData = BundleManager.getBaseNgList(bundle);
         preferenceHelper = new PreferenceHelper(MainActivity.this, employeeNo);
         //TODO remove under line when production
-        preferenceHelper.clearPreference();
+//        preferenceHelper.clearPreference();
+
+        restoreCacheIfHave();
 
         initUI();
         setEventLogout();
@@ -78,6 +80,14 @@ public class MainActivity extends ReportActivity {
 
         if (savedInstanceState == null) {
             initDocumentManager();
+        }
+    }
+
+    private void restoreCacheIfHave() {
+        startDate = preferenceHelper.getStartDate();
+        selectedNgList = preferenceHelper.getNg1DetailList();
+        if (baseNgListData == null) {
+            baseNgListData = preferenceHelper.getBaseNgListData();
         }
     }
 
@@ -125,6 +135,7 @@ public class MainActivity extends ReportActivity {
             public void onSavedList(List<NGDetail> ngDetailList) {
                 if (ngDetailList != null) {
                     selectedNgList = ngDetailList;
+                    preferenceHelper.saveNg1DetailList(selectedNgList);
                 }
             }
         });
@@ -236,6 +247,7 @@ public class MainActivity extends ReportActivity {
         //TODO : save start date to storage
         if (startDate == null || startDate.isEmpty()) {
             startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+            preferenceHelper.saveStartDate(startDate);
         }
         setStatusToRunning();
     }
