@@ -62,7 +62,6 @@ public class ScanQrActivity extends FragmentActivity {
         setContentView(R.layout.activity_scan_qr);
 
         bundle = new Bundle();
-        preferenceHelper = new PreferenceHelper(ScanQrActivity.this, employeeNo);
 
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -220,6 +219,7 @@ public class ScanQrActivity extends FragmentActivity {
             @Override
             public void onSuccess(NGListData ngListData) {
                 bundle = BundleManager.putBaseNgList(bundle, ngListData);
+                preferenceHelper = new PreferenceHelper(ScanQrActivity.this, employeeNo);
                 preferenceHelper.saveBaseNgListData(ngListData);
                 startMainActivity(bundle);
             }
