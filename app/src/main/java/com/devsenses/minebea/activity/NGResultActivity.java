@@ -12,20 +12,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devsenses.minebea.R;
-import com.devsenses.minebea.dialog.DialogBreakReason;
 import com.devsenses.minebea.dialog.DialogContinueWork;
 import com.devsenses.minebea.dialog.DialogNgRemark;
 import com.devsenses.minebea.dialog.DialogWithText;
-import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.manager.NGDetailListManager;
 import com.devsenses.minebea.model.FinishModel;
-import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
-import com.devsenses.minebea.task.TaskBreak;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskFinish;
 import com.devsenses.minebea.utils.Utils;
+import com.google.gson.Gson;
 
 /**
  * Created by pong.p on 2/2/2016.
@@ -43,6 +41,8 @@ public class NGResultActivity extends BaseModelActivity {
     private NGDetailListManager ngDetailListManager;
     private BreakReasonData currentBreakReasonData;
 
+    private PreferenceHelper preferenceHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,7 @@ public class NGResultActivity extends BaseModelActivity {
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_ng);
 
+        preferenceHelper = new PreferenceHelper(NGResultActivity.this, employeeNo);
         initUI();
         initEvent();
         initSummaryWorkingData();
@@ -145,7 +146,6 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void sendNGDataToServer(@Nullable String remark) {
-        //TODO fixed ng1 and 2 send data
         FinishModel model = new FinishModel();
         model.setQrCode(employeeNo);
         model.setOkQty(getOKQuantity());
@@ -153,7 +153,7 @@ public class NGResultActivity extends BaseModelActivity {
         model.setSetup(getSetup());
         model.setDt(getDt());
         model.setNgs(ngDetailListManager.getNgSummaryJsonFormatted());
-        model.setBreaks("[]");
+        model.setBreaks(new Gson().toJsonTree(BundleManager.getBreakStepList(bundle)).toString());
         model.setRemark(remark);
         model.setStartDate(BundleManager.getStartDate(bundle));
         model.setEndDate(BundleManager.getEndDate(bundle));
@@ -166,17 +166,12 @@ public class NGResultActivity extends BaseModelActivity {
 
             @Override
             public void onFailure(String reason) {
-                DialogWithText.showAlertWithBreak(NGResultActivity.this, reason, new DialogWithText.OnClickListener() {
-                    @Override
-                    public void onClick() {
-                        loadReasonList();
-                    }
-                });
+                DialogWithText.showMessage(NGResultActivity.this, reason);
             }
         });
     }
 
-    private void updateResultQty(){
+    private void updateResultQty() {
         textResult.setText(String.valueOf(getOKQuantity() + getSumNGQuantity()));
     }
 
@@ -206,6 +201,8 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void showContinueDialog() {
+        preferenceHelper.clearPreference();
+
         new DialogContinueWork(NGResultActivity.this, BundleManager.getProcessTitle(bundle) + " : " +
                 BundleManager.getProcessNumber(bundle), new DialogContinueWork.OnDialogContinueWorkListener() {
             @Override
@@ -235,70 +232,5 @@ public class NGResultActivity extends BaseModelActivity {
         this.finish();
         this.startActivity(intent);
         overridePendingTransition(0, 0);
-    }
-
-    private void loadReasonList() {
-        TaskBreak.getBreakReasonList(NGResultActivity.this, employeeNo, new OnApiGetReasonListener() {
-            @Override
-            public void onSuccess(BreakReasonData breakReasonData) {
-                showBreakDialog(breakReasonData);
-            }
-
-            @Override
-            public void onFailure(String reason) {
-                DialogWithText.showMessage(NGResultActivity.this, reason + "\nPlease try again.", true, null);
-            }
-        });
-    }
-
-    private void showBreakDialog(BreakReasonData breakReasonData) {
-        this.currentBreakReasonData = breakReasonData;
-        new DialogBreakReason(NGResultActivity.this, getFormattedProcessText(), breakReasonData,
-                new DialogBreakReason.OnBreakReasonDialogListener() {
-                    @Override
-                    public void onStop(BreakReason breakReason, String description) {
-                        startBreak(breakReason, description);
-                    }
-
-                    @Override
-                    public void onCancel() {
-//                        showStopRunningDialog();
-                    }
-                }).show();
-    }
-
-    private void startBreak(BreakReason breakReason, String description) {
-        TaskBreak.startBreak(NGResultActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
-            @Override
-            public void onSuccess() {
-                DialogWithText.showMessage(NGResultActivity.this, "You are breaking now.\n" +
-                        "Please wait until the process before your are finish", new DialogWithText.OnClickListener() {
-                    @Override
-                    public void onClick() {
-                        startMainActivity(bundle);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(String reason) {
-                DialogWithText.showMessage(NGResultActivity.this, reason + "\nPlease try again.", true,
-                        new DialogWithText.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                if (currentBreakReasonData != null) {
-                                    showBreakDialog(currentBreakReasonData);
-                                }
-                            }
-                        });
-            }
-        });
-    }
-
-    private void startMainActivity(final Bundle bundle) {
-        Intent mainIntent = new Intent(NGResultActivity.this, MainActivity.class);
-        mainIntent.putExtras(bundle);
-        NGResultActivity.this.startActivity(mainIntent);
-        this.finish();
     }
 }
