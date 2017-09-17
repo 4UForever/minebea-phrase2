@@ -99,16 +99,16 @@ public class FinishModel {
     @Override
     public String toString() {
         return "FinishModel{" +
-                "qrCode='" + qrCode + '\n' +
+                "qrCode=" + qrCode + '\n' +
                 ", okQty=" + okQty  + '\n' +
-                ", lastSerialNo='" + lastSerialNo + '\n' +
+                ", lastSerialNo=" + lastSerialNo + '\n' +
                 ", setup=" + setup  + '\n' +
                 ", dt=" + dt  + '\n' +
-                ", ngs='" + ngs + '\n' +
-                ", breaks='" + breaks + '\n' +
-                ", remark='" + remark + '\n' +
-                ", startDate='" + startDate + '\n' +
-                ", endDate='" + endDate + '\n' +
+                ", ngs=" + ngs + '\n' +
+                ", breaks=" + breaks + '\n' +
+                ", remark=" + remark + '\n' +
+                ", startDate=" + startDate + '\n' +
+                ", endDate=" + endDate + '\n' +
                 '}';
     }
 }
