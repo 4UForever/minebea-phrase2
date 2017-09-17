@@ -88,7 +88,7 @@ public class NGDetailListManager {
             ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
             ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
             Log.d("MineBea", "ng1=" + ng1 + " ng2=" + ng2);
-            if (ng2 >= ng1) {
+            if (ng2 > ng1) {
                 isMatched = false;
             }
         }
