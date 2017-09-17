@@ -2,6 +2,7 @@ package com.devsenses.minebea.manager;
 
 import android.os.Bundle;
 
+import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
@@ -42,6 +43,7 @@ public class BundleManager {
     public static final String KEY_WORKING_DATE = "workingDate";
     public static final String KEY_BASE_NG_LIST_DATA = "ngListData";
     public static final String KEY_NG_1_LIST = "ng1";
+    public static final String KEY_BREAK_STEP_LIST = "breaks";
     public static final String KEY_SETUP = "setup";
     public static final String KEY_DT = "dt";
     public static final String KEY_START_DATE = "start_date";
@@ -115,9 +117,11 @@ public class BundleManager {
         return Parcels.unwrap(bundle.getParcelable(KEY_BASE_NG_LIST_DATA));
     }
 
-    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List, String setup,
+    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List,
+                                               List<BreakStep> breakStepList, String setup,
                                                String dt, String startDate, String endDate) {
         setNg1List(bundle, ng1List);
+        setBreakStepList(bundle, breakStepList);
         setSetup(bundle, setup);
         setDt(bundle, dt);
         setStartDate(bundle, startDate);
@@ -132,6 +136,14 @@ public class BundleManager {
 
     public static List<NGDetail> getNg1List(Bundle bundle) {
         return Parcels.unwrap(bundle.getParcelable(KEY_NG_1_LIST));
+    }
+
+    private static void setBreakStepList(Bundle bundle, List<BreakStep> breakStepList) {
+        bundle.putParcelable(KEY_BREAK_STEP_LIST, Parcels.wrap(breakStepList));
+    }
+
+    public static List<BreakStep> getBreakStepList(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_BREAK_STEP_LIST));
     }
 
     private static void setSetup(Bundle bundle, String setup) {
@@ -330,7 +342,7 @@ public class BundleManager {
         return bundle.getString(KEY_LOT_NO);
     }
 
-    /*On Break*/
+    /*On BreakStep*/
     public static void setOnBreak(Bundle bundle, Long onBreak) {
         if (onBreak == null) onBreak = (long) 0;
         bundle.putLong(KEY_ON_BREAK, onBreak);

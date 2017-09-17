@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
+import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ public class PreferenceHelper {
     private final static String KEY_NG1_LIST = "KEY_NG1_LIST";
     private final static String KEY_START_DATE = "KEY_START_DATE";
     private final static String KEY_NG_LIST_DATA = "KEY_NG_LIST_DATA";
+    private final static String KEY_BREAK_STEP_LIST = "KEY_BREAK_STEP_LIST";
 
     private final SharedPreferences preferences;
 
@@ -89,8 +91,19 @@ public class PreferenceHelper {
         }
     }
 
-    public void saveBreakDetailList() {
+    public void saveBreakStepList(List<BreakStep> breakStepList) {
+        preferences.edit().putString(KEY_BREAK_STEP_LIST, new Gson().toJson(breakStepList)).apply();
+    }
 
+    public List<BreakStep> getBreakStepList() {
+        try {
+            Type listType = new TypeToken<List<BreakStep>>() {
+            }.getType();
+            return new Gson().fromJson(preferences.getString(KEY_BREAK_STEP_LIST, ""), listType);
+        } catch (Exception e) {
+            Log.e("MineBea", e.getMessage());
+            return null;
+        }
     }
 
     public void clearPreference() {

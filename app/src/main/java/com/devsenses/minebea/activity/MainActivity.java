@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,7 +15,6 @@ import com.devsenses.minebea.R;
 import com.devsenses.minebea.dialog.DialogBreakReason;
 import com.devsenses.minebea.dialog.DialogNgListDetail;
 import com.devsenses.minebea.dialog.DialogStopRunning;
-import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.listener.OnApiGetReasonListener;
 import com.devsenses.minebea.listener.OnButtonAddNumberClickedListener;
 import com.devsenses.minebea.listener.OnButtonDeleteNumberClickedListener;
@@ -24,13 +22,16 @@ import com.devsenses.minebea.listener.OnDialogStopProcessListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.model.breakmodel.BreakReason;
 import com.devsenses.minebea.model.breakmodel.BreakReasonData;
+import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.storage.DefaultValue;
 import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskBreak;
+import com.devsenses.minebea.utils.DateUtils;
 import com.devsenses.minebea.utils.NetworkUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class MainActivity extends ReportActivity {
 
     private NGListData baseNgListData;
     private List<NGDetail> selectedNgList;
+    private List<BreakStep> breakStepList;
 
     private String startDate;
     private PreferenceHelper preferenceHelper;
@@ -85,9 +87,16 @@ public class MainActivity extends ReportActivity {
 
     private void restoreCacheIfHave() {
         startDate = preferenceHelper.getStartDate();
-        selectedNgList = preferenceHelper.getNg1DetailList();
         if (baseNgListData == null) {
             baseNgListData = preferenceHelper.getBaseNgListData();
+        }
+        selectedNgList = preferenceHelper.getNg1DetailList();
+        if (selectedNgList == null) {
+            selectedNgList = new ArrayList<>();
+        }
+        breakStepList = preferenceHelper.getBreakStepList();
+        if (breakStepList == null) {
+            breakStepList = new ArrayList<>();
         }
     }
 
@@ -179,7 +188,8 @@ public class MainActivity extends ReportActivity {
     }
 
     private void showStopRunningDialog() {
-        DialogStopRunning dialog = new DialogStopRunning(MainActivity.this, getFormattedProcessText(), new OnDialogStopProcessListener() {
+        DialogStopRunning dialog = new DialogStopRunning(MainActivity.this,
+                getFormattedProcessText(), new OnDialogStopProcessListener() {
             @Override
             public void onFinish() {
                 goToNGPage();
@@ -210,21 +220,19 @@ public class MainActivity extends ReportActivity {
 
                 @Override
                 public void onFailure(String reason) {
-                    DialogWithText.showMessage(MainActivity.this, reason + "\nPlease try again.", true,
-                            new DialogWithText.OnClickListener() {
-                                @Override
-                                public void onClick() {
-                                    showStopRunningDialog();
-                                }
-                            });
+                    showCacheReasonListDialog();
                 }
             });
         } else {
-            if (preferenceHelper.getBreakReasonData() != null) {
-                showBreakDialog(preferenceHelper.getBreakReasonData());
-            } else {
-                showBreakDialog(DefaultValue.getDefaultBreakReasonData());
-            }
+            showCacheReasonListDialog();
+        }
+    }
+
+    private void showCacheReasonListDialog() {
+        if (preferenceHelper.getBreakReasonData() != null) {
+            showBreakDialog(preferenceHelper.getBreakReasonData());
+        } else {
+            showBreakDialog(DefaultValue.getDefaultBreakReasonData());
         }
     }
 
@@ -246,44 +254,34 @@ public class MainActivity extends ReportActivity {
     private void startProcess(final long processId) {
         //TODO : save start date to storage
         if (startDate == null || startDate.isEmpty()) {
-            startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+            startDate = DateUtils.reFormatDate(Calendar.getInstance());
             preferenceHelper.saveStartDate(startDate);
+        }
+        if (!breakStepList.isEmpty() && breakStepList.get(breakStepList.size() - 1).getEndBreak().isEmpty()) {
+            breakStepList.get(breakStepList.size() - 1).setEndBreak(DateUtils.reFormatDate(Calendar.getInstance()));
+            preferenceHelper.saveBreakStepList(breakStepList);
         }
         setStatusToRunning();
     }
 
     private void startBreak(BreakReason breakReason, String remark) {
         //TODO : save break to storage
+        BreakStep breakStep = new BreakStep();
+        breakStep.setBreakFlag(remark);
+        breakStep.setBreakId(breakReason.getId());
+        breakStep.setStartBreak(DateUtils.reFormatDate(Calendar.getInstance()));
+        breakStepList.add(breakStep);
+        preferenceHelper.saveBreakStepList(breakStepList);
+
         setStatusToBreak();
-//        TaskBreak.startBreak(MainActivity.this, employeeNo, breakReason.getId(), description, new OnBaseApi() {
-//            @Override
-//            public void onSuccess() {
-//                setStatusToBreak();
-//            }
-//
-//            @Override
-//            public void onFailure(String reason) {
-//                DialogWithText.showMessage(MainActivity.this, reason, true,
-//                        new DialogWithText.OnClickListener() {
-//                            @Override
-//                            public void onClick() {
-//                                if (currentBreakReasonData != null) {
-//                                    showBreakDialog(currentBreakReasonData);
-//                                }
-//                            }
-//                        });
-//                setStatusToRunning();
-//            }
-//        });
     }
 
     private void goToNGPage() {
-        String endDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+        String endDate = DateUtils.reFormatDate(Calendar.getInstance());
 
         Intent intent = new Intent(MainActivity.this, NGResultActivity.class);
-        bundle = BundleManager.putSummaryWorkingData(bundle, selectedNgList, getSetup(), getDt(), startDate, endDate);
-        //TODO add break list to bundle
-//        bundle = BundleManager.putBreakList(bundle, breakList);
+        bundle = BundleManager.putSummaryWorkingData(bundle, selectedNgList, breakStepList,
+                getSetup(), getDt(), startDate, endDate);
         intent.putExtras(bundle);
         this.finish();
         this.startActivity(intent);
