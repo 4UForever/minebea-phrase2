@@ -3,6 +3,7 @@ package com.devsenses.minebea.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -64,7 +65,7 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void initNGDetailListManager() {
-        ListView listView = (ListView) findViewById(R.id.list_result_ng1_and_ng2);
+        RecyclerView listView = (RecyclerView) findViewById(R.id.list_result_ng1_and_ng2);
         ngDetailListManager = new NGDetailListManager(NGResultActivity.this, listView, BundleManager.getNg1List(bundle));
         ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
             @Override

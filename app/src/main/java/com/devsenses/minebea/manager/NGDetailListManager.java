@@ -2,6 +2,7 @@ package com.devsenses.minebea.manager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -25,13 +26,13 @@ public class NGDetailListManager {
     }
 
     private final Context context;
-    private final ListView listView;
+    private final RecyclerView listView;
     private final List<NGDetail> ngDetailList;
 
     private Ng1AndNg2Adapter adapter;
     private OnNg2SumChangeListener listener;
 
-    public NGDetailListManager(@NonNull Context context, ListView listView, List<NGDetail> ngDetailList) {
+    public NGDetailListManager(@NonNull Context context, RecyclerView listView, List<NGDetail> ngDetailList) {
         this.context = context;
         this.listView = listView;
         this.ngDetailList = ngDetailList;
@@ -87,12 +88,10 @@ public class NGDetailListManager {
         for (int i = 0; i < getNgSummaryList().size(); i++) {
             ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
             ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
-            Log.d("MineBea", "ng1=" + ng1 + " ng2=" + ng2);
             if (ng2 > ng1) {
                 isMatched = false;
             }
         }
-        Log.d("MineBea", "------------------------------------");
         return isMatched;
     }
 
