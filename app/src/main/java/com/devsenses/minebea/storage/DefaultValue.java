@@ -17,7 +17,7 @@ public final class DefaultValue {
 
     public static BreakReasonData getDefaultBreakReasonData() {
         List<BreakReason> list = new ArrayList<>();
-        list.add(createBreakReason(7, "001", "เข้าห้องน้ำ / กินน้ำ from default", 0));
+        list.add(createBreakReason(7, "001", "เข้าห้องน้ำ / กินน้ำ", 0));
         list.add(createBreakReason(8, "002", "ไปห้องพยาบาล", 1));
         list.add(createBreakReason(9, "003", "พักเบรคใหญ่ / ย่อย", 0));
         list.add(createBreakReason(10, "004", "Stop meeting (เพื่อ Information ข้อมูลต่าง ๆ)", 1));
