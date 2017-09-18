@@ -25,6 +25,7 @@ import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
+import com.devsenses.minebea.storage.CacheHelper;
 import com.devsenses.minebea.storage.DefaultValue;
 import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskBreak;
@@ -53,6 +54,7 @@ public class MainActivity extends ReportActivity {
 
     private String startDate;
     private PreferenceHelper preferenceHelper;
+    private CacheHelper cacheHelper;
 
     /**
      * THIS CLASS EXTENDS FROM ReportActivity
@@ -70,8 +72,7 @@ public class MainActivity extends ReportActivity {
 
         baseNgListData = BundleManager.getBaseNgList(bundle);
         preferenceHelper = new PreferenceHelper(MainActivity.this, employeeNo);
-        //TODO remove under line when production
-//        preferenceHelper.clearPreference();
+        cacheHelper = new CacheHelper(MainActivity.this);
 
         restoreCacheIfHave();
 
@@ -214,7 +215,7 @@ public class MainActivity extends ReportActivity {
             TaskBreak.getBreakReasonList(MainActivity.this, employeeNo, new OnApiGetReasonListener() {
                 @Override
                 public void onSuccess(BreakReasonData breakReasonData) {
-                    preferenceHelper.saveBreakReasonData(breakReasonData);
+                    cacheHelper.saveBreakReasonData(breakReasonData);
                     showBreakDialog(breakReasonData);
                 }
 
@@ -229,8 +230,8 @@ public class MainActivity extends ReportActivity {
     }
 
     private void showCacheReasonListDialog() {
-        if (preferenceHelper.getBreakReasonData() != null) {
-            showBreakDialog(preferenceHelper.getBreakReasonData());
+        if (cacheHelper.getBreakReasonData() != null) {
+            showBreakDialog(cacheHelper.getBreakReasonData());
         } else {
             showBreakDialog(DefaultValue.getDefaultBreakReasonData());
         }
@@ -252,7 +253,6 @@ public class MainActivity extends ReportActivity {
     }
 
     private void startProcess(final long processId) {
-        //TODO : save start date to storage
         if (startDate == null || startDate.isEmpty()) {
             startDate = DateUtils.reFormatDate(Calendar.getInstance());
             preferenceHelper.saveStartDate(startDate);
@@ -265,7 +265,6 @@ public class MainActivity extends ReportActivity {
     }
 
     private void startBreak(BreakReason breakReason, String remark) {
-        //TODO : save break to storage
         BreakStep breakStep = new BreakStep();
         breakStep.setBreakFlag(remark);
         breakStep.setBreakId(breakReason.getId());

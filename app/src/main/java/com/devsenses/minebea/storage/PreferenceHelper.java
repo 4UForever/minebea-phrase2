@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.devsenses.minebea.model.breakmodel.BreakReasonData;
 import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
@@ -23,7 +22,6 @@ public class PreferenceHelper {
 
     private final static String KEY = "MINEBEA_PREF_KEY";
 
-    private final static String KEY_BREAK_REASON_DATA = "KEY_BREAK_REASON_DATA";
     private final static String KEY_NG1_LIST = "KEY_NG1_LIST";
     private final static String KEY_START_DATE = "KEY_START_DATE";
     private final static String KEY_NG_LIST_DATA = "KEY_NG_LIST_DATA";
@@ -59,23 +57,6 @@ public class PreferenceHelper {
 
     public String getStartDate() {
         return preferences.getString(KEY_START_DATE, "");
-    }
-
-    public void saveBreakReasonData(BreakReasonData breakReasonData) {
-        preferences.edit().putString(KEY_BREAK_REASON_DATA, new Gson().toJson(breakReasonData)).apply();
-    }
-
-    public BreakReasonData getBreakReasonData() {
-        try {
-            BreakReasonData data = new Gson().fromJson(preferences.getString(KEY_BREAK_REASON_DATA, ""),
-                    BreakReasonData.class);
-            String oldText = data.getBreakReason().get(0).getReason();
-            data.getBreakReason().get(0).setReason(oldText + " from cache");
-            return data;
-        } catch (Exception e) {
-            Log.e("MineBea", e.getMessage());
-            return null;
-        }
     }
 
     public void saveBaseNgListData(NGListData data) {
