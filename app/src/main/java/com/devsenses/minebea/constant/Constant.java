@@ -7,9 +7,9 @@ import android.os.Environment;
  */
 public class Constant {
 
-    public static final String baseUrl = "http://dev-minebea.devsenses.net/";
+//    public static final String baseUrl = "http://dev-minebea.devsenses.net/";
 //  public static final String baseUrl = "http://staging-minebea.devsenses.net/";
-//  public static final String baseUrl = "http://192.168.1.95/"; //Real
+  public static final String baseUrl = "http://minebea2017.local/api/"; //Real
 
     public static final String urlLogin = baseUrl + "/api/user/login";
     public static final String urlProcessStatus = baseUrl + "/api/process/check-status";
