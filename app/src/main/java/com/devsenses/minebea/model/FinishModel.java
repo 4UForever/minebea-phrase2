@@ -15,6 +15,7 @@ public class FinishModel {
     private String remark;
     private String startDate;
     private String endDate;
+    private String wipQty;
 
     public String getQrCode() {
         return qrCode;
@@ -96,6 +97,14 @@ public class FinishModel {
         this.endDate = endDate;
     }
 
+    public String getWipQty() {
+        return wipQty;
+    }
+
+    public void setWipQty(String wipQty) {
+        this.wipQty = wipQty;
+    }
+
     @Override
     public String toString() {
         return "FinishModel{" +
@@ -109,6 +118,7 @@ public class FinishModel {
                 ", remark=" + remark + '\n' +
                 ", startDate=" + startDate + '\n' +
                 ", endDate=" + endDate + '\n' +
+                ", wipQty=" + wipQty + '\n' +
                 '}';
     }
 }

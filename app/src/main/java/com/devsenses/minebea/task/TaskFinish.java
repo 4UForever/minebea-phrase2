@@ -27,7 +27,7 @@ public class TaskFinish extends Task {
 
         Call<BaseModel> call = getService().finishProcess(model.getQrCode(), model.getOkQty(),
                 model.getLastSerialNo(), model.getSetup(), model.getDt(), model.getNgs(),
-                model.getBreaks(), model.getRemark(), model.getStartDate(), model.getEndDate());
+                model.getBreaks(), model.getRemark(), model.getStartDate(), model.getEndDate(), model.getWipQty());
 
         call.enqueue(new Callback<BaseModel>() {
             @Override

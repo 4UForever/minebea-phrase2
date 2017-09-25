@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:weightSum="10">
 
     <FrameLayout
         android:id="@+id/container"
@@ -30,24 +30,77 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bgModel"
             android:orientation="horizontal"
-            android:weightSum="10"
-            android:background="@color/bgModel">
+            android:weightSum="10">
 
-            <include layout="@layout/view_working_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"/>
-            <include layout="@layout/view_work_result"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:layout_gravity="right"/>
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/view_working_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mainPaddingTop_InNameModel"
+                    android:text="Last lot on this shift?"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/space_normal"
+                    android:paddingLeft="@dimen/space_normal"
+                    android:weightSum="10">
+
+                    <CheckBox
+                        android:id="@+id/check_finish_wip_last_lot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/space_normal"
+                        android:text="WIP"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <EditText
+                        android:id="@+id/edit_finish_wip_last_lot"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:paddingLeft="@dimen/space_normal"
+                        android:paddingRight="@dimen/space_normal"
+                        android:background="@android:color/darker_gray"
+                        android:enabled="false"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <include
+                layout="@layout/view_work_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="5" />
 
         </LinearLayout>
 
         <!-- NG list-->
-        <include layout="@layout/view_ng_list"/>
+        <include layout="@layout/view_ng_list" />
 
     </LinearLayout>
 
@@ -59,15 +112,15 @@
         android:layout_gravity="bottom"
         android:background="@color/blueText"
         android:gravity="center"
-        android:padding="@dimen/md_button_padding_frame_side"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/md_button_padding_frame_side">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Done"
-            android:textSize="@dimen/textSizeNormal"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textSizeNormal" />
     </LinearLayout>
 
 </LinearLayout>

@@ -7,9 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devsenses.minebea.R;
@@ -37,6 +38,8 @@ public class NGResultActivity extends BaseModelActivity {
     private TextView textSumNG;
     private TextView textResult;
     private EditText editLastSN;
+    private EditText editWipLastLot;
+    private CheckBox checkWipLastLot;
 
     private LinearLayout btnDoneLayout;
     private NGDetailListManager ngDetailListManager;
@@ -85,6 +88,8 @@ public class NGResultActivity extends BaseModelActivity {
         textSumNG = (TextView) findViewById(R.id.text_ng_qty);
         textResult = (TextView) findViewById(R.id.text_result);
         editLastSN = (EditText) findViewById(R.id.edit_last_sn);
+        editWipLastLot = (EditText) findViewById(R.id.edit_finish_wip_last_lot);
+        checkWipLastLot = (CheckBox) findViewById(R.id.check_finish_wip_last_lot);
     }
 
     private void initSummaryWorkingData() {
@@ -119,6 +124,19 @@ public class NGResultActivity extends BaseModelActivity {
                 updateResultQty();
             }
         });
+        checkWipLastLot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    editWipLastLot.setEnabled(true);
+                    editWipLastLot.setBackgroundColor(getResources().getColor(android.R.color.white));
+                } else {
+                    editWipLastLot.setText("");
+                    editWipLastLot.setEnabled(false);
+                    editWipLastLot.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+                }
+            }
+        });
     }
 
     private boolean checkNGProcessCondition() {
@@ -132,6 +150,10 @@ public class NGResultActivity extends BaseModelActivity {
         }
         if (ngDetailListManager.isNg2Empty()) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas input all NG2 value.");
+            return false;
+        }
+        if (checkWipLastLot.isChecked() && getWipLastLot().isEmpty()) {
+            DialogWithText.showMessage(NGResultActivity.this, "Pleas input WIP lot for last shift.");
             return false;
         }
         return true;
@@ -158,6 +180,7 @@ public class NGResultActivity extends BaseModelActivity {
         model.setRemark(remark);
         model.setStartDate(BundleManager.getStartDate(bundle));
         model.setEndDate(BundleManager.getEndDate(bundle));
+        model.setWipQty(getWipLastLot());
 
         TaskFinish.finishProcess(NGResultActivity.this, model, new OnBaseApi() {
             @Override
@@ -190,6 +213,14 @@ public class NGResultActivity extends BaseModelActivity {
 
     private int getDt() {
         return getNumberFromString(editDt.getText().toString());
+    }
+
+    private String getWipLastLot() {
+        try {
+            return editWipLastLot.getText().toString();
+        } catch (NullPointerException e) {
+            return "";
+        }
     }
 
     private int getNumberFromString(String str) {
