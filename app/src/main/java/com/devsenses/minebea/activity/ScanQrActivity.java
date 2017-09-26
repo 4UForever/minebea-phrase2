@@ -216,7 +216,7 @@ public class ScanQrActivity extends FragmentActivity {
         TaskNG.getNGList(ScanQrActivity.this, employeeNo, new OnApiGetNGListener() {
             @Override
             public void onSuccess(NGListData ngListData) {
-                bundle = BundleManager.putNg1List(bundle, ngListData);
+                bundle = BundleManager.putBaseNgList(bundle, ngListData);
                 startMainActivity(bundle);
             }
 

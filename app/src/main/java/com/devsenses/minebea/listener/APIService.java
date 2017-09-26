@@ -43,7 +43,7 @@ public interface APIService {
     @FormUrlEncoded
     @POST("api/process/check-input-lot")
     Call<LotModel> checkPartAvailable(@Field("qr_code") String qrCode, @Field("parts") String parts,
-                                       @Field("wip_lots") String wipLots);
+                                      @Field("wip_lots") String wipLots);
 
     @GET("api/user/line-leader")
     Call<LineLeaderModel> requestLineLeader(@Query("qr_code") String qrCode);
@@ -51,7 +51,7 @@ public interface APIService {
     @FormUrlEncoded
     @POST("api/process/keep-first-serial")
     Call<BaseModel> sendLineLeader(@Field("qr_code") String qrCode, @Field("line_leader") long lineLeader,
-                                   @Field("first_serial_no") String firstSerialNo,@Field("lot_number") String lotNumber,
+                                   @Field("first_serial_no") String firstSerialNo, @Field("lot_number") String lotNumber,
                                    @Field("lot_id") long lotId);
 
     @FormUrlEncoded
@@ -75,5 +75,8 @@ public interface APIService {
     @FormUrlEncoded
     @POST("api/process/process-finish")
     Call<BaseModel> finishProcess(@Field("qr_code") String qrCode, @Field("ok_qty") int okQuantity,
-                                  @Field("last_serial_no") String lastSerial, @Field("ngs") String ngListJson);
+                                  @Field("last_serial_no") String lastSerial, @Field("setup") int setup,
+                                  @Field("dt") int dt, @Field("ngs") String ngListJson,
+                                  @Field("breaks") String breakListJson, @Field("remark") String remark,
+                                  @Field("start_time") String startDate, @Field("end_time") String endDate);
 }

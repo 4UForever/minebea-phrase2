@@ -138,12 +138,14 @@ public class DialogBreakReason extends MaterialDialog.Builder {
 
     private void enableEditBox() {
         editBox.setEnabled(true);
+        editBox.setVisibility(View.VISIBLE);
         selectedBreakReasonFlag = FLAG_ENABLE;
     }
 
     private void disableEditBox() {
         editBox.setText("");
         editBox.setEnabled(false);
+        editBox.setVisibility(View.GONE);
         selectedBreakReasonFlag = FLAG_DISABLE;
     }
 

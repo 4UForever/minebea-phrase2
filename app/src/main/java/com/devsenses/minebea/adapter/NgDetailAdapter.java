@@ -61,7 +61,7 @@ public class NgDetailAdapter extends BaseAdapter {
 
         NGDetail ngDetail = new NGDetail();
         ngDetail.setNg(ng);
-        ngDetail.setQuantity("0");
+        ngDetail.setQuantity("");
 
         return ngDetail;
     }
