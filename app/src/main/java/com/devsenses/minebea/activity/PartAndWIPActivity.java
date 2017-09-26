@@ -23,6 +23,7 @@ import com.devsenses.minebea.model.partmodel.LotNo;
 import com.devsenses.minebea.model.partmodel.Part;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.PartModel;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskNG;
 import com.devsenses.minebea.task.TaskPartAndWIP;
 import com.devsenses.minebea.utils.Utils;
@@ -42,6 +43,7 @@ public class PartAndWIPActivity extends BaseModelActivity {
 
     private PartAndWIPViewManager partViewManager;
     private LineLeaderManager lineLeaderManager;
+    private PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class PartAndWIPActivity extends BaseModelActivity {
     @Override
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_part_wip);
+
+        preferenceHelper = new PreferenceHelper(PartAndWIPActivity.this, employeeNo);
 
         initUI();
         initDoneEvent();
@@ -218,6 +222,7 @@ public class PartAndWIPActivity extends BaseModelActivity {
             @Override
             public void onSuccess(NGListData ngListData) {
                 bundle = BundleManager.putBaseNgList(bundle, ngListData);
+                preferenceHelper.saveBaseNgListData(ngListData);
                 startMainActivity(bundle);
             }
 

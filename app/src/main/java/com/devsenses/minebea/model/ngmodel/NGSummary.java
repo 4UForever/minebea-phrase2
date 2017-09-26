@@ -44,4 +44,12 @@ public class NGSummary {
     public void setNg2(String ng2) {
         this.ng2 = ng2;
     }
+
+    @Override
+    public String toString() {
+        return "NGSummary{" +
+                "ng=" + ng.getTitle() +
+                ", ng2='" + ng2 + '\'' +
+                '}';
+    }
 }

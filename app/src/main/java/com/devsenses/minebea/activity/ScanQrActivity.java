@@ -30,6 +30,7 @@ import com.devsenses.minebea.model.loginmodel.Shift;
 import com.devsenses.minebea.model.loginmodel.UserPermission;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskLogin;
 import com.devsenses.minebea.task.TaskModel;
 import com.devsenses.minebea.task.TaskNG;
@@ -52,6 +53,7 @@ public class ScanQrActivity extends FragmentActivity {
     private List<Shift> shiftList;
     private List<Model> modelList;
     private DialogEmp_No dialogEmp_no;
+    private PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +219,8 @@ public class ScanQrActivity extends FragmentActivity {
             @Override
             public void onSuccess(NGListData ngListData) {
                 bundle = BundleManager.putBaseNgList(bundle, ngListData);
+                preferenceHelper = new PreferenceHelper(ScanQrActivity.this, employeeNo);
+                preferenceHelper.saveBaseNgListData(ngListData);
                 startMainActivity(bundle);
             }
 

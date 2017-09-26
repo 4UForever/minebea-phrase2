@@ -35,7 +35,6 @@ public class DialogNgListDetail extends MaterialDialog.Builder {
 
     private ListView listView;
     private NgDetailAdapter ngDetailAdapter;
-    private NGManager ngManager;
 
     public DialogNgListDetail(Context context, NGListData baseNgList, @Nullable List<NGDetail> existNgList,
                               OnDialogNgListListener listener) {
