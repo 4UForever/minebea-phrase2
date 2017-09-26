@@ -14,6 +14,7 @@ import com.devsenses.minebea.dialog.DialogModelSelect;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.fragment.ScanQRFragment;
 import com.devsenses.minebea.listener.OnApiFailureRecoverProcessListener;
+import com.devsenses.minebea.listener.OnApiGetNGListener;
 import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.listener.OnDialogEmp_NoListener;
 import com.devsenses.minebea.listener.OnQRCodeHelperListener;
@@ -27,9 +28,12 @@ import com.devsenses.minebea.model.loginmodel.ProcessLog;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
 import com.devsenses.minebea.model.loginmodel.Shift;
 import com.devsenses.minebea.model.loginmodel.UserPermission;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskLogin;
 import com.devsenses.minebea.task.TaskModel;
+import com.devsenses.minebea.task.TaskNG;
 import com.devsenses.minebea.utils.Utils;
 
 import java.util.List;
@@ -49,6 +53,7 @@ public class ScanQrActivity extends FragmentActivity {
     private List<Shift> shiftList;
     private List<Model> modelList;
     private DialogEmp_No dialogEmp_no;
+    private PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,10 +182,10 @@ public class ScanQrActivity extends FragmentActivity {
                         SelectedModel selectedModel = new SelectedModel().initProcessLog(processLog);
                         bundle = BundleManager.putSelectedModelDataToBundle(bundle, selectedModel);
                         if (processLog.isOnWorkingPage()) {
-                            startMainActivity(bundle);
+                            loadNgDetailList();
                         } else {
                             RecoverPartModel recoverPartModel = new RecoverPartModel(processLog.getPart(), processLog.getWipLot());
-                            Log.d("Task","recoverPartModel : "+recoverPartModel.toString());
+                            Log.d("Task", "recoverPartModel : " + recoverPartModel.toString());
                             bundle = BundleManager.putRecoverPartAndWIPData(bundle, recoverPartModel);
                             startPartAndWIPActivity(bundle);
                         }
@@ -207,6 +212,39 @@ public class ScanQrActivity extends FragmentActivity {
                                 });
                     }
                 });
+    }
+
+    private void loadNgDetailList() {
+        TaskNG.getNGList(ScanQrActivity.this, employeeNo, new OnApiGetNGListener() {
+            @Override
+            public void onSuccess(NGListData ngListData) {
+                bundle = BundleManager.putBaseNgList(bundle, ngListData);
+                preferenceHelper = new PreferenceHelper(ScanQrActivity.this, employeeNo);
+                preferenceHelper.saveBaseNgListData(ngListData);
+                startMainActivity(bundle);
+            }
+
+            @Override
+            public void onFailure(String reason) {
+                if (scanQRFragment != null) {
+                    scanQRFragment.enableCornerButton();
+                    scanQRFragment.startCamera();
+                }
+
+                DialogWithText.showMessage(ScanQrActivity.this,
+                        reason + "\nPlease try again or contact administrator.", true,
+                        new DialogWithText.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                if (scanQRFragment != null) {
+                                    scanQRFragment.disableCornerButton();
+                                    scanQRFragment.stopCamera();
+                                }
+                                loadNgDetailList();
+                            }
+                        });
+            }
+        });
     }
 
     private void showModelDialog(List<Shift> shiftList, List<Model> modelList, final boolean isWork, final boolean isView) {

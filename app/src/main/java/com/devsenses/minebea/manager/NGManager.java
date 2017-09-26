@@ -36,7 +36,7 @@ public class NGManager implements NGContain.OnSelectedNGPerItem {
     private LinearLayout layoutNGList;
     private TextView textAddNG;
 
-    public NGManager(Context context,LinearLayout layoutNGList,TextView textAddNG,OnUpdateNGNumberListener  listener){
+    public NGManager(Context context, LinearLayout layoutNGList, TextView textAddNG, OnUpdateNGNumberListener listener) {
         this.context = context;
         this.layoutNGList = layoutNGList;
         this.textAddNG = textAddNG;
@@ -59,25 +59,7 @@ public class NGManager implements NGContain.OnSelectedNGPerItem {
         TaskNG.getNGList(context, employeeNo, new OnApiGetNGListener() {
             @Override
             public void onSuccess(NGListData ngListData) {
-//                NG ng = new NG();
-//                ng.setId(1);
-//                ng.setTitle("yeah");
-//                NG ng2 = new NG();
-//                ng2.setId(2);
-//                ng2.setTitle("yeah");
-//                ngListData.getNGList().add(ng);
-//                ngListData.getNGList().add(ng2);
-
-                ngContainList = new ArrayList<>();
-
-                if (ngListData.getNGList().size() > 0) {
-                    baseBGList = ngListData.getNGList();
-                    resetNGList();
-                    checkAndAddNGRowIfCan();
-                } else {
-                    showTextNoNGAvailable();
-                    textAddNG.setVisibility(View.GONE);
-                }
+                setupNGListLayout(ngListData);
             }
 
             @Override
@@ -91,6 +73,28 @@ public class NGManager implements NGContain.OnSelectedNGPerItem {
                         });
             }
         });
+    }
+
+    public void setupNGListLayout(NGListData ngListData) {
+//        NG ng = new NG();
+//        ng.setId(1);
+//        ng.setTitle("yeah");
+//        NG ng2 = new NG();
+//        ng2.setId(2);
+//        ng2.setTitle("yeah");
+//        ngListData.getNGList().add(ng);
+//        ngListData.getNGList().add(ng2);
+
+        ngContainList = new ArrayList<>();
+
+        if (ngListData.getNGList().size() > 0) {
+            baseBGList = ngListData.getNGList();
+            resetNGList();
+            checkAndAddNGRowIfCan();
+        } else {
+            showTextNoNGAvailable();
+            textAddNG.setVisibility(View.GONE);
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -223,7 +227,7 @@ public class NGManager implements NGContain.OnSelectedNGPerItem {
         }
     }
 
-    public interface OnUpdateNGNumberListener{
+    public interface OnUpdateNGNumberListener {
         void onUpdateQuantity();
     }
 }

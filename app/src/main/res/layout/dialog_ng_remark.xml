@@ -25,18 +25,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Break Running ?"
+                android:text="Confirm Input"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/textSizeBig" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text_process_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="265"
+            android:text="Total NG1 and Total NG2 do not match.\nPlease input the reason on remark."
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/textSizeNormal" />
 
@@ -50,15 +51,14 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="8dp">
-
-        <Spinner
-            android:id="@+id/spinner_reason"
-            style="@style/spinner_wh"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/space_normal"
+            android:text="Remark"
+            android:textColor="@color/black"/>
         <EditText
-            android:id="@+id/edit_dialog_break_description"
+            android:id="@+id/edit_dialog_ng_remark_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/darker_gray"

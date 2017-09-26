@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -36,7 +37,8 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
 
     private LineLeader selectedLineLeader;
 
-    public DialogLineLeaderSelect(@NonNull Context context, List<LineLeader> lineLeaderList, LotDataModel lotDataModel, OnDialogLineLeaderListener listener) {
+    public DialogLineLeaderSelect(@NonNull Context context, List<LineLeader> lineLeaderList,
+                                  LotDataModel lotDataModel, OnDialogLineLeaderListener listener) {
         super(context);
         this.context = context;
         this.lotDataModel = lotDataModel;
@@ -64,10 +66,23 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
         lotNoSpinner = (Spinner) customView.findViewById(R.id.lotNoSpinner);
         layout = (ViewGroup) customView.findViewById(R.id.frameLayout);
 
-        if(!lotDataModel.isTypingLot()){
+        if (!lotDataModel.isTypingLot()) {
             lotNoEdit.setVisibility(View.GONE);
             lotNoSpinner.setVisibility(View.VISIBLE);
-            lotNoSpinner.setAdapter(new SpinnerLotNoAdapter(context,lotDataModel.getLotDataList()));
+            lotNoSpinner.setAdapter(new SpinnerLotNoAdapter(context, lotDataModel.getLotDataList()));
+            lotNoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (!lotDataModel.getLotDataList().get(position).getFirstSerialNo().isEmpty()) {
+                        firstSerialEdit.setText(lotDataModel.getLotDataList().get(position).getFirstSerialNo());
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
     }
 
@@ -120,36 +135,36 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
                     DialogWithText.showMessage(context, "Please select line leader.");
                     return;
                 }
-                if(firstSerialEdit.getText().toString().isEmpty()){
+                if (firstSerialEdit.getText().toString().isEmpty()) {
                     DialogWithText.showMessage(context, "Please input first serial no.");
                     return;
                 }
-                if(lotDataModel.isTypingLot() && lotNoEdit.getText().toString().isEmpty()){
+                if (lotDataModel.isTypingLot() && lotNoEdit.getText().toString().isEmpty()) {
                     DialogWithText.showMessage(context, "Please input lot no.");
                     return;
                 }
-                listener.onOk(selectedLineLeader.getId(), firstSerialEdit.getText().toString(),getLotNo(),getLotID());
+                listener.onOk(selectedLineLeader.getId(), firstSerialEdit.getText().toString(), getLotNo(), getLotID());
                 autoDismiss(true);
             }
         });
     }
 
-    private String getLotNo(){
+    private String getLotNo() {
         return lotNoEdit.getText().toString();
     }
 
-    private Long getLotID(){
-        if(lotNoSpinner.getAdapter() != null) {
+    private Long getLotID() {
+        if (lotNoSpinner.getAdapter() != null) {
             return lotNoSpinner.getAdapter().getItemId(lotNoSpinner.getSelectedItemPosition());
-        }else{
+        } else {
             return Long.parseLong("0");
         }
     }
 
-    public String getLotNoByID(){
-        if(lotNoSpinner.getAdapter() != null) {
-            return ((SpinnerLotNoAdapter)lotNoSpinner.getAdapter()).getItem(lotNoSpinner.getSelectedItemPosition()).getNumber();
-        }else{
+    public String getLotNoByID() {
+        if (lotNoSpinner.getAdapter() != null) {
+            return ((SpinnerLotNoAdapter) lotNoSpinner.getAdapter()).getItem(lotNoSpinner.getSelectedItemPosition()).getNumber();
+        } else {
             return getLotNo();
         }
     }
@@ -164,6 +179,6 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
     }
 
     public interface OnDialogLineLeaderListener {
-        void onOk(long lineLeaderID, String firstSerial,String lotNo,Long lotId);
+        void onOk(long lineLeaderID, String firstSerial, String lotNo, Long lotId);
     }
 }

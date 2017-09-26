@@ -31,6 +31,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
+                    android:text="Setup"
+                    android:textColor="@color/blackText"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="D/T"
+                    android:textColor="@color/blackText"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/textSizeNormal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
                     android:text="OK qty"
                     android:textColor="@color/blackText"
                     android:textStyle="bold"
@@ -68,6 +86,58 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <EditText
+                        android:id="@+id/edit_work_result_setup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:inputType="number"
+                        android:hint="Input"
+                        android:digits="0123456789"
+                        android:textColor="@color/default_green"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/blackText"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeNormal" />
+
+                    <EditText
+                        android:id="@+id/edit_work_result_dt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:inputType="number"
+                        android:hint="Input"
+                        android:digits="0123456789"
+                        android:textColor="@color/default_green"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

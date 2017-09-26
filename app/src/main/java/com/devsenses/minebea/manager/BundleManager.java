@@ -2,13 +2,18 @@ package com.devsenses.minebea.manager;
 
 import android.os.Bundle;
 
+import com.devsenses.minebea.model.breakmodel.BreakStep;
 import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.SelectedModel;
 import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.model.ngmodel.NGDetail;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.RecoverPartModel;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,13 @@ public class BundleManager {
     public static final String KEY_SHIFT_ID = "idShift";
     public static final String KEY_SHIFT_NAME = "shiftName";
     public static final String KEY_WORKING_DATE = "workingDate";
+    public static final String KEY_BASE_NG_LIST_DATA = "ngListData";
+    public static final String KEY_NG_1_LIST = "ng1";
+    public static final String KEY_BREAK_STEP_LIST = "breaks";
+    public static final String KEY_SETUP = "setup";
+    public static final String KEY_DT = "dt";
+    public static final String KEY_START_DATE = "start_date";
+    public static final String KEY_END_DATE = "end_date";
 
     public static Bundle putLoginModelDataToBundle(Bundle bundle, String workingDate, Shift shift, Model model, Line line, Process process) {
 
@@ -91,12 +103,87 @@ public class BundleManager {
         return bundle;
     }
 
+    public static Bundle putBaseNgList(Bundle bundle, NGListData listData) {
+        setBaseNgList(bundle, listData);
+
+        return bundle;
+    }
+
+    private static void setBaseNgList(Bundle bundle, NGListData listData) {
+        bundle.putParcelable(KEY_BASE_NG_LIST_DATA, Parcels.wrap(listData));
+    }
+
+    public static NGListData getBaseNgList(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_BASE_NG_LIST_DATA));
+    }
+
+    public static Bundle putSummaryWorkingData(Bundle bundle, List<NGDetail> ng1List,
+                                               List<BreakStep> breakStepList, String setup,
+                                               String dt, String startDate, String endDate) {
+        setNg1List(bundle, ng1List);
+        setBreakStepList(bundle, breakStepList);
+        setSetup(bundle, setup);
+        setDt(bundle, dt);
+        setStartDate(bundle, startDate);
+        setEndDate(bundle, endDate);
+
+        return bundle;
+    }
+
+    private static void setNg1List(Bundle bundle, List<NGDetail> ng1List) {
+        bundle.putParcelable(KEY_NG_1_LIST, Parcels.wrap(ng1List));
+    }
+
+    public static List<NGDetail> getNg1List(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_NG_1_LIST));
+    }
+
+    private static void setBreakStepList(Bundle bundle, List<BreakStep> breakStepList) {
+        bundle.putParcelable(KEY_BREAK_STEP_LIST, Parcels.wrap(breakStepList));
+    }
+
+    public static List<BreakStep> getBreakStepList(Bundle bundle) {
+        return Parcels.unwrap(bundle.getParcelable(KEY_BREAK_STEP_LIST));
+    }
+
+    private static void setSetup(Bundle bundle, String setup) {
+        bundle.putString(KEY_SETUP, setup);
+    }
+
+    public static String getSetup(Bundle bundle) {
+        return bundle.getString(KEY_SETUP, "0");
+    }
+
+    private static void setDt(Bundle bundle, String dt) {
+        bundle.putString(KEY_DT, dt);
+    }
+
+    public static String getDt(Bundle bundle) {
+        return bundle.getString(KEY_DT, "0");
+    }
+
+    private static void setStartDate(Bundle bundle, String startDate) {
+        bundle.putString(KEY_START_DATE, startDate);
+    }
+
+    public static String getStartDate(Bundle bundle) {
+        return bundle.getString(KEY_START_DATE, "");
+    }
+
+    private static void setEndDate(Bundle bundle, String endDate) {
+        bundle.putString(KEY_END_DATE, endDate);
+    }
+
+    public static String getEndDate(Bundle bundle) {
+        return bundle.getString(KEY_END_DATE, "");
+    }
+
     public static RecoverPartModel getRecoverPartAndWIPData(Bundle bundle) {
         return (RecoverPartModel) bundle.getParcelable(KEY_RECOVER_PART);
     }
 
     /* Date */
-    public static void setWorkingDateData(Bundle bundle, String date){
+    public static void setWorkingDateData(Bundle bundle, String date) {
         setWorkingDate(bundle, date);
     }
 
@@ -255,7 +342,7 @@ public class BundleManager {
         return bundle.getString(KEY_LOT_NO);
     }
 
-    /*On Break*/
+    /*On BreakStep*/
     public static void setOnBreak(Bundle bundle, Long onBreak) {
         if (onBreak == null) onBreak = (long) 0;
         bundle.putLong(KEY_ON_BREAK, onBreak);

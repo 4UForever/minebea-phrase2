@@ -3,7 +3,6 @@ package com.devsenses.minebea.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -11,19 +10,21 @@ import android.widget.LinearLayout;
 
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.dialog.DialogWithText;
-import com.devsenses.minebea.listener.OnApiGetPartWIPListener;
-import com.devsenses.minebea.listener.OnBaseApi;
-import com.devsenses.minebea.listener.OnCallback;
-import com.devsenses.minebea.manager.PartAndWIPViewManager;
 import com.devsenses.minebea.fragment.ScanQRFragment;
+import com.devsenses.minebea.listener.OnApiGetNGListener;
+import com.devsenses.minebea.listener.OnApiGetPartWIPListener;
 import com.devsenses.minebea.listener.OnQRCodeHelperListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.manager.LineLeaderManager;
+import com.devsenses.minebea.manager.PartAndWIPViewManager;
+import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.model.partmodel.LotDataModel;
 import com.devsenses.minebea.model.partmodel.LotNo;
 import com.devsenses.minebea.model.partmodel.Part;
 import com.devsenses.minebea.model.partmodel.PartData;
 import com.devsenses.minebea.model.partmodel.PartModel;
+import com.devsenses.minebea.storage.PreferenceHelper;
+import com.devsenses.minebea.task.TaskNG;
 import com.devsenses.minebea.task.TaskPartAndWIP;
 import com.devsenses.minebea.utils.Utils;
 
@@ -42,6 +43,7 @@ public class PartAndWIPActivity extends BaseModelActivity {
 
     private PartAndWIPViewManager partViewManager;
     private LineLeaderManager lineLeaderManager;
+    private PreferenceHelper preferenceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class PartAndWIPActivity extends BaseModelActivity {
     @Override
     public void initCreateView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_part_wip);
+
+        preferenceHelper = new PreferenceHelper(PartAndWIPActivity.this, employeeNo);
 
         initUI();
         initDoneEvent();
@@ -207,8 +211,30 @@ public class PartAndWIPActivity extends BaseModelActivity {
             @Override
             public void onFinished(String lotNo) {
                 Utils.clearKeyboard(PartAndWIPActivity.this);
-                BundleManager.setLotNo(bundle,lotNo);
+                BundleManager.setLotNo(bundle, lotNo);
+                loadNgDetailList();
+            }
+        });
+    }
+
+    private void loadNgDetailList() {
+        TaskNG.getNGList(PartAndWIPActivity.this, employeeNo, new OnApiGetNGListener() {
+            @Override
+            public void onSuccess(NGListData ngListData) {
+                bundle = BundleManager.putBaseNgList(bundle, ngListData);
+                preferenceHelper.saveBaseNgListData(ngListData);
                 startMainActivity(bundle);
+            }
+
+            @Override
+            public void onFailure(String reason) {
+                DialogWithText.showMessage(PartAndWIPActivity.this, reason + "\nPlease try again.",
+                        new DialogWithText.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                loadNgDetailList();
+                            }
+                        });
             }
         });
     }

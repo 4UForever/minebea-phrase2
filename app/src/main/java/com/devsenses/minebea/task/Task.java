@@ -1,6 +1,5 @@
 package com.devsenses.minebea.task;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -11,6 +10,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
+
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
@@ -27,8 +27,11 @@ public class Task {
             public com.squareup.okhttp.Response intercept(Chain chain) throws IOException {
                 //for show response content as String before convert to Gson
                 com.squareup.okhttp.Response response = chain.proceed(chain.request());
+//                final String url = response.request().urlString();
+//                final String request = response.request().body().toString();
                 final String content = response.body().string();
                 Log.d(TAG, content);
+//                Log.d(TAG, url + "\n" + request + "\n" + content);
                 return response.newBuilder()
                         .body(ResponseBody.create(response.body().contentType(), content))
                         .build();
@@ -58,14 +61,14 @@ public class Task {
         return message;
     }
 
-    public static void reportException(String msg, ResponseBody rb){
+    public static void reportException(String msg, ResponseBody rb) {
         try {
-            Crashlytics.log(msg+"\n"+rb.string());
-            Crashlytics.logException(new Exception(msg+"\n"+rb.string()));
+            Crashlytics.log(msg + "\n" + rb.string());
+            Crashlytics.logException(new Exception(msg + "\n" + rb.string()));
         } catch (Exception e) {
             e.printStackTrace();
-            Crashlytics.log(msg+"\ncan't get ResponseBody");
-            Crashlytics.logException(new Exception(msg+"\ncan't get ResponseBody"));
+            Crashlytics.log(msg + "\ncan't get ResponseBody");
+            Crashlytics.logException(new Exception(msg + "\ncan't get ResponseBody"));
         }
 
     }
