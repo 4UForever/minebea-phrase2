@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/md_button_padding_frame_side">
+
+        <TextView
+            android:textSize="@dimen/textSizeNormal"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Part No. : "
+            android:textStyle="bold"/>
+
+        <TextView
+            android:textSize="@dimen/textSizeNormal"
+            android:textColor="@color/blueText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:text="1234-56"
+            android:layout_marginStart="@dimen/md_button_padding_frame_side"
+            android:padding="@dimen/md_button_padding_vertical"
+            android:id="@+id/partNoTextView" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/icqListLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+
+</LinearLayout>

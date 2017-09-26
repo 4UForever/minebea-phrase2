@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/md_button_padding_frame_side"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout
+        android:id="@+id/searchableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:hint="Type to search here"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/md_button_padding_horizontal"
+            android:id="@+id/searchEditText" />
+
+        <GridView
+            android:layout_below="@+id/searchEditText"
+            android:scrollbars="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/gridView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numColumns="1"
+            android:verticalSpacing="10dp"
+            android:stretchMode="columnWidth"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>
