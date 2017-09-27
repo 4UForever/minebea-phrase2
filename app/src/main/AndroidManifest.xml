@@ -12,7 +12,7 @@
     <uses-feature android:name="android.hardware.camera.front" android:required="true"/>
 
     <application
-
+        android:name=".MineBeaApplication"
         tools:replace="android:icon,android:theme"
         android:allowBackup="true"
         android:icon="@mipmap/ic_minebea_launcher"
