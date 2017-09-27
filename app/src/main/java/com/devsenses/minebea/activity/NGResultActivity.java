@@ -95,6 +95,7 @@ public class NGResultActivity extends BaseModelActivity {
     private void initSummaryWorkingData() {
         editSetup.setText(BundleManager.getSetup(bundle));
         editDt.setText(BundleManager.getDt(bundle));
+        editLastSN.setText(preferenceHelper.getLastSerialNo());
     }
 
     private void initEvent() {
@@ -160,9 +161,10 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void showNgRemarkDialog() {
-        new DialogNgRemark(NGResultActivity.this, new DialogNgRemark.OnConfirmNgDialogListener() {
+        new DialogNgRemark(NGResultActivity.this, preferenceHelper.getRemark(), new DialogNgRemark.OnConfirmNgDialogListener() {
             @Override
             public void onConfirm(String remark) {
+                preferenceHelper.saveRemark(remark);
                 sendNGDataToServer(remark);
             }
         }).show();

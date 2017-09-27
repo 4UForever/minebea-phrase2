@@ -26,6 +26,8 @@ public class PreferenceHelper {
     private final static String KEY_START_DATE = "KEY_START_DATE";
     private final static String KEY_NG_LIST_DATA = "KEY_NG_LIST_DATA";
     private final static String KEY_BREAK_STEP_LIST = "KEY_BREAK_STEP_LIST";
+    private final static String KEY_REMARK = "KEY_REMARK";
+    private final static String KEY_LAST_SERIAL_NUMBER = "KEY_LAST_SERIAL_NUMBER";
 
     private final SharedPreferences preferences;
 
@@ -85,6 +87,22 @@ public class PreferenceHelper {
             Log.e("MineBea", e.getMessage());
             return null;
         }
+    }
+
+    public void saveLastSerialNo(String lastSerialNo) {
+        preferences.edit().putString(KEY_LAST_SERIAL_NUMBER, lastSerialNo).apply();
+    }
+
+    public String getLastSerialNo() {
+        return preferences.getString(KEY_LAST_SERIAL_NUMBER, "");
+    }
+
+    public void saveRemark(String remark) {
+        preferences.edit().putString(KEY_REMARK, remark).apply();
+    }
+
+    public String getRemark() {
+        return preferences.getString(KEY_REMARK, "");
     }
 
     public void clearPreference() {

@@ -8,6 +8,7 @@ import com.devsenses.minebea.listener.OnBaseApi;
 import com.devsenses.minebea.listener.OnBaseApiFailure;
 import com.devsenses.minebea.model.lineleadermodel.LineLeader;
 import com.devsenses.minebea.model.partmodel.LotDataModel;
+import com.devsenses.minebea.storage.PreferenceHelper;
 import com.devsenses.minebea.task.TaskLineLeader;
 
 import java.util.List;
@@ -24,9 +25,12 @@ public class LineLeaderManager{
     private String qrCode;
     private DialogLineLeaderSelect dialog;
 
-    public LineLeaderManager(Context context, LotDataModel lotDataModel){
+    private PreferenceHelper preferenceHelper;
+
+    public LineLeaderManager(Context context, LotDataModel lotDataModel,PreferenceHelper preferenceHelper){
         this.context = context;
         this.lotDataModel = lotDataModel;
+        this.preferenceHelper = preferenceHelper;
     }
 
     public void startFillLineLeaderInfo(String qrCode,OnSendLineLeaderCallback listener){
@@ -54,7 +58,8 @@ public class LineLeaderManager{
         if(dialog == null) {
             dialog = new DialogLineLeaderSelect(context, lineLeaderList, lotDataModel, new DialogLineLeaderSelect.OnDialogLineLeaderListener() {
                 @Override
-                public void onOk(long lineLeaderID, String firstSerial, String lotNo, Long lotId) {
+                public void onOk(long lineLeaderID, String firstSerial, String lastSerial, String lotNo, Long lotId) {
+                    preferenceHelper.saveLastSerialNo(lastSerial);
                     sendLineLeaderAndFirstSerialData(lineLeaderID, firstSerial, lotNo, lotId);
                 }
             });

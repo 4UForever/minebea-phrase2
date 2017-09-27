@@ -20,11 +20,13 @@ public class DialogNgRemark extends MaterialDialog.Builder {
         void onConfirm(String description);
     }
 
+    private final String remark;
     private final OnConfirmNgDialogListener listener;
     private EditText editBox;
 
-    public DialogNgRemark(@NonNull Context context, @NonNull OnConfirmNgDialogListener listener) {
+    public DialogNgRemark(@NonNull Context context, String remark, @NonNull OnConfirmNgDialogListener listener) {
         super(context);
+        this.remark = remark;
         this.listener = listener;
 
         initCustomView();
@@ -49,6 +51,9 @@ public class DialogNgRemark extends MaterialDialog.Builder {
 
     private void initEditBox() {
         editBox = (EditText) customView.findViewById(R.id.edit_dialog_ng_remark_description);
+        if (remark != null) {
+            editBox.setText(remark);
+        }
     }
 
     private void setPositiveAction() {

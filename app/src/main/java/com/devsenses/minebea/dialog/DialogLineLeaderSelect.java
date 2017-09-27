@@ -36,6 +36,7 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
     private LineLeaderListSearchableLayout searchCustomLayout;
 
     private LineLeader selectedLineLeader;
+    private String selectedLastSerial = "";
 
     public DialogLineLeaderSelect(@NonNull Context context, List<LineLeader> lineLeaderList,
                                   LotDataModel lotDataModel, OnDialogLineLeaderListener listener) {
@@ -76,6 +77,7 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
                     if (!lotDataModel.getLotDataList().get(position).getFirstSerialNo().isEmpty()) {
                         firstSerialEdit.setText(lotDataModel.getLotDataList().get(position).getFirstSerialNo());
                     }
+                    selectedLastSerial = lotDataModel.getLotDataList().get(position).getLastSerialNo();
                 }
 
                 @Override
@@ -143,7 +145,9 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
                     DialogWithText.showMessage(context, "Please input lot no.");
                     return;
                 }
-                listener.onOk(selectedLineLeader.getId(), firstSerialEdit.getText().toString(), getLotNo(), getLotID());
+                listener.onOk(selectedLineLeader.getId(),
+                        firstSerialEdit.getText().toString(), selectedLastSerial,
+                        getLotNo(), getLotID());
                 autoDismiss(true);
             }
         });
@@ -179,6 +183,6 @@ public class DialogLineLeaderSelect extends MaterialDialog.Builder {
     }
 
     public interface OnDialogLineLeaderListener {
-        void onOk(long lineLeaderID, String firstSerial, String lotNo, Long lotId);
+        void onOk(long lineLeaderID, String firstSerial, String lastSerial, String lotNo, Long lotId);
     }
 }

@@ -9,6 +9,7 @@ public class LotData {
     private static final String FIELD_ID = "id";
     private static final String FIELD_NUMBER = "number";
     private static final String FIELD_FIRST_SERIAL_NO = "first_serial_no";
+    private static final String FIELD_LAST_SERIAL_NO = "last_serial_no";
 
     @SerializedName(FIELD_ID)
     private long id;
@@ -16,6 +17,8 @@ public class LotData {
     private String number;
     @SerializedName(FIELD_FIRST_SERIAL_NO)
     private String firstSerialNo;
+    @SerializedName(FIELD_LAST_SERIAL_NO)
+    private String lastSerialNo;
 
     public long getId() {
         return id;
@@ -39,5 +42,13 @@ public class LotData {
 
     public void setFirstSerialNo(String firstSerialNo) {
         this.firstSerialNo = firstSerialNo;
+    }
+
+    public String getLastSerialNo() {
+        return lastSerialNo != null ? lastSerialNo : "";
+    }
+
+    public void setLastSerialNo(String lastSerialNo) {
+        this.lastSerialNo = lastSerialNo;
     }
 }

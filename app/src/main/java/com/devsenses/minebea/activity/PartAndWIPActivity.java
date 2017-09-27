@@ -205,7 +205,7 @@ public class PartAndWIPActivity extends BaseModelActivity {
 
     private void startFillLineLeaderInfo(String empNo, LotDataModel lotDataModel) {
         if (lineLeaderManager == null) {
-            lineLeaderManager = new LineLeaderManager(PartAndWIPActivity.this, lotDataModel);
+            lineLeaderManager = new LineLeaderManager(PartAndWIPActivity.this, lotDataModel, preferenceHelper);
         }
         lineLeaderManager.startFillLineLeaderInfo(empNo, new LineLeaderManager.OnSendLineLeaderCallback() {
             @Override
