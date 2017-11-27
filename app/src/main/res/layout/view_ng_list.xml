@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
             android:text="NG Detail"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeNormal"
@@ -27,9 +27,8 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="NG1 Use Qty."
+            android:layout_weight="6"
+            android:text="Serial No"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeNormal"
             android:textStyle="bold" />
@@ -37,9 +36,19 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_weight="3"
             android:gravity="center"
-            android:text="NG2 Use Qty."
+            android:text="NG1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeNormal"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="NG2"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeNormal"
             android:textStyle="bold" />

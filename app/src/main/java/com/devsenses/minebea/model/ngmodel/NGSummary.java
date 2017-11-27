@@ -11,15 +11,18 @@ import org.parceler.Parcel;
 @Parcel(Parcel.Serialization.BEAN)
 public class NGSummary {
     private static final String FIELD_NG = "ng";
+    private static final String FIELD_SERIAL_NO = "serial_no";
     private static final String FIELD_NG_1 = "ng1";
     private static final String FIELD_NG_2 = "ng2";
 
     @SerializedName(FIELD_NG)
     private NG ng;
+    @SerializedName(FIELD_SERIAL_NO)
+    private String serialNo;
     @SerializedName(FIELD_NG_1)
-    private String ng1;
+    private boolean ng1;
     @SerializedName(FIELD_NG_2)
-    private String ng2;
+    private boolean ng2;
 
     public NG getNg() {
         return ng;
@@ -29,19 +32,27 @@ public class NGSummary {
         this.ng = ng;
     }
 
-    public String getNg1() {
-        return ng1 != null ? ng1 : "";
+    public String getSerialNo() {
+        return serialNo != null ? serialNo : "";
     }
 
-    public void setNg1(String ng1) {
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public boolean getNg1() {
+        return ng1;
+    }
+
+    public void setNg1(boolean ng1) {
         this.ng1 = ng1;
     }
 
-    public String getNg2() {
-        return ng2 != null ? ng2 : "";
+    public boolean getNg2() {
+        return ng2;
     }
 
-    public void setNg2(String ng2) {
+    public void setNg2(boolean ng2) {
         this.ng2 = ng2;
     }
 
@@ -49,6 +60,8 @@ public class NGSummary {
     public String toString() {
         return "NGSummary{" +
                 "ng=" + ng.getTitle() +
+                ", serial=" + getSerialNo() +
+                ", ng1='" + ng1 +
                 ", ng2='" + ng2 + '\'' +
                 '}';
     }

@@ -1,10 +1,7 @@
 package com.devsenses.minebea.manager;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.devsenses.minebea.adapter.Ng1AndNg2Adapter;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
@@ -25,15 +22,13 @@ public class NGDetailListManager {
         void onNg2SumUpdate(String sumNg2);
     }
 
-    private final Context context;
     private final RecyclerView listView;
     private final List<NGDetail> ngDetailList;
 
     private Ng1AndNg2Adapter adapter;
     private OnNg2SumChangeListener listener;
 
-    public NGDetailListManager(@NonNull Context context, RecyclerView listView, List<NGDetail> ngDetailList) {
-        this.context = context;
+    public NGDetailListManager(RecyclerView listView, List<NGDetail> ngDetailList) {
         this.listView = listView;
         this.ngDetailList = ngDetailList;
 
@@ -45,13 +40,7 @@ public class NGDetailListManager {
     }
 
     private void initListView() {
-        adapter = new Ng1AndNg2Adapter(context, ngDetailList);
-        adapter.setOnNg2ChangeListener(new Ng1AndNg2Adapter.OnNg2ChangeListener() {
-            @Override
-            public void onNg2Change() {
-                if (listener != null) listener.onNg2SumUpdate(getSumNg2Value());
-            }
-        });
+        adapter = new Ng1AndNg2Adapter(ngDetailList);
         listView.setAdapter(adapter);
     }
 
@@ -59,36 +48,10 @@ public class NGDetailListManager {
         return adapter.getNgSummaryList();
     }
 
-    public String getSumNg2Value() {
-        String ng2;
-        int ng2Value = 0;
-        for (int i = 0; i < getNgSummaryList().size(); i++) {
-            ng2 = getNgSummaryList().get(i).getNg2();
-            if (!ng2.isEmpty()) {
-                ng2Value += Integer.parseInt(ng2);
-            }
-        }
-        return String.valueOf(ng2Value);
-    }
-
-    public boolean isNg2Empty() {
-        boolean isEmpty = false;
-        for (int i = 0; i < getNgSummaryList().size(); i++) {
-            if (getNgSummaryList().get(i).getNg2().isEmpty()) {
-                isEmpty = true;
-            }
-        }
-
-        return isEmpty;
-    }
-
     public boolean isNg1AndNg2Matched() {
         boolean isMatched = true;
-        int ng1, ng2;
         for (int i = 0; i < getNgSummaryList().size(); i++) {
-            ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
-            ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
-            if (ng2 > ng1) {
+            if (getNgSummaryList().get(i).getNg1() != getNgSummaryList().get(i).getNg2()) {
                 isMatched = false;
             }
         }
@@ -102,14 +65,10 @@ public class NGDetailListManager {
             for (int i = 0; i < getNgSummaryList().size(); i++) {
                 JSONObject ngObj = new JSONObject();
                 ngObj.put("ng_id", getNgSummaryList().get(i).getNg().getId());
-                ng1 = Integer.parseInt(getNgSummaryList().get(i).getNg1());
-                ng2 = Integer.parseInt(getNgSummaryList().get(i).getNg2());
-                if (ng2 >= ng1) {
-                    ngObj.put("ng1", ng2);
-                } else {
-                    ngObj.put("ng1", ng1);
-                }
-                ngObj.put("ng2", ng2);
+                //TODO wait real API for name of "serial id"
+                ngObj.put("serial_no", getNgSummaryList().get(i).getSerialNo());
+                ngObj.put("ng1", getNgSummaryList().get(i).getNg1());
+                ngObj.put("ng2", getNgSummaryList().get(i).getNg2());
                 ary.put(ngObj);
             }
             return ary.toString();

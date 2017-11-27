@@ -1,15 +1,11 @@
 package com.devsenses.minebea.adapter;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.devsenses.minebea.R;
@@ -29,18 +25,18 @@ public class Ng1AndNg2Adapter extends RecyclerView.Adapter<Ng1AndNg2Adapter.View
     }
 
     private final List<NGSummary> list;
-    private final LayoutInflater inflater;
     private OnNg2ChangeListener listener;
 
-    public Ng1AndNg2Adapter(@NonNull Context context, @Nullable List<NGDetail> ngDetailList) {
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public Ng1AndNg2Adapter(@Nullable List<NGDetail> ngDetailList) {
         this.list = new ArrayList<>();
 
         if (ngDetailList != null) {
             for (int i = 0; i < ngDetailList.size(); i++) {
                 NGSummary summary = new NGSummary();
+                summary.setSerialNo(ngDetailList.get(i).getSerialNo());
                 summary.setNg(ngDetailList.get(i).getNg());
-                summary.setNg1(ngDetailList.get(i).getQuantity());
+                summary.setNg1(true);
+                summary.setNg2(true);
                 this.list.add(summary);
             }
         }
@@ -58,15 +54,13 @@ public class Ng1AndNg2Adapter extends RecyclerView.Adapter<Ng1AndNg2Adapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_ng1_and_ng2, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textNgDetail.setText(list.get(position).getNg().getTitle());
-        holder.textNg1.setText(list.get(position).getNg1());
-        holder.editNg2.setText(list.get(position).getNg2());
+        holder.textNgSerialNo.setText(list.get(position).getSerialNo());
     }
 
     @Override
@@ -111,29 +105,33 @@ public class Ng1AndNg2Adapter extends RecyclerView.Adapter<Ng1AndNg2Adapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNgDetail;
-        TextView textNg1;
-        EditText editNg2;
+        TextView textNgSerialNo;
+        RadioButton radioButtonNg1;
+        RadioButton radioButtonNg2;
 
         ViewHolder(View view) {
             super(view);
             textNgDetail = (TextView) view.findViewById(R.id.text_item_ng_detail);
-            textNg1 = (TextView) view.findViewById(R.id.text_item_ng1);
-            editNg2 = (EditText) view.findViewById(R.id.edit_item_ng2);
-            editNg2.addTextChangedListener(new TextWatcher() {
+            textNgSerialNo = (TextView) view.findViewById(R.id.text_item_ng_serial_no);
+            radioButtonNg1 = (RadioButton) view.findViewById(R.id.radiobtn_item_ng1);
+            radioButtonNg2 = (RadioButton) view.findViewById(R.id.radiobtn_item_ng2);
+
+            radioButtonNg1.setChecked(true);
+            radioButtonNg2.setChecked(true);
+
+            radioButtonNg1.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    list.get(getAdapterPosition()).setNg2(s.toString());
-                    if (listener != null) listener.onNg2Change();
+                public void onClick(View v) {
+                    radioButtonNg1.setChecked(!radioButtonNg1.isChecked());
+                    list.get(getAdapterPosition()).setNg1(radioButtonNg1.isChecked());
                 }
+            });
 
+            radioButtonNg2.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
+                public void onClick(View v) {
+                    radioButtonNg2.setChecked(!radioButtonNg2.isChecked());
+                    list.get(getAdapterPosition()).setNg2(radioButtonNg2.isChecked());
                 }
             });
         }

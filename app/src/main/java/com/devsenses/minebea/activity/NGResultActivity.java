@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -69,7 +70,7 @@ public class NGResultActivity extends BaseModelActivity {
 
     private void initNGDetailListManager() {
         RecyclerView listView = (RecyclerView) findViewById(R.id.list_result_ng1_and_ng2);
-        ngDetailListManager = new NGDetailListManager(NGResultActivity.this, listView, BundleManager.getNg1List(bundle));
+        ngDetailListManager = new NGDetailListManager(listView, BundleManager.getNg1List(bundle));
         ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
             @Override
             public void onNg2SumUpdate(String sumNg2) {
@@ -144,16 +145,16 @@ public class NGResultActivity extends BaseModelActivity {
         if (getOKQuantity() == 0) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add OK quantity.");
             return false;
-        }
-        if (editLastSN.getText().toString().isEmpty()) {
+        }else if (editLastSN.getText().toString().isEmpty()) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add last serial number.");
             return false;
-        }
-        if (ngDetailListManager.isNg2Empty()) {
-            DialogWithText.showMessage(NGResultActivity.this, "Pleas input all NG2 value.");
-            return false;
-        }
-        if (checkWipLastLot.isChecked() && getWipLastLot().isEmpty()) {
+//        }else if (ngDetailListManager.isNg2Empty()) {
+//            DialogWithText.showMessage(NGResultActivity.this, "Pleas input all NG2 value.");
+//            return false;
+//        }else if (ngDetailListManager.isNg2WrongNumber()) {
+//            DialogWithText.showMessage(NGResultActivity.this, "Pleas input only 1 or 0 at Ng2 value.");
+//            return false;
+        }else if (checkWipLastLot.isChecked() && getWipLastLot().isEmpty()) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas input WIP lot for last shift.");
             return false;
         }
@@ -171,6 +172,7 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void sendNGDataToServer(@Nullable String remark) {
+        Log.d("MineBea", ngDetailListManager.getNgSummaryJsonFormatted());
         FinishModel model = new FinishModel();
         model.setQrCode(employeeNo);
         model.setOkQty(getOKQuantity());
