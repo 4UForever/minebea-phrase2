@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,7 +13,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.adapter.NgDetailAdapter;
-import com.devsenses.minebea.manager.NGManager;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGListData;
 import com.devsenses.minebea.utils.UiUtils;
@@ -92,11 +92,12 @@ public class DialogNgListDetail extends MaterialDialog.Builder {
         onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                if (isDuplicateNgDetail()) {
-                    Utils.alert(context, "Warning", "Please do not select duplicate NG1 detail.");
-                } else if (isQtyEmpty()) {
-                    Utils.alert(context, "Warning", "Please input user qty to all ng detail.");
+                if (isDuplicateSerialNo()) {
+                    Utils.alert(context, "Warning", "Please do not input duplicate serial no.");
+                } else if (isSerialNoEmpty()) {
+                    Utils.alert(context, "Warning", "Please input serial no. to all ng detail.");
                 } else {
+//                    Log.d("MineBea", ngDetailAdapter.getSelectedNgList().toString());
                     if (!isBaseNgListEmpty()) {
 //                        Log.d("MineBea", "listener return " + ngDetailAdapter.getSelectedNgList().toString());
                         listener.onSavedList(ngDetailAdapter.getSelectedNgList());
@@ -128,12 +129,12 @@ public class DialogNgListDetail extends MaterialDialog.Builder {
         });
     }
 
-    private boolean isDuplicateNgDetail() {
+    private boolean isDuplicateSerialNo() {
         boolean isDuplicate = false;
         List<NGDetail> list = ngDetailAdapter.getSelectedNgList();
         for (int i = 0; i < list.size() - 1; i++) {
             for (int j = i + 1; j < list.size(); j++) {
-                if (list.get(i).getNg().getId() == list.get(j).getNg().getId()) {
+                if (list.get(i).getSerialNo().equals(list.get(j).getSerialNo())) {
                     isDuplicate = true;
                 }
             }
@@ -141,10 +142,10 @@ public class DialogNgListDetail extends MaterialDialog.Builder {
         return isDuplicate;
     }
 
-    private boolean isQtyEmpty() {
+    private boolean isSerialNoEmpty() {
         boolean isEmpty = false;
         for (int i = 0; i < ngDetailAdapter.getSelectedNgList().size(); i++) {
-            if (ngDetailAdapter.getSelectedNgList().get(i).getQuantity().isEmpty()) {
+            if (ngDetailAdapter.getSelectedNgList().get(i).getSerialNo().isEmpty()) {
                 isEmpty = true;
             }
         }

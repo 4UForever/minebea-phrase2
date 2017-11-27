@@ -11,10 +11,13 @@ import org.parceler.Parcel;
 @Parcel(Parcel.Serialization.BEAN)
 public class NGDetail {
     private static final String FIELD_NG = "ng";
+    private static final String FIELD_SERIAL_NO = "serial_no";
     private static final String FIELD_QUANTITY = "quantity";
 
     @SerializedName(FIELD_NG)
     private NG ng;
+    @SerializedName(FIELD_SERIAL_NO)
+    private String serialNo;
     @SerializedName(FIELD_QUANTITY)
     private String quantity;
 
@@ -27,18 +30,27 @@ public class NGDetail {
     }
 
     public String getQuantity() {
-        return quantity != null ? quantity : "0";
+        return quantity != null ? quantity : "1";
     }
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
+    public String getSerialNo() {
+        return serialNo != null ? serialNo : "";
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
     @Override
     public String toString() {
         return "NGDetail{" +
-                "ng=" + ng +
-                ", quantity='" + quantity + '\'' +
+                "ng=" + getNg() +
+                "serialNo=" + getSerialNo() +
+                ", quantity='" + getQuantity() + '\'' +
                 '}';
     }
 }

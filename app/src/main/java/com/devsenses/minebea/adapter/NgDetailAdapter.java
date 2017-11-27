@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.model.ngmodel.NG;
@@ -61,7 +62,7 @@ public class NgDetailAdapter extends BaseAdapter {
 
         NGDetail ngDetail = new NGDetail();
         ngDetail.setNg(ng);
-        ngDetail.setQuantity("");
+        ngDetail.setSerialNo("");
 
         return ngDetail;
     }
@@ -100,7 +101,7 @@ public class NgDetailAdapter extends BaseAdapter {
                 holder.spinnerNgListItem.setSelection(i);
             }
         }
-        holder.ngItemQty.setText(selectedNgList.get(position).getQuantity());
+        holder.ngItemSerialNo.setText(selectedNgList.get(position).getSerialNo());
         return convertView;
     }
 
@@ -140,7 +141,7 @@ public class NgDetailAdapter extends BaseAdapter {
 
     private class ViewHolder {
         Spinner spinnerNgListItem;
-        EditText ngItemQty;
+        EditText ngItemSerialNo;
         Button btnNgItemDelete;
 
         private final int itemPosition;
@@ -149,7 +150,7 @@ public class NgDetailAdapter extends BaseAdapter {
             this.itemPosition = itemPosition;
 
             spinnerNgListItem = (Spinner) v.findViewById(R.id.spinner_ng_list_item);
-            ngItemQty = (EditText) v.findViewById(R.id.edit_ng_item_qty);
+            ngItemSerialNo = (EditText) v.findViewById(R.id.edit_ng_item_serial_no);
             btnNgItemDelete = (Button) v.findViewById(R.id.btn_ng_item_delete);
 
             spinnerNgListItem.setAdapter(new SpinnerTitleAdapter(context, baseNgTitleList));
@@ -177,11 +178,11 @@ public class NgDetailAdapter extends BaseAdapter {
 
                 }
             });
-            ngItemQty.addTextChangedListener(new TextWatcher() {
+            ngItemSerialNo.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-                        selectedNgList.get(itemPosition).setQuantity(ngItemQty.getText().toString());
+                        selectedNgList.get(itemPosition).setSerialNo(ngItemSerialNo.getText().toString());
                     } catch (IndexOutOfBoundsException e) {
                         Log.e("MineBea", "error position " + itemPosition);
                     }
@@ -201,7 +202,7 @@ public class NgDetailAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     removeSelectedNgDetail(itemPosition);
-                    getSelectedNgList();
+//                    getSelectedNgList();
                 }
             });
         }

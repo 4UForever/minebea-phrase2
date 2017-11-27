@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="5"
                 android:padding="8dp"
                 android:text="NG Detail"
                 android:textAppearance="?android:attr/textAppearanceLarge"
@@ -51,7 +51,18 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="4"
+                android:padding="8dp"
+                android:text="Serial No"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textSizeNormal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:padding="8dp"
                 android:text="Use QTY"
                 android:textAppearance="?android:attr/textAppearanceLarge"
