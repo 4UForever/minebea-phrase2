@@ -1,9 +1,12 @@
 package com.devsenses.minebea.manager;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.devsenses.minebea.adapter.AdditionalNgDetailAdapter;
 import com.devsenses.minebea.adapter.Ng1AndNg2Adapter;
+import com.devsenses.minebea.model.ngmodel.NG;
 import com.devsenses.minebea.model.ngmodel.NGDetail;
 import com.devsenses.minebea.model.ngmodel.NGSummary;
 
@@ -11,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,57 +22,83 @@ import java.util.List;
  */
 
 public class NGDetailListManager {
-    public interface OnNg2SumChangeListener {
-        void onNg2SumUpdate(String sumNg2);
-    }
+//    public interface OnNg2SumChangeListener {
+//        void onNg2SumUpdate(String sumNg2);
+//    }
 
     private final RecyclerView listView;
     private final List<NGDetail> ngDetailList;
+    private final RecyclerView additionalListView;
+    private final List<NG> baseNgList;
 
     private Ng1AndNg2Adapter adapter;
-    private OnNg2SumChangeListener listener;
+    private AdditionalNgDetailAdapter additionalAdapter;
+//    private OnNg2SumChangeListener listener;
 
-    public NGDetailListManager(RecyclerView listView, List<NGDetail> ngDetailList) {
+    public NGDetailListManager(RecyclerView listView, List<NGDetail> ngDetailList,
+                               RecyclerView additionalListView, List<NG> baseNgList) {
         this.listView = listView;
         this.ngDetailList = ngDetailList;
+        this.additionalListView = additionalListView;
+        this.baseNgList = baseNgList;
 
         initListView();
+        initAdditionalListView();
     }
 
-    public void setOnNg2ChangeListener(OnNg2SumChangeListener listener) {
-        this.listener = listener;
-    }
+//    public void setOnNg2ChangeListener(OnNg2SumChangeListener listener) {
+//        this.listener = listener;
+//    }
 
     private void initListView() {
         adapter = new Ng1AndNg2Adapter(ngDetailList);
         listView.setAdapter(adapter);
     }
 
-    private List<NGSummary> getNgSummaryList() {
+    private void initAdditionalListView() {
+        additionalAdapter = new AdditionalNgDetailAdapter(baseNgList);
+        additionalListView.setAdapter(additionalAdapter);
+    }
+
+
+    //////   Utility   /////////
+
+    public List<NGSummary> getNgSummaryList() {
         return adapter.getNgSummaryList();
     }
 
-    public boolean isNg1AndNg2Matched() {
+    public List<NGSummary> getAdditionalNgSummaryList() {
+        return additionalAdapter.getAdditionalNgSummaryList();
+    }
+
+    public List<NGSummary> getFinalNgSummaryList() {
+        List<NGSummary> newList = new ArrayList<>(
+                getNgSummaryList().size() + getAdditionalNgSummaryList().size());
+        newList.addAll(getNgSummaryList());
+        newList.addAll(getAdditionalNgSummaryList());
+        return newList;
+    }
+
+    public boolean isNg1AndNg2Matched(@NonNull List<NGSummary> list) {
         boolean isMatched = true;
-        for (int i = 0; i < getNgSummaryList().size(); i++) {
-            if (getNgSummaryList().get(i).getNg1() != getNgSummaryList().get(i).getNg2()) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getNg1() != list.get(i).getNg2()) {
                 isMatched = false;
             }
         }
         return isMatched;
     }
 
-    public String getNgSummaryJsonFormatted() {
-        int ng1, ng2;
+    public String getNgSummaryJsonFormatted(@NonNull List<NGSummary> list) {
         try {
             JSONArray ary = new JSONArray();
-            for (int i = 0; i < getNgSummaryList().size(); i++) {
+            for (int i = 0; i < list.size(); i++) {
                 JSONObject ngObj = new JSONObject();
-                ngObj.put("ng_id", getNgSummaryList().get(i).getNg().getId());
+                ngObj.put("ng_id", list.get(i).getNg().getId());
                 //TODO wait real API for name of "serial id"
-                ngObj.put("serial_no", getNgSummaryList().get(i).getSerialNo());
-                ngObj.put("ng1", getNgSummaryList().get(i).getNg1());
-                ngObj.put("ng2", getNgSummaryList().get(i).getNg2());
+                ngObj.put("serial_no", list.get(i).getSerialNo());
+                ngObj.put("ng1", list.get(i).getNg1());
+                ngObj.put("ng2", list.get(i).getNg2());
                 ary.put(ngObj);
             }
             return ary.toString();

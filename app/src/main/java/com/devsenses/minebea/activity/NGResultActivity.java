@@ -70,14 +70,16 @@ public class NGResultActivity extends BaseModelActivity {
 
     private void initNGDetailListManager() {
         RecyclerView listView = (RecyclerView) findViewById(R.id.list_result_ng1_and_ng2);
-        ngDetailListManager = new NGDetailListManager(listView, BundleManager.getNg1List(bundle));
-        ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
-            @Override
-            public void onNg2SumUpdate(String sumNg2) {
-                textSumNG.setText(sumNg2);
-                updateResultQty();
-            }
-        });
+        RecyclerView additionalListView = (RecyclerView) findViewById(R.id.list_result_additional_ng1_and_ng2);
+        ngDetailListManager = new NGDetailListManager(listView, BundleManager.getNg1List(bundle),
+                additionalListView, preferenceHelper.getBaseNgListData().getNGList());
+//        ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
+//            @Override
+//            public void onNg2SumUpdate(String sumNg2) {
+//                textSumNG.setText(sumNg2);
+//                updateResultQty();
+//            }
+//        });
     }
 
     private void initUI() {
@@ -104,7 +106,7 @@ public class NGResultActivity extends BaseModelActivity {
             @Override
             public void onClick(View v) {
                 if (checkNGProcessCondition()) {
-                    if (ngDetailListManager.isNg1AndNg2Matched()) {
+                    if (ngDetailListManager.isNg1AndNg2Matched(ngDetailListManager.getFinalNgSummaryList())) {
                         sendNGDataToServer("");
                     } else {
                         showNgRemarkDialog();
@@ -145,7 +147,7 @@ public class NGResultActivity extends BaseModelActivity {
         if (getOKQuantity() == 0) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add OK quantity.");
             return false;
-        }else if (editLastSN.getText().toString().isEmpty()) {
+        } else if (editLastSN.getText().toString().isEmpty()) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas add last serial number.");
             return false;
 //        }else if (ngDetailListManager.isNg2Empty()) {
@@ -154,7 +156,7 @@ public class NGResultActivity extends BaseModelActivity {
 //        }else if (ngDetailListManager.isNg2WrongNumber()) {
 //            DialogWithText.showMessage(NGResultActivity.this, "Pleas input only 1 or 0 at Ng2 value.");
 //            return false;
-        }else if (checkWipLastLot.isChecked() && getWipLastLot().isEmpty()) {
+        } else if (checkWipLastLot.isChecked() && getWipLastLot().isEmpty()) {
             DialogWithText.showMessage(NGResultActivity.this, "Pleas input WIP lot for last shift.");
             return false;
         }
@@ -172,14 +174,14 @@ public class NGResultActivity extends BaseModelActivity {
     }
 
     private void sendNGDataToServer(@Nullable String remark) {
-        Log.d("MineBea", ngDetailListManager.getNgSummaryJsonFormatted());
+        Log.d("MineBea", ngDetailListManager.getNgSummaryJsonFormatted(ngDetailListManager.getFinalNgSummaryList()));
         FinishModel model = new FinishModel();
         model.setQrCode(employeeNo);
         model.setOkQty(getOKQuantity());
         model.setLastSerialNo(editLastSN.getText().toString());
         model.setSetup(getSetup());
         model.setDt(getDt());
-        model.setNgs(ngDetailListManager.getNgSummaryJsonFormatted());
+        model.setNgs(ngDetailListManager.getNgSummaryJsonFormatted(ngDetailListManager.getFinalNgSummaryList()));
         model.setBreaks(new Gson().toJsonTree(BundleManager.getBreakStepList(bundle)).toString());
         model.setRemark(remark);
         model.setStartDate(BundleManager.getStartDate(bundle));

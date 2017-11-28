@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.model.ngmodel.NG;
@@ -63,6 +62,7 @@ public class NgDetailAdapter extends BaseAdapter {
         NGDetail ngDetail = new NGDetail();
         ngDetail.setNg(ng);
         ngDetail.setSerialNo("");
+        ngDetail.setLockAtFinish(false);
 
         return ngDetail;
     }
