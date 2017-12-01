@@ -154,7 +154,8 @@ public final class MockData {
     public static NGDetail getMockNgDetail(String title,String qty) {
         NGDetail ng = new NGDetail();
         ng.setNg(getMockNg(title));
-        ng.setQuantity(qty);
+        ng.setSerialNo(qty);
+        ng.setLockAtFinish(true);
         return ng;
     }
 }
