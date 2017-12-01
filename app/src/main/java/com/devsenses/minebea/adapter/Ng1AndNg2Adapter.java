@@ -61,47 +61,14 @@ public class Ng1AndNg2Adapter extends RecyclerView.Adapter<Ng1AndNg2Adapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textNgDetail.setText(list.get(position).getNg().getTitle());
         holder.textNgSerialNo.setText(list.get(position).getSerialNo());
+        holder.radioButtonNg1.setChecked(true);
+        holder.radioButtonNg2.setChecked(list.get(position).getNg2());
     }
 
     @Override
     public int getItemCount() {
         return list.size();
     }
-
-//    @Override
-//    public int getCount() {
-//        return list.size();
-//    }
-//
-//    @Override
-//    public NGSummary getItem(int position) {
-//        return list.get(position);
-//    }
-//
-//    @Override
-//    public long getItemId(int position) {
-//        return position;
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        ViewHolder holder;
-//        if (convertView == null) {
-//            convertView = inflater.inflate(R.layout.item_ng1_and_ng2, parent, false);
-//            holder = new ViewHolder(convertView, position);
-//            convertView.setTag(holder);
-//        } else {
-//            holder = (ViewHolder) convertView.getTag();
-//        }
-//
-//        holder.textNgDetail.setText(list.get(position).getNg().getTitle());
-//        holder.textNg1.setText(list.get(position).getNg1());
-//        holder.editNg2.setText(list.get(position).getNg2());
-//
-//        Log.d("MineBea", "position=" + position + " " + list.get(position).toString());
-//
-//        return convertView;
-//    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNgDetail;
@@ -116,22 +83,17 @@ public class Ng1AndNg2Adapter extends RecyclerView.Adapter<Ng1AndNg2Adapter.View
             radioButtonNg1 = (RadioButton) view.findViewById(R.id.radiobtn_item_ng1);
             radioButtonNg2 = (RadioButton) view.findViewById(R.id.radiobtn_item_ng2);
 
-            radioButtonNg1.setChecked(true);
-            radioButtonNg2.setChecked(true);
-
-            radioButtonNg1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    radioButtonNg1.setChecked(!radioButtonNg1.isChecked());
-                    list.get(getAdapterPosition()).setNg1(radioButtonNg1.isChecked());
-                }
-            });
+            radioButtonNg1.setEnabled(false);
+            radioButtonNg1.setClickable(false);
 
             radioButtonNg2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    radioButtonNg2.setChecked(!radioButtonNg2.isChecked());
-                    list.get(getAdapterPosition()).setNg2(radioButtonNg2.isChecked());
+                    list.get(getAdapterPosition()).setNg2(!list.get(getAdapterPosition()).getNg2());
+                    radioButtonNg2.setChecked(list.get(getAdapterPosition()).getNg2());
+                    if (listener != null) {
+                        listener.onNg2Change();
+                    }
                 }
             });
         }

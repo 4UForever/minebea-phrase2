@@ -26,11 +26,16 @@ import java.util.List;
  */
 
 public class AdditionalNgDetailAdapter extends RecyclerView.Adapter<AdditionalNgDetailAdapter.ViewHolder> {
+    public interface OnNg2ChangeListener {
+        void onNg2Change();
+    }
 
     private final List<NG> baseNgList;
     private final List<NGSummary> list;
 
     private final List<String> baseNgTitleList;
+
+    private Ng1AndNg2Adapter.OnNg2ChangeListener listener;
 
     public AdditionalNgDetailAdapter(List<NG> baseNgList) {
         this.baseNgList = baseNgList;
@@ -45,6 +50,10 @@ public class AdditionalNgDetailAdapter extends RecyclerView.Adapter<AdditionalNg
             titles.add(ng.getTitle());
         }
         return titles;
+    }
+
+    public void setOnNg2ChangeListener(Ng1AndNg2Adapter.OnNg2ChangeListener listener) {
+        this.listener = listener;
     }
 
     public void addNewNgSummary() {
@@ -99,7 +108,7 @@ public class AdditionalNgDetailAdapter extends RecyclerView.Adapter<AdditionalNg
             }
         }
         holder.ngItemSerialNo.setText(list.get(position).getSerialNo());
-        holder.radioButtonNg1.setChecked(list.get(position).getNg1());
+        holder.radioButtonNg1.setChecked(false);
         holder.radioButtonNg2.setChecked(list.get(position).getNg2());
     }
 
@@ -124,6 +133,9 @@ public class AdditionalNgDetailAdapter extends RecyclerView.Adapter<AdditionalNg
             btnNgItemDelete = (Button) v.findViewById(R.id.btn_ng_additional_delete);
 
             spinnerNgListItem.setAdapter(new SpinnerTitleAdapter(context, baseNgTitleList));
+
+            radioButtonNg1.setEnabled(false);
+            radioButtonNg1.setClickable(false);
 
             initSpinnerEvent();
             initEditSerialNoEvent();
@@ -178,19 +190,14 @@ public class AdditionalNgDetailAdapter extends RecyclerView.Adapter<AdditionalNg
         }
 
         private void initRadioEvent() {
-            radioButtonNg1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    radioButtonNg1.setChecked(!radioButtonNg1.isChecked());
-                    list.get(getAdapterPosition()).setNg1(radioButtonNg1.isChecked());
-                }
-            });
-
             radioButtonNg2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    radioButtonNg2.setChecked(!radioButtonNg2.isChecked());
-                    list.get(getAdapterPosition()).setNg2(radioButtonNg2.isChecked());
+                    list.get(getAdapterPosition()).setNg2(!list.get(getAdapterPosition()).getNg2());
+                    radioButtonNg2.setChecked(list.get(getAdapterPosition()).getNg2());
+                    if (listener != null) {
+                        listener.onNg2Change();
+                    }
                 }
             });
         }

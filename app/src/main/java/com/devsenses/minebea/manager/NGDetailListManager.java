@@ -22,9 +22,9 @@ import java.util.List;
  */
 
 public class NGDetailListManager {
-//    public interface OnNg2SumChangeListener {
-//        void onNg2SumUpdate(String sumNg2);
-//    }
+    public interface OnNg2SumChangeListener {
+        void onNg2SumUpdate(String sumNg2);
+    }
 
     private final RecyclerView listView;
     private final List<NGDetail> ngDetailList;
@@ -33,7 +33,7 @@ public class NGDetailListManager {
 
     private Ng1AndNg2Adapter adapter;
     private AdditionalNgDetailAdapter additionalAdapter;
-//    private OnNg2SumChangeListener listener;
+    private OnNg2SumChangeListener listener;
 
     public NGDetailListManager(RecyclerView listView, List<NGDetail> ngDetailList,
                                RecyclerView additionalListView, List<NG> baseNgList) {
@@ -44,20 +44,39 @@ public class NGDetailListManager {
 
         initListView();
         initAdditionalListView();
+        updateNg2Sum();
     }
 
-//    public void setOnNg2ChangeListener(OnNg2SumChangeListener listener) {
-//        this.listener = listener;
-//    }
+    public void setOnNg2ChangeListener(OnNg2SumChangeListener listener) {
+        this.listener = listener;
+    }
 
     private void initListView() {
         adapter = new Ng1AndNg2Adapter(ngDetailList);
         listView.setAdapter(adapter);
+        adapter.setOnNg2ChangeListener(new Ng1AndNg2Adapter.OnNg2ChangeListener() {
+            @Override
+            public void onNg2Change() {
+                updateNg2Sum();
+            }
+        });
     }
 
     private void initAdditionalListView() {
         additionalAdapter = new AdditionalNgDetailAdapter(baseNgList);
         additionalListView.setAdapter(additionalAdapter);
+        additionalAdapter.setOnNg2ChangeListener(new Ng1AndNg2Adapter.OnNg2ChangeListener() {
+            @Override
+            public void onNg2Change() {
+                updateNg2Sum();
+            }
+        });
+    }
+
+    private void updateNg2Sum() {
+        if (listener != null) {
+            this.listener.onNg2SumUpdate(String.valueOf(getSumNG()));
+        }
     }
 
 
@@ -77,6 +96,20 @@ public class NGDetailListManager {
         newList.addAll(getNgSummaryList());
         newList.addAll(getAdditionalNgSummaryList());
         return newList;
+    }
+
+
+    public void addNewAdditionalNgSummary() {
+        additionalAdapter.addNewNgSummary();
+        updateNg2Sum();
+    }
+
+    public int getSumNG() {
+        int sumNg = 0;
+        for (NGSummary ng : getFinalNgSummaryList()) {
+            if (ng.getNg2()) sumNg++;
+        }
+        return sumNg;
     }
 
     public boolean isNg1AndNg2Matched(@NonNull List<NGSummary> list) {

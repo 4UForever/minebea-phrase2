@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ public class NGResultActivity extends BaseModelActivity {
     private EditText editLastSN;
     private EditText editWipLastLot;
     private CheckBox checkWipLastLot;
+    private Button btnAddNewNg;
 
     private LinearLayout btnDoneLayout;
     private NGDetailListManager ngDetailListManager;
@@ -73,13 +75,13 @@ public class NGResultActivity extends BaseModelActivity {
         RecyclerView additionalListView = (RecyclerView) findViewById(R.id.list_result_additional_ng1_and_ng2);
         ngDetailListManager = new NGDetailListManager(listView, BundleManager.getNg1List(bundle),
                 additionalListView, preferenceHelper.getBaseNgListData().getNGList());
-//        ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
-//            @Override
-//            public void onNg2SumUpdate(String sumNg2) {
-//                textSumNG.setText(sumNg2);
-//                updateResultQty();
-//            }
-//        });
+        ngDetailListManager.setOnNg2ChangeListener(new NGDetailListManager.OnNg2SumChangeListener() {
+            @Override
+            public void onNg2SumUpdate(String sumNg2) {
+                textSumNG.setText(sumNg2);
+                updateResultQty();
+            }
+        });
     }
 
     private void initUI() {
@@ -93,6 +95,8 @@ public class NGResultActivity extends BaseModelActivity {
         editLastSN = (EditText) findViewById(R.id.edit_last_sn);
         editWipLastLot = (EditText) findViewById(R.id.edit_finish_wip_last_lot);
         checkWipLastLot = (CheckBox) findViewById(R.id.check_finish_wip_last_lot);
+
+        btnAddNewNg = (Button) findViewById(R.id.btn_result_add_new_ng);
     }
 
     private void initSummaryWorkingData() {
@@ -139,6 +143,12 @@ public class NGResultActivity extends BaseModelActivity {
                     editWipLastLot.setEnabled(false);
                     editWipLastLot.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
                 }
+            }
+        });
+        btnAddNewNg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ngDetailListManager.addNewAdditionalNgSummary();
             }
         });
     }

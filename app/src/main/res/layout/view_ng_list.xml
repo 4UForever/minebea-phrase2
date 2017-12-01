@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="@dimen/space_normal"
-        android:weightSum="20">
+        android:weightSum="40">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_weight="16"
             android:text="NG Detail"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeNormal"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="12"
             android:text="Serial No"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeNormal"
@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="5"
             android:gravity="center"
             android:text="NG1"
             android:textColor="@color/black"
@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="5"
             android:gravity="center"
             android:text="NG2"
             android:textColor="@color/black"
@@ -54,19 +54,45 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_result_ng1_and_ng2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@null"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_ng1_and_ng2" />
+        android:paddingBottom="@dimen/space_normal">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_result_additional_ng1_and_ng2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_additional_ng1_and_ng2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_normal">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_result_ng1_and_ng2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_ng1_and_ng2" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_result_additional_ng1_and_ng2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_additional_ng1_and_ng2" />
+
+            <Button
+                android:id="@+id/btn_result_add_new_ng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/space_normal"
+                android:text="Add new NG"
+                android:textColor="@color/green"
+                android:textSize="@dimen/textSizeNormal" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
 </LinearLayout>
