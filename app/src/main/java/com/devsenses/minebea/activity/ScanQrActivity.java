@@ -249,7 +249,7 @@ public class ScanQrActivity extends FragmentActivity {
 
     private void showModelDialog(List<Shift> shiftList, List<Model> modelList, final boolean isWork, final boolean isView) {
         scanQRFragment.stopCamera();
-        new DialogModelSelect(this, employeeNo, isWork, isView, shiftList, modelList, new DialogModelSelect.OnSelectedListener() {
+        new DialogModelSelect(this,getSupportFragmentManager(), employeeNo, isWork, isView, shiftList, modelList, new DialogModelSelect.OnSelectedListener() {
             @Override
             public void onWork(String workingDate, Shift shift, Model model, Line line, Process process) {
                 Utils.clearKeyboard(ScanQrActivity.this);

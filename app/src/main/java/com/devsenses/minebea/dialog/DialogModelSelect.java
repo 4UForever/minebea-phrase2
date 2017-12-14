@@ -3,15 +3,19 @@ package com.devsenses.minebea.dialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +42,8 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     private EditText editDate;
     private LinearLayout layoutDateAndShift;
 
+    @NonNull
+    private final FragmentManager fragmentManager;
     private List<Shift> shiftData;
     private List<Model> modelData;
 
@@ -45,15 +51,27 @@ public class DialogModelSelect extends MaterialDialog.Builder {
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
+    private View newView;
+    private View continueView;
+    private Button btnNew;
+    private Button btnContinue;
 
-    public DialogModelSelect(@NonNull Context context, String empNo, boolean isWork, boolean isView, List<Shift> shiftData, List<Model> modelData,
+    private boolean isStartNewWork = true;
+
+    public DialogModelSelect(@NonNull Context context, @NonNull FragmentManager fragmentManager,
+                             String empNo, boolean isWork, boolean isView, List<Shift> shiftData, List<Model> modelData,
                              OnSelectedListener listener) {
         super(context);
+        this.fragmentManager = fragmentManager;
         this.shiftData = shiftData;
         this.modelData = modelData;
         this.listener = listener;
-        
+
         initCustomView();
+        initPagerView();
+        initTab();
+        initContinueList();
+
         initUIDialog();
         initDialogOption(isWork, isView);
         setDateTimeField();
@@ -71,9 +89,72 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         setEmployeeNo(empNo);
     }
 
+    private void initPagerView() {
+        newView = customView.findViewById(R.id.view_emp_select_new);
+        continueView = customView.findViewById(R.id.view_emp_select_continue);
+    }
+
     private void initCustomView() {
         View view = View.inflate(context, R.layout.dialog_emp_listselect, null);
         customView(view, true);
+    }
+
+    private void initTab() {
+        btnNew = (Button) customView.findViewById(R.id.btn_emp_select_new);
+        btnContinue = (Button) customView.findViewById(R.id.btn_emp_select_continue);
+
+        btnNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStartNewView();
+                hideContinueView();
+                isStartNewWork = true;
+            }
+        });
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContinueView();
+                hideStartNewView();
+                isStartNewWork = false;
+            }
+        });
+    }
+
+    private void showStartNewView() {
+        newView.setVisibility(View.VISIBLE);
+        btnNew.setBackgroundResource(R.color.green);
+    }
+
+    private void showContinueView() {
+        continueView.setVisibility(View.VISIBLE);
+        btnContinue.setBackgroundResource(R.color.green);
+    }
+
+    private void hideStartNewView() {
+        newView.setVisibility(View.GONE);
+        btnNew.setBackgroundResource(R.color.dark_green);
+    }
+
+    private void hideContinueView() {
+        continueView.setVisibility(View.GONE);
+        btnContinue.setBackgroundResource(R.color.dark_green);
+    }
+
+    private void initContinueList() {
+        RadioGroup group = (RadioGroup) continueView.findViewById(R.id.radiogroup_unfinish_button);
+
+        final RadioButton[] rb = new RadioButton[20];
+        final int pad = getContext().getResources().getDimensionPixelSize(R.dimen.space_normal);
+        for (int i = 0; i < 20; i++) {
+            rb[i] = new RadioButton(getContext());
+            rb[i].setText("Test " + i);
+            rb[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    getContext().getResources().getDimension(R.dimen.textSizeNormal));
+            rb[i].setPadding(pad, pad, pad, pad);
+            group.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
+        }
     }
 
     private void initUIDialog() {
