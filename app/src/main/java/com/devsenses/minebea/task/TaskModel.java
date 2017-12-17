@@ -20,13 +20,13 @@ import retrofit.Retrofit;
 public class TaskModel extends Task {
 
     public static void sendModel(final Context context, String qrCode, SelectedModel selectedModel,
-                                 final OnBaseApi listener) {
+                                 String processLogFrom, final OnBaseApi listener) {
         final LoadingDialog dialog = new LoadingDialog(context);
         dialog.show();
 
         Call<BaseModel> call = getService().sendModel(qrCode, selectedModel.getWorkingDate(),
                 selectedModel.getShiftID(), selectedModel.getID(),
-                selectedModel.getLineID(), selectedModel.getProcessID());
+                selectedModel.getLineID(), selectedModel.getProcessID(),processLogFrom);
 
         call.enqueue(new Callback<BaseModel>() {
             @Override

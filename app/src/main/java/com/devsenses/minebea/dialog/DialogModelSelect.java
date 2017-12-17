@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devsenses.minebea.R;
 import com.devsenses.minebea.adapter.SpinnerTitleAdapter;
+import com.devsenses.minebea.model.loginmodel.ContinueData;
 import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
@@ -47,6 +48,7 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     private List<Shift> shiftData;
     private List<Model> modelData;
 
+    private final List<ContinueData> continueDataList;
     private OnSelectedListener listener;
 
     private DatePickerDialog datePickerDialog;
@@ -57,20 +59,21 @@ public class DialogModelSelect extends MaterialDialog.Builder {
     private Button btnContinue;
 
     private boolean isStartNewWork = true;
+    private RadioGroup radioContinuePeocessGroup;
 
     public DialogModelSelect(@NonNull Context context, @NonNull FragmentManager fragmentManager,
                              String empNo, boolean isWork, boolean isView, List<Shift> shiftData, List<Model> modelData,
-                             OnSelectedListener listener) {
+                             List<ContinueData> continueDataList, OnSelectedListener listener) {
         super(context);
         this.fragmentManager = fragmentManager;
         this.shiftData = shiftData;
         this.modelData = modelData;
+        this.continueDataList = continueDataList;
         this.listener = listener;
 
         initCustomView();
         initPagerView();
         initTab();
-        initContinueList();
 
         initUIDialog();
         initDialogOption(isWork, isView);
@@ -78,6 +81,8 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         initEditDate();
         initSpinnerShift();
         initSpinnerModel();
+
+        initContinueList();
 
         if (isWork) {
             setPositiveAction();
@@ -142,21 +147,6 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         btnContinue.setBackgroundResource(R.color.dark_green);
     }
 
-    private void initContinueList() {
-        RadioGroup group = (RadioGroup) continueView.findViewById(R.id.radiogroup_unfinish_button);
-
-        final RadioButton[] rb = new RadioButton[20];
-        final int pad = getContext().getResources().getDimensionPixelSize(R.dimen.space_normal);
-        for (int i = 0; i < 20; i++) {
-            rb[i] = new RadioButton(getContext());
-            rb[i].setText("Test " + i);
-            rb[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getContext().getResources().getDimension(R.dimen.textSizeNormal));
-            rb[i].setPadding(pad, pad, pad, pad);
-            group.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
-        }
-    }
-
     private void initUIDialog() {
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         editDate = (EditText) customView.findViewById(R.id.editDate);
@@ -170,6 +160,7 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         spinnerProcess = (Spinner) customView.findViewById(R.id.spinnerProcessNo);
 
         layoutDateAndShift = (LinearLayout) customView.findViewById(R.id.layout_date_and_shift);
+        radioContinuePeocessGroup = (RadioGroup) continueView.findViewById(R.id.radiogroup_unfinish_button);
     }
 
     private void initDialogOption(boolean isWork, boolean isView) {
@@ -259,6 +250,27 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         spinnerProcessAdapter.notifyDataSetChanged();
     }
 
+    private void initContinueList() {
+        final int length = continueDataList.size();
+        if (length > 0) {
+            final RadioButton[] rb = new RadioButton[length];
+            final int pad = getContext().getResources().getDimensionPixelSize(R.dimen.space_normal);
+            for (int i = 0; i < length; i++) {
+                ContinueData data = continueDataList.get(i);
+
+                rb[i] = new RadioButton(getContext());
+                rb[i].setId(i);
+                rb[i].setText("Line " + data.getLineId() + " : " +
+                        " Model " + data.getProductTitle() + " : " +
+                        " Process " + data.getProcessNumber());
+                rb[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getContext().getResources().getDimension(R.dimen.textSizeNormal));
+                rb[i].setPadding(pad, pad, pad, pad);
+                radioContinuePeocessGroup.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
+            }
+        }
+    }
+
     private List<String> getShiftTimeList() {
         List<String> listShift = new ArrayList<>();
         for (int i = 0; i < shiftData.size(); i++) {
@@ -295,19 +307,51 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                int shiftPosition = getShiftPosition();
-                int modelPosition = getModelPosition();
-                int linePosition = getLinePosition();
-                int processPosition = getProcessPosition();
+                Model model;
+                Line line;
+                Process process;
+                String processLog = "";
 
-                String selectedDate = editDate.getText().toString();
+                Shift shift = shiftData.get(getShiftPosition());
+                String date = editDate.getText().toString();
 
-                Shift selectedShift = shiftData.get(shiftPosition);
-                Model selectedModel = modelData.get(modelPosition);
-                Line selectedLine = selectedModel.getLines().get(linePosition);
-                Process selectedProcess = selectedLine.getProcesses().get(processPosition);
+                if (isStartNewWork) {
+                    model = modelData.get(getModelPosition());
+                    line = model.getLines().get(getLinePosition());
+                    process = line.getProcesses().get(getProcessPosition());
+                } else {
+                    ContinueData data = continueDataList.get(getContinueProcessPosition());
+                    process = new Process();
+                    process.setId(Integer.parseInt(data.getProcessId()));
+                    process.setTitle(data.getProcessTitle());
+                    process.setNumber(data.getProcessNumber());
+                    process.setCreatedAt("-");
+                    process.setUpdatedAt("-");
 
-                listener.onWork(selectedDate, selectedShift, selectedModel, selectedLine, selectedProcess);
+                    List<Process> processList = new ArrayList<>();
+                    processList.add(process);
+
+                    line = new Line();
+                    line.setId(Integer.parseInt(data.getLineId()));
+                    line.setTitle(data.getLineTitle());
+                    line.setProcesses(processList);
+                    line.setCreatedAt("-");
+                    line.setUpdatedAt("-");
+
+                    List<Line> lineList = new ArrayList<>();
+                    lineList.add(line);
+
+                    model = new Model();
+                    model.setId(Integer.parseInt(data.getProductId()));
+                    model.setTitle(data.getProductTitle());
+                    model.setLines(lineList);
+                    model.setCreatedAt("-");
+                    model.setUpdatedAt("-");
+
+                    processLog = String.valueOf(data.getProcessLogFrom());
+                }
+
+                listener.onWork(date, shift, model, line, process, processLog);
                 autoDismiss(true);
             }
         });
@@ -351,8 +395,12 @@ public class DialogModelSelect extends MaterialDialog.Builder {
         return (spinnerProcess != null ? spinnerProcess.getSelectedItemPosition() : 0);
     }
 
+    private int getContinueProcessPosition() {
+        return (spinnerProcess != null ? radioContinuePeocessGroup.getCheckedRadioButtonId() : -1);
+    }
+
     public interface OnSelectedListener {
-        void onWork(String workingDate, Shift shift, Model model, Line line, Process process);
+        void onWork(String workingDate, Shift shift, Model model, Line line, Process process, String processLogFrom);
 
         void onView(String workingDate, Shift shift, Model model, Line line, Process process);
     }

@@ -163,4 +163,22 @@ public class SelectedModel {
         setOnBreak(processLog.getData().getOnBreak());
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "SelectedModel{" +
+                "mId=" + mId +
+                ", mTitles='" + mTitles + '\'' +
+                ", mLineID=" + mLineID +
+                ", mLineTitle='" + mLineTitle + '\'' +
+                ", mProcessID=" + mProcessID +
+                ", mProcessTitle='" + mProcessTitle + '\'' +
+                ", mProcessNumber='" + mProcessNumber + '\'' +
+                ", mOnBreak=" + mOnBreak +
+                ", mLotNumber='" + mLotNumber + '\'' +
+                ", mShiftID=" + mShiftID +
+                ", mShiftTitles='" + mShiftTitles + '\'' +
+                ", mWorkingDate='" + mWorkingDate + '\'' +
+                '}';
+    }
 }

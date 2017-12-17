@@ -4,6 +4,7 @@ import com.devsenses.minebea.model.BaseModel;
 import com.devsenses.minebea.model.breakmodel.BreakReasonModel;
 import com.devsenses.minebea.model.documentmodel.DocumentModel;
 import com.devsenses.minebea.model.lineleadermodel.LineLeaderModel;
+import com.devsenses.minebea.model.loginmodel.ContinueModel;
 import com.devsenses.minebea.model.loginmodel.LoginModel;
 import com.devsenses.minebea.model.loginmodel.OnProcessModel;
 import com.devsenses.minebea.model.ngmodel.NGModel;
@@ -26,6 +27,10 @@ public interface APIService {
     Call<LoginModel> login(@Field("qr_code") String qrCode);
 
     @FormUrlEncoded
+    @POST("api/process/get-continue-process")
+    Call<ContinueModel> loadContinueProcess(@Field("qr_code") String qrCode);
+
+    @FormUrlEncoded
     @POST("api/process/recover-work-status")
     Call<OnProcessModel> loadRecoverModel(@Field("qr_code") String qrCode, @Field("on_process") long onProcessID);
 
@@ -33,7 +38,8 @@ public interface APIService {
     @POST("api/process/model-data")
     Call<BaseModel> sendModel(@Field("qr_code") String qrCode, @Field("working_date") String workingDate,
                               @Field("shift_id") long shiftID, @Field("model_id") long modelID,
-                              @Field("line_id") long lineID, @Field("process_id") long processID);
+                              @Field("line_id") long lineID, @Field("process_id") long processID,
+                              @Field("process_log_from") String processLoFrom);
 
     @FormUrlEncoded
     @POST("api/process/request-part")

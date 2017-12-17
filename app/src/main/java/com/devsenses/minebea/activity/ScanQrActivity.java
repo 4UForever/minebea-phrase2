@@ -13,6 +13,7 @@ import com.devsenses.minebea.dialog.DialogEmp_No;
 import com.devsenses.minebea.dialog.DialogModelSelect;
 import com.devsenses.minebea.dialog.DialogWithText;
 import com.devsenses.minebea.fragment.ScanQRFragment;
+import com.devsenses.minebea.listener.OnApiContinueProcessListener;
 import com.devsenses.minebea.listener.OnApiFailureRecoverProcessListener;
 import com.devsenses.minebea.listener.OnApiGetNGListener;
 import com.devsenses.minebea.listener.OnBaseApi;
@@ -20,6 +21,7 @@ import com.devsenses.minebea.listener.OnDialogEmp_NoListener;
 import com.devsenses.minebea.listener.OnQRCodeHelperListener;
 import com.devsenses.minebea.manager.BundleManager;
 import com.devsenses.minebea.manager.LoginManager;
+import com.devsenses.minebea.model.loginmodel.ContinueData;
 import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.LoginModel;
 import com.devsenses.minebea.model.loginmodel.Model;
@@ -168,9 +170,41 @@ public class ScanQrActivity extends FragmentActivity {
         if (modelReturn.getDatum().getOnProcess() != null) {
             loadRecoverProcess(modelReturn.getDatum().getOnProcess());
         } else {
-            showModelDialog(modelReturn.getDatum().getShifts(), modelReturn.getDatum().getModels(), BundleManager.getIsWork(bundle),
-                    BundleManager.getIsView(bundle));
+            loadContinueProcess(modelReturn);
         }
+    }
+
+    private void loadContinueProcess(final LoginModel modelReturn) {
+        TaskLogin.loadContinueProcess(ScanQrActivity.this, employeeNo, new OnApiContinueProcessListener() {
+            @Override
+            public void onSuccess(List<ContinueData> continueData) {
+                showModelDialog(modelReturn.getDatum().getShifts(), modelReturn.getDatum().getModels(),
+                        BundleManager.getIsWork(bundle),
+                        BundleManager.getIsView(bundle),
+                        continueData);
+            }
+
+            @Override
+            public void onFailure(String reason) {
+                if (scanQRFragment != null) {
+                    scanQRFragment.enableCornerButton();
+                    scanQRFragment.startCamera();
+                }
+
+                DialogWithText.showMessage(ScanQrActivity.this,
+                        reason + "\nPlease try again or contact administrator.", true,
+                        new DialogWithText.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                if (scanQRFragment != null) {
+                                    scanQRFragment.disableCornerButton();
+                                    scanQRFragment.stopCamera();
+                                }
+                                loadContinueProcess(modelReturn);
+                            }
+                        });
+            }
+        });
     }
 
     private void loadRecoverProcess(final Long onProcess) {
@@ -247,11 +281,13 @@ public class ScanQrActivity extends FragmentActivity {
         });
     }
 
-    private void showModelDialog(List<Shift> shiftList, List<Model> modelList, final boolean isWork, final boolean isView) {
+    private void showModelDialog(List<Shift> shiftList, List<Model> modelList, final boolean isWork, final boolean isView,
+                                 List<ContinueData> continueDataList) {
         scanQRFragment.stopCamera();
-        new DialogModelSelect(this,getSupportFragmentManager(), employeeNo, isWork, isView, shiftList, modelList, new DialogModelSelect.OnSelectedListener() {
+        new DialogModelSelect(this, getSupportFragmentManager(), employeeNo, isWork, isView,
+                shiftList, modelList, continueDataList, new DialogModelSelect.OnSelectedListener() {
             @Override
-            public void onWork(String workingDate, Shift shift, Model model, Line line, Process process) {
+            public void onWork(String workingDate, Shift shift, Model model, Line line, Process process, String processLogFrom) {
                 Utils.clearKeyboard(ScanQrActivity.this);
 
                 SelectedModel selectedModel = new SelectedModel()
@@ -262,9 +298,11 @@ public class ScanQrActivity extends FragmentActivity {
                         .initProcess(process);
                 selectedModel.setOnBreak((long) 0);
 
+                Log.d("MineBea", selectedModel.toString());
+
                 bundle = BundleManager.putSelectedModelDataToBundle(bundle, selectedModel);
 
-                sendSelectModelToServer(selectedModel);
+                sendSelectModelToServer(selectedModel, processLogFrom);
             }
 
             @Override
@@ -276,8 +314,8 @@ public class ScanQrActivity extends FragmentActivity {
         }).show();
     }
 
-    private void sendSelectModelToServer(final SelectedModel selectedModel) {
-        TaskModel.sendModel(ScanQrActivity.this, employeeNo, selectedModel, new OnBaseApi() {
+    private void sendSelectModelToServer(final SelectedModel selectedModel, String processLogFrom) {
+        TaskModel.sendModel(ScanQrActivity.this, employeeNo, selectedModel, processLogFrom, new OnBaseApi() {
             @Override
             public void onSuccess() {
                 startPartAndWIPActivity(bundle);
@@ -286,12 +324,7 @@ public class ScanQrActivity extends FragmentActivity {
             @Override
             public void onFailure(String reason) {
                 if (scanQRFragment != null) scanQRFragment.enableCornerButton();
-                DialogWithText.showMessage(ScanQrActivity.this, reason, new DialogWithText.OnClickListener() {
-                    @Override
-                    public void onClick() {
-                        showModelDialog(shiftList, modelList, BundleManager.getIsWork(bundle), BundleManager.getIsView(bundle));
-                    }
-                });
+                DialogWithText.showMessage(ScanQrActivity.this, reason);
             }
         });
     }

@@ -3,8 +3,10 @@ package com.devsenses.minebea.task;
 import android.content.Context;
 
 import com.devsenses.minebea.dialog.LoadingDialog;
+import com.devsenses.minebea.listener.OnApiContinueProcessListener;
 import com.devsenses.minebea.listener.OnApiFailureRecoverProcessListener;
 import com.devsenses.minebea.manager.LoginManager;
+import com.devsenses.minebea.model.loginmodel.ContinueModel;
 import com.devsenses.minebea.model.loginmodel.LoginModel;
 import com.devsenses.minebea.model.loginmodel.OnProcessModel;
 import com.devsenses.minebea.model.partmodel.PartModel;
@@ -37,15 +39,15 @@ public class TaskLogin extends Task {
                     String error;
                     try {
                         String errorBody = response.errorBody().string();
-                        if(errorBody.contains("Invalid QR code")){
+                        if (errorBody.contains("Invalid QR code")) {
                             error = "Invalid QR code";
-                        }else{
+                        } else {
                             error = "Unexpected error found.";
                         }
                     } catch (Exception ex) {
-                        logAPIFailure("asyncLogin fail",ex.getMessage());
+                        logAPIFailure("asyncLogin fail", ex.getMessage());
                         error = "Unexpected error found.";
-                        reportException("TaskLogin/asyncLogin",response.errorBody());
+                        reportException("TaskLogin/asyncLogin", response.errorBody());
                     }
                     listener.onFailure(error);
                 }
@@ -80,9 +82,9 @@ public class TaskLogin extends Task {
                         Gson gson = new GsonBuilder().create();
                         PartModel modelData = gson.fromJson(response.errorBody().string(), PartModel.class);
                         error = modelData.getMetaDatum().getError();
-                    }catch (Exception ex) {
+                    } catch (Exception ex) {
                         error = "Unexpected error found.";
-                        reportException("TaskLogin/loadRecoverProcess",response.errorBody());
+                        reportException("TaskLogin/loadRecoverProcess", response.errorBody());
                     }
                     listener.onFailure(error);
                 }
@@ -91,7 +93,44 @@ public class TaskLogin extends Task {
 
             @Override
             public void onFailure(Throwable t) {
-                logAPIFailure("sendModel Fail", t.getMessage());
+                logAPIFailure("loadRecoverProcess Fail", t.getMessage());
+                listener.onFailure("Please check your connection and try again");
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public static void loadContinueProcess(final Context context, final String qrCode,
+                                           final OnApiContinueProcessListener listener) {
+        final LoadingDialog dialog = new LoadingDialog(context);
+        dialog.show();
+
+        Call<ContinueModel> call = getService().loadContinueProcess(qrCode);
+
+        call.enqueue(new Callback<ContinueModel>() {
+            @Override
+            public void onResponse(Response<ContinueModel> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    ContinueModel modelData = response.body();
+                    listener.onSuccess(modelData.getContinueDataList());
+                } else {
+                    String error;
+                    try {
+                        Gson gson = new GsonBuilder().create();
+                        PartModel modelData = gson.fromJson(response.errorBody().string(), PartModel.class);
+                        error = modelData.getMetaDatum().getError();
+                    } catch (Exception ex) {
+                        error = "Unexpected error found.";
+                        reportException("TaskLogin/loadContinueProcess", response.errorBody());
+                    }
+                    listener.onFailure(error);
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                logAPIFailure("loadContinueProcess Fail", t.getMessage());
                 listener.onFailure("Please check your connection and try again");
                 dialog.dismiss();
             }

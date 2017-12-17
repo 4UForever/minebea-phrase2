@@ -128,8 +128,7 @@ public class NGDetailListManager {
             for (int i = 0; i < list.size(); i++) {
                 JSONObject ngObj = new JSONObject();
                 ngObj.put("ng_id", list.get(i).getNg().getId());
-                //TODO wait real API for name of "serial id"
-                ngObj.put("serial_no", list.get(i).getSerialNo());
+                ngObj.put("ng_serial", list.get(i).getSerialNo());
                 ngObj.put("ng1", list.get(i).getNg1());
                 ngObj.put("ng2", list.get(i).getNg2());
                 ary.put(ngObj);
