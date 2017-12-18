@@ -28,6 +28,7 @@ import com.devsenses.minebea.model.loginmodel.Line;
 import com.devsenses.minebea.model.loginmodel.Model;
 import com.devsenses.minebea.model.loginmodel.Process;
 import com.devsenses.minebea.model.loginmodel.Shift;
+import com.devsenses.minebea.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -320,6 +321,11 @@ public class DialogModelSelect extends MaterialDialog.Builder {
                     line = model.getLines().get(getLinePosition());
                     process = line.getProcesses().get(getProcessPosition());
                 } else {
+                    if (getContinueProcessPosition() < 0) {
+                        Utils.alert(getContext(),"","Please select continue line");
+                        return;
+                    }
+
                     ContinueData data = continueDataList.get(getContinueProcessPosition());
                     process = new Process();
                     process.setId(Integer.parseInt(data.getProcessId()));
