@@ -16,6 +16,7 @@ public class FinishModel {
     private String startDate;
     private String endDate;
     private String wipQty;
+    private boolean isContinue;
 
     public String getQrCode() {
         return qrCode;
@@ -105,6 +106,14 @@ public class FinishModel {
         this.wipQty = wipQty;
     }
 
+    public boolean isContinue() {
+        return isContinue;
+    }
+
+    public void setContinue(boolean isContinue) {
+        this.isContinue = isContinue;
+    }
+
     @Override
     public String toString() {
         return "FinishModel{" +
@@ -119,6 +128,7 @@ public class FinishModel {
                 ", startDate=" + startDate + '\n' +
                 ", endDate=" + endDate + '\n' +
                 ", wipQty=" + wipQty + '\n' +
+                ", isContinue=" + isContinue + '\n' +
                 '}';
     }
 }

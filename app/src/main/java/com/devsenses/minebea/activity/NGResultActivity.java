@@ -43,6 +43,7 @@ public class NGResultActivity extends BaseModelActivity {
     private EditText editWipLastLot;
     private CheckBox checkWipLastLot;
     private Button btnAddNewNg;
+    private CheckBox checkContinueNextLot;
 
     private LinearLayout btnDoneLayout;
     private NGDetailListManager ngDetailListManager;
@@ -95,6 +96,7 @@ public class NGResultActivity extends BaseModelActivity {
         editLastSN = (EditText) findViewById(R.id.edit_last_sn);
         editWipLastLot = (EditText) findViewById(R.id.edit_finish_wip_last_lot);
         checkWipLastLot = (CheckBox) findViewById(R.id.check_finish_wip_last_lot);
+        checkContinueNextLot = (CheckBox) findViewById(R.id.check_continue_next_lot);
 
         btnAddNewNg = (Button) findViewById(R.id.btn_result_add_new_ng);
     }
@@ -197,6 +199,7 @@ public class NGResultActivity extends BaseModelActivity {
         model.setStartDate(BundleManager.getStartDate(bundle));
         model.setEndDate(BundleManager.getEndDate(bundle));
         model.setWipQty(getWipLastLot());
+        model.setContinue(getIsContinueNextLot());
 
         TaskFinish.finishProcess(NGResultActivity.this, model, new OnBaseApi() {
             @Override
@@ -229,6 +232,10 @@ public class NGResultActivity extends BaseModelActivity {
 
     private int getDt() {
         return getNumberFromString(editDt.getText().toString());
+    }
+
+    private boolean getIsContinueNextLot() {
+        return checkContinueNextLot.isChecked();
     }
 
     private String getWipLastLot() {

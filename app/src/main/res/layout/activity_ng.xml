@@ -45,10 +45,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/space_normal"
+                    android:weightSum="10">
+
+                    <CheckBox
+                        android:id="@+id/check_continue_next_lot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/space_normal"
+                        android:text="Continue on next lot?"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/textSizeNormal" />
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/mainPaddingTop_InNameModel"
+                    android:paddingTop="@dimen/space_normal"
                     android:text="Last lot on this shift?"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textSizeNormal" />
@@ -58,8 +81,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingTop="@dimen/space_normal"
                     android:paddingLeft="@dimen/space_normal"
+                    android:paddingTop="@dimen/space_normal"
                     android:weightSum="10">
 
                     <CheckBox
@@ -80,14 +103,15 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
-                        android:inputType="number"
-                        android:singleLine="true"
-                        android:paddingLeft="@dimen/space_normal"
-                        android:paddingRight="@dimen/space_normal"
                         android:background="@android:color/darker_gray"
                         android:enabled="false"
+                        android:inputType="number"
+                        android:paddingLeft="@dimen/space_normal"
+                        android:paddingRight="@dimen/space_normal"
+                        android:singleLine="true"
                         android:textSize="@dimen/textSizeNormal" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <include

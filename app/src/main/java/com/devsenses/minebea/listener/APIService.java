@@ -26,9 +26,8 @@ public interface APIService {
     @POST("api/user/login")
     Call<LoginModel> login(@Field("qr_code") String qrCode);
 
-    @FormUrlEncoded
-    @POST("api/process/get-continue-process")
-    Call<ContinueModel> loadContinueProcess(@Field("qr_code") String qrCode);
+    @GET("api/process/get-continue-process")
+    Call<ContinueModel> loadContinueProcess(@Query("qr_code") String qrCode);
 
     @FormUrlEncoded
     @POST("api/process/recover-work-status")
@@ -85,5 +84,5 @@ public interface APIService {
                                   @Field("dt") int dt, @Field("ngs") String ngListJson,
                                   @Field("breaks") String breakListJson, @Field("remark") String remark,
                                   @Field("start_time") String startDate, @Field("end_time") String endDate,
-                                  @Field("wip_qty") String wipQty);
+                                  @Field("wip_qty") String wipQty, @Field("is_continue") Boolean isContinue);
 }
