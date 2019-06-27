@@ -3,6 +3,7 @@ package com.devsenses.minebea.task;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.devsenses.minebea.BuildConfig;
 import com.devsenses.minebea.constant.Constant;
 import com.devsenses.minebea.listener.APIService;
 import com.squareup.okhttp.Interceptor;
@@ -30,6 +31,7 @@ public class Task {
 //                final String url = response.request().urlString();
 //                final String request = response.request().body().toString();
                 final String content = response.body().string();
+                Log.d(TAG, chain.request().urlString());
                 Log.d(TAG, content);
 //                Log.d(TAG, url + "\n" + request + "\n" + content);
                 return response.newBuilder()

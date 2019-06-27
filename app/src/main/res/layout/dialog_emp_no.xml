@@ -40,6 +40,7 @@
                 android:background="@drawable/edit_text_bg"
                 android:padding="10dp"
                 android:layout_width="match_parent"
+                android:text="pong.p"
                 android:hint="Emp no."
                 android:textSize="@dimen/textSizeSmall"
                 android:singleLine="true"
